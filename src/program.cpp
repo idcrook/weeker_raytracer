@@ -18,7 +18,7 @@ vec3 random_in_unit_sphere() {
 
 vec3 color(const ray& r, hittable *world) {
   hit_record rec;
-  if (world->hit(r, 0.0, MAXFLOAT, rec)) {
+  if (world->hit(r, 0.0001, MAXFLOAT, rec)) {
     vec3 target = rec.p + rec.normal + random_in_unit_sphere();
     return 0.5 * color(ray(rec.p, target - rec.p), world);
   }
@@ -28,7 +28,7 @@ vec3 color(const ray& r, hittable *world) {
     return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
   }
 }
-// ./build/apps/program > output/ch8a.ppm
+// ./build/apps/program > output/ch8c.ppm
 
 int main() {
   int nx = 200;
