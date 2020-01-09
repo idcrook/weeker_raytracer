@@ -25,7 +25,7 @@ vec3 color(const ray& r, hittable *world, int depth) {
     return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
   }
 }
-// ./build/apps/program > output/ch9c.ppm
+// ./build/apps/program > output/ch10a.ppm
 
 int main() {
   int nx = 200;
@@ -35,10 +35,14 @@ int main() {
 
   // create hittable list (and add to world)
   hittable *list[4];
-  list[0] = new sphere(vec3(0,0,-1), 0.5,      new lambertian(vec3(0.8, 0.3, 0.3)));
+  list[0] = new sphere(vec3(0,0,-1), 0.5, new lambertian(vec3(0.1, 0.2, 0.5)));
   list[1] = new sphere(vec3(0,-100.5,-1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-  list[2] = new sphere(vec3(1,0,-1), 0.5,      new metal(vec3(0.1, 0.3, 0.1), 1.0));
-  list[3] = new sphere(vec3(-1,0,-1), 0.5,     new metal(vec3(0.8, 0.8, 0.8), 0.3));
+  list[2] = new sphere(vec3(1,0,-1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.0));
+  list[3] = new sphere(vec3(-1,0,-1), 0.5, new dielectric(1.5));
+  // list[0] = new sphere(vec3(0,0,-1), 0.5,      new lambertian(vec3(0.13, 0.53, 0.73)));
+  // list[1] = new sphere(vec3(0,-100.5,-1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
+  // list[2] = new sphere(vec3(1,0,-1), 0.5,      new metal(vec3(0.1, 0.3, 0.1), 1.0));
+  // list[3] = new sphere(vec3(-1,0,-1), 0.5,     new metal(vec3(0.8, 0.8, 0.8), 0.6));
   hittable *world = new hittable_list(list,4);
 
   camera cam;
@@ -50,6 +54,8 @@ int main() {
       for (int s = 0; s < ns; s++) {
         float u = float(i + random_double() - (1.0/2.0)) / float(nx);
         float v = float(j + random_double() - (1.0/2.0)) / float(ny);
+        // float u = float(i + random_double()) / float(nx);
+        // float v = float(j + random_double()) / float(ny);
         ray r = cam.get_ray(u, v);
         col += color(r, world, 0);
       }

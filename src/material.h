@@ -13,8 +13,38 @@ vec3 random_in_unit_sphere() {
   return p;
 }
 
+// angle of incidence is the angle of reflection
+// n is unit normal vector
 vec3 reflect(const vec3& v, const vec3& n) {
   return v - 2*dot(v,n)*n;
+}
+
+// Snell's law: n_0 sin(theta_0) = n_1 sin(theta_1)
+// n_0: originating material index of refraction
+// n_1: transmitting material index of refraction
+// theta_0, theta_1, angle of ray w.r.t. normal
+// (n_0 / n_1) * sin(theta_0) = sin (theta_1)
+// if n_0 > n_1, there may be no real solution (total internal reflection)
+// theta_1 = arcsin( (n_0/ n_1) * sin(theta_0)
+// "critical angle" is when theta_1 = 90°
+
+// a = cos(theta_0)*v
+// x = sin(theta_0)*v
+// sin(theta_0) = x / sqrt(a^2 + x^2)
+// cos(theta_0) = dot(uv, n)
+
+// n is unit normal vector
+bool refract(const vec3& v, const vec3& n, float ni_over_nt, vec3& refracted) {
+  vec3 uv = unit_vector(v);
+  float dt = dot(uv, n);
+  // TBD: prove these derivations
+  float discriminant = 1.0 - ni_over_nt*ni_over_nt*(1-dt*dt);
+  if (discriminant > 0) {
+    refracted = ni_over_nt*(uv - n*dt) - n*sqrt(discriminant);
+    return true;
+  }
+  else
+    return false;
 }
 
 class material  {
@@ -57,4 +87,43 @@ public:
   vec3 albedo;
   float fuzz;
 };
+
+
+class dielectric : public material {
+ public:
+  dielectric(float ri) : ref_idx(ri) {}
+  virtual bool scatter(const ray& r_in, const hit_record& rec,
+                       vec3& attenuation, ray& scattered) const {
+    vec3 outward_normal;
+    vec3 reflected = reflect(r_in.direction(), rec.normal);
+    float ni_over_nt;
+    attenuation = vec3(1.0, 1.0, 0.0);
+    vec3 refracted;
+
+    if (dot(r_in.direction(), rec.normal) > 0) {
+      outward_normal = -rec.normal;
+      ni_over_nt = ref_idx;
+    }
+    else {
+      outward_normal = rec.normal;
+      ni_over_nt = 1.0 / ref_idx;
+    }
+
+    if (refract(r_in.direction(), outward_normal, ni_over_nt, refracted)) {
+      scattered = ray(rec.p, refracted);
+    }
+    else {
+      scattered = ray(rec.p, reflected);
+      return false;
+    }
+
+    return true;
+  }
+
+  float ref_idx;
+};
+
+
+
+
 #endif

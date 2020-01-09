@@ -10,8 +10,9 @@ INCLUDE  := -Iinclude/ -Isrc/
 # header files have implementations
 # program.cpp found in src/
 
-SRC      :=                      \
-	$(wildcard src/*.cpp)         \
+SRC      :=                     \
+	$(wildcard src/*.cpp)       \
+	$(wildcard src/*.h)         \
 
 OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 
