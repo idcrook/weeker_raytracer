@@ -6,10 +6,21 @@
 
 #include <iostream>
 
+vec3 random_in_unit_sphere() {
+  vec3 p;
+  do {
+    // pick a random point in unit square {x,y,z} in range -1 to +1
+    //p = -2.0*vec3(random_double(), random_double(), random_double()) + vec3(1,1,1);
+    p = 2.0*vec3(random_double(), random_double(), random_double()) - vec3(1,1,1);
+  } while (p.squared_length() >= 1.0);
+  return p;
+}
+
 vec3 color(const ray& r, hittable *world) {
   hit_record rec;
   if (world->hit(r, 0.0, MAXFLOAT, rec)) {
-    return 0.5*vec3(rec.normal.x()+1, rec.normal.y()+1, rec.normal.z()+1);
+    vec3 target = rec.p + rec.normal + random_in_unit_sphere();
+    return 0.5 * color(ray(rec.p, target - rec.p), world);
   }
   else {
     vec3 unit_direction = unit_vector(r.direction());
@@ -17,7 +28,7 @@ vec3 color(const ray& r, hittable *world) {
     return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
   }
 }
-// ./build/apps/program > output/ch7a.ppm
+// ./build/apps/program > output/ch8a.ppm
 
 int main() {
   int nx = 200;
@@ -44,6 +55,9 @@ int main() {
         col += color(r, world);
       }
       col /= float(ns);
+
+      // gamma 2 correction -> pow(1/gamma) aka square root
+      col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]) );
 
       int ir = int(255.99*col[0]);
       int ig = int(255.99*col[1]);
