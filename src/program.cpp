@@ -43,7 +43,7 @@ int main() {
   list[4] = new sphere(vec3(-1,0,-1), -0.50, new dielectric(1.5));
   hittable *world = new hittable_list(list,5);
 
-  camera cam(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0), 90, float(nx)/float(ny));
+  camera cam(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0), 22, float(nx)/float(ny));
 
   for (int j = ny-1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
