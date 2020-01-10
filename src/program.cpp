@@ -25,11 +25,11 @@ vec3 color(const ray& r, hittable *world, int depth) {
     return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
   }
 }
-// ./build/apps/program > output/ch11a.ppm
+// ./build/apps/program > output/ch12a.ppm
 
 int main() {
-  int nx = 200;
-  int ny = 100;
+  int nx = 600;
+  int ny = 300;
   int ns = 100;
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
@@ -43,7 +43,7 @@ int main() {
   list[4] = new sphere(vec3(-1,0,-1), -0.50, new dielectric(1.5));
   hittable *world = new hittable_list(list,5);
 
-  camera cam(vec3(-2,2,1), vec3(0,0,-1), vec3(0,1,0), 22, float(nx)/float(ny));
+  camera cam(vec3(-2,2,1), vec3(-0.1,-0.1,-1), vec3(0,1,0), 37.5, float(nx)/float(ny));
 
   for (int j = ny-1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
