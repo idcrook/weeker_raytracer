@@ -28,8 +28,8 @@ vec3 color(const ray& r, hittable *world, int depth) {
 // ./build/apps/program > output/ch12a.ppm
 
 int main() {
-  int nx = 600;
-  int ny = 300;
+  int nx = 200;
+  int ny = 100;
   int ns = 100;
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
@@ -43,7 +43,13 @@ int main() {
   list[4] = new sphere(vec3(-1,0,-1), -0.50, new dielectric(1.5));
   hittable *world = new hittable_list(list,5);
 
-  camera cam(vec3(-2,2,1), vec3(-0.1,-0.1,-1), vec3(0,1,0), 37.5, float(nx)/float(ny));
+  vec3 lookfrom(3,3,2);
+  vec3 lookat(0.1,0.1,-1);
+  float dist_to_focus = (lookfrom-lookat).length();
+  float aperture = 2.0;
+
+  camera cam(lookfrom, lookat, vec3(0,1,0), 20,
+             float(nx)/float(ny), aperture, dist_to_focus);
 
   for (int j = ny-1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
