@@ -1,6 +1,7 @@
 #include "float.h"
 #include "hittable_list.h"
 #include "material.h"
+#include "moving_sphere.h"
 #include "sphere.h"
 #include "camera.h"
 #include "random.h"
@@ -86,10 +87,12 @@ int main() {
   vec3 lookfrom(13,2,3);
   vec3 lookat(0,0,0);
   float dist_to_focus = 10.0;
-  float aperture = 0.1;
+  //float aperture = 0.1;
+  float aperture = 0.0;
 
   camera cam(lookfrom, lookat, vec3(0,1,0), 20,
-             float(nx)/float(ny), aperture, dist_to_focus);
+             float(nx)/float(ny), aperture, dist_to_focus,
+             0.0, 1.0);
 
   for (int j = ny-1; j >= 0; j--) {
     std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
