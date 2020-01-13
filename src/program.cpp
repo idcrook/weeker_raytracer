@@ -29,6 +29,7 @@ vec3 color(const ray& r, hittable *world, int depth) {
 
 hittable *random_scene() {
   int n = 500;
+  // oversized container
   hittable **list = new hittable*[2*n+1];
 
   list[0] =  new sphere(vec3(0,-1000,0), 1000, new lambertian(vec3(0.5, 0.5, 0.5)));
@@ -55,7 +56,7 @@ hittable *random_scene() {
         }
         else {  // "bubble"
           list[i++] = new sphere(center, 0.22, new dielectric(1.5));
-          list[i++] = new sphere(center, -0.18, new dielectric(1.5));
+          list[i++] = new sphere(center, -0.20, new dielectric(1.5));
         }
       }
     }
