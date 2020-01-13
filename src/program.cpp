@@ -70,12 +70,15 @@ hittable *random_scene() {
 }
 
 int main() {
+  int nx = 200;
+  int ny = 100;
+  int ns = 10;
   // int nx = 200;
   // int ny = 100;
   // int ns = 100;
-  int nx = 1200;
-  int ny = 800;
-  int ns = 10;
+  // int nx = 1200;
+  // int ny = 800;
+  // int ns = 10;
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
   hittable *world = random_scene();
