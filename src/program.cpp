@@ -28,6 +28,18 @@ vec3 color(const ray& r, hittable *world, int depth) {
   }
 }
 
+hittable *two_spheres() {
+    texture *checker = new checker_texture(
+        new constant_texture(vec3(0.2, 0.3, 0.4)),
+        new constant_texture(vec3(0.9, 0.9, 0.9))
+    );
+    int n = 50;
+    hittable **list = new hittable*[n+1];
+    list[0] = new sphere(vec3(0,-10, 0), 10, new lambertian(checker));
+    list[1] = new sphere(vec3(0, 10, 0), 10, new lambertian(checker));
+    return new hittable_list(list,2);
+}
+
 hittable *random_scene() {
   int n = 50000;
   hittable **list = new hittable*[n+1];
@@ -116,7 +128,8 @@ int main (int argc, char** argv) {
 
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
 
-  hittable *world = random_scene();
+  //hittable *world = random_scene();
+  hittable *world = two_spheres();
 
   vec3 lookfrom(13,2,3);
   vec3 lookat(0,0,0);
