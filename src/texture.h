@@ -1,6 +1,7 @@
 #ifndef TEXTUREH
 #define TEXTUREH
 
+#include "perlin.h"
 #include "vec3.h"
 
 class texture {
@@ -20,18 +21,28 @@ public:
 };
 
 class checker_texture : public texture {
-    public:
-        checker_texture() {}
-        checker_texture(texture *t0, texture *t1): even(t0), odd(t1) {}
-        virtual vec3 value(float u, float v, const vec3& p) const {
-            float sines = sin(10*p.x())*sin(10*p.y())*sin(10*p.z());
-            if (sines < 0)
-                return odd->value(u, v, p);
-            else
-                return even->value(u, v, p);
-        }
-        texture *even;
-        texture *odd;
+public:
+  checker_texture() {}
+  checker_texture(texture *t0, texture *t1): even(t0), odd(t1) {}
+  virtual vec3 value(float u, float v, const vec3& p) const {
+    float sines = sin(10*p.x())*sin(10*p.y())*sin(10*p.z());
+    if (sines < 0)
+      return odd->value(u, v, p);
+    else
+      return even->value(u, v, p);
+  }
+  texture *even;
+  texture *odd;
+};
+
+class noise_texture : public texture {
+public:
+  noise_texture() {}
+  virtual vec3 value(float u, float v, const vec3& p) const {
+    (void)u; (void)v;
+    return vec3(1,1,1) * noise.noise(p);
+  }
+  perlin noise;
 };
 
 #endif
