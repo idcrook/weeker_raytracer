@@ -27,12 +27,15 @@ vec3 color(const ray& r, hittable *world, int depth) {
     return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
   }
 }
-// ./build/apps/program > output/ch2a.ppm
 
 hittable *random_scene() {
   int n = 50000;
   hittable **list = new hittable*[n+1];
-  list[0] =  new sphere(vec3(0,-1000,0), 1000, new lambertian(new constant_texture(vec3(0.5, 0.5, 0.5))));
+  texture *checkered = new
+    checker_texture(new constant_texture(vec3(0.2, 0.3, 0.4)),
+                    new constant_texture(vec3(0.9, 0.9, 0.9))
+                    );
+  list[0] =  new sphere(vec3(0,-1000,0), 1000, new lambertian(checkered));
   int i = 1;
   for (int a = -10; a < 10; a++) {
     for (int b = -10; b < 10; b++) {
@@ -79,6 +82,9 @@ hittable *random_scene() {
   return new bvh_node(list,i, 0.0, 1.0);
 
 }
+
+
+// ./build/apps/program > output.ppm
 
 
 int main (int argc, char** argv) {
