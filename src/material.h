@@ -3,6 +3,7 @@
 
 #include "hittable.h"
 #include "random.h"
+#include "texture.h"
 
 vec3 random_in_unit_sphere() {
   vec3 p;
@@ -64,18 +65,18 @@ public:
 
 class lambertian : public material {
 public:
-  lambertian(const vec3& a) : albedo(a) {}
+  lambertian(texture *a) : albedo(a) {}
   virtual bool scatter(const ray& r_in, const hit_record& rec,
                        vec3& attenuation, ray& scattered) const {
     // consume to avoid compiler warning
     r_in.direction();
     vec3 target = rec.p + rec.normal + random_in_unit_sphere();
     scattered = ray(rec.p, target-rec.p, r_in.time());
-    attenuation = albedo;
+    attenuation = albedo->value(0, 0, rec.p);
     return true;
   }
 
-  vec3 albedo;
+  texture *albedo;
 };
 
 
