@@ -119,7 +119,6 @@ hittable *random_scene0() {
   return new hittable_list(list,i);
 }
 
-//int main() {
 int main (int argc, char** argv) {
 
   // default value for higher resolution render
