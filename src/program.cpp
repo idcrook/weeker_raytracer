@@ -7,6 +7,10 @@
 #include "camera.h"
 #include "random.h"
 #include "texture.h"
+#include "surface_texture.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <iostream>
 
@@ -17,6 +21,7 @@ vec3 color(const ray& r, hittable *world, int depth) {
     vec3 attenuation;
     if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
       return attenuation*color(scattered, world, depth+1);
+      //return attenuation;
     }
     else {
       return vec3(0,0,0);
@@ -29,12 +34,21 @@ vec3 color(const ray& r, hittable *world, int depth) {
   }
 }
 
+hittable *earth() {
+  int nx, ny, nn;
+  unsigned char *tex_data = stbi_load("earthmap.jpg", &nx, &ny, &nn, 0);
+  material *mat =  new lambertian(new image_texture(tex_data, nx, ny));
+  return new sphere(vec3(0,0, 0), 2, mat);
+
+}
+
 hittable *two_perlin_spheres() {
   texture *pertext = new noise_texture(4.0);
-  //texture *pertext = new noise_texture(1.86);
   hittable **list = new hittable*[2];
   list[0] = new sphere(vec3(0,-1000, 0), 1000, new lambertian(pertext));
+  //list[0] = new sphere(vec3(0,-1000, 0), 1000, new metal(vec3(0.7, 0.6, 0.5), 0.0));
   list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
+
   return new hittable_list(list, 2);
 }
 
@@ -131,7 +145,7 @@ int main (int argc, char** argv) {
   } else {
     nx = 1200;
     ny = 800;
-    ns = 20;
+    ns = 24;
   }
 
   std::cerr << "Total Scanlines: " << ny << std::endl;
@@ -140,7 +154,8 @@ int main (int argc, char** argv) {
 
   //hittable *world = random_scene();
   //hittable *world = two_spheres();
-  hittable *world = two_perlin_spheres();
+  //hittable *world = two_perlin_spheres();
+  hittable *world = earth();
 
   vec3 lookfrom(13,2,3);
   vec3 lookat(0,0,0);
@@ -163,6 +178,7 @@ int main (int argc, char** argv) {
         col += color(r, world, 0);
       }
       col /= float(ns);
+
 
       // gamma 2 correction -> pow(1/gamma) aka square root
       col = vec3( sqrt(col[0]), sqrt(col[1]), sqrt(col[2]) );
