@@ -30,7 +30,8 @@ vec3 color(const ray& r, hittable *world, int depth) {
 }
 
 hittable *two_perlin_spheres() {
-  texture *pertext = new noise_texture(1.5);
+  texture *pertext = new noise_texture(4.0);
+  //texture *pertext = new noise_texture(1.86);
   hittable **list = new hittable*[2];
   list[0] = new sphere(vec3(0,-1000, 0), 1000, new lambertian(pertext));
   list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
@@ -130,7 +131,7 @@ int main (int argc, char** argv) {
   } else {
     nx = 1200;
     ny = 800;
-    ns = 10;
+    ns = 20;
   }
 
   std::cerr << "Total Scanlines: " << ny << std::endl;

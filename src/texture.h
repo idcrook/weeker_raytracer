@@ -41,7 +41,6 @@ public:
   noise_texture(float sc) : scale(sc) {}
   virtual vec3 value(float u, float v, const vec3& p) const {
     (void)u; (void)v;
-    //return vec3(1,1,1) * noise.noise(p*scale);
     return vec3(1,1,1) * 0.5 * (1 + sin(scale*p.z() + 10*noise.turb(p)));
   }
   perlin noise;
