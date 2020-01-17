@@ -1,5 +1,7 @@
 #include "float.h"
+
 #include "aarect.h"
+#include "box.h"
 #include "bvh.h"
 #include "hittable_list.h"
 #include "material.h"
@@ -31,6 +33,28 @@ vec3 color(const ray& r, hittable *world, int depth) {
   else {
     return vec3(0,0,0);
   }
+}
+
+hittable *cornell_box_blocks() {
+    hittable **list = new hittable*[8];
+    int i = 0;
+    material *red = new lambertian(new constant_texture(vec3(0.65, 0.05, 0.05)));
+    material *white = new lambertian(new constant_texture(vec3(0.73, 0.73, 0.73)));
+    material *green = new lambertian(new constant_texture(vec3(0.12, 0.45, 0.15)));
+    material *light = new diffuse_light(new constant_texture(vec3(15, 15, 15)));
+
+    list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
+    list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
+
+    list[i++] = new xz_rect(213, 343, 227, 332, 554, light);     // light source
+    list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
+    list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
+    list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
+
+    list[i++] = new box(vec3(130, 0, 65), vec3(295, 165, 230), white);
+    list[i++] = new box(vec3(265, 0, 295), vec3(430, 330, 460), white);
+
+    return new hittable_list(list,i);
 }
 
 hittable *cornell_box() {
@@ -81,15 +105,12 @@ hittable *two_perlin_spheres() {
   list[0] = new sphere(vec3(0,-1000, 0), 1000, new lambertian(pertext));
   //list[0] = new sphere(vec3(0,-1000, 0), 1000, new metal(vec3(0.7, 0.6, 0.5), 0.0));
   list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
-
   return new hittable_list(list, 2);
 }
 
 hittable *two_spheres() {
-  texture *checker = new checker_texture(
-                                         new constant_texture(vec3(0.2, 0.3, 0.4)),
-                                         new constant_texture(vec3(0.9, 0.9, 0.9))
-                                         );
+  texture *checker = new checker_texture(new constant_texture(vec3(0.2, 0.3, 0.4)),
+                                         new constant_texture(vec3(0.9, 0.9, 0.9)));
   int n = 50;
   hittable **list = new hittable*[n+1];
   list[0] = new sphere(vec3(0,-10, 0), 10, new lambertian(checker));
@@ -149,12 +170,9 @@ hittable *random_scene() {
 
   //return new hittable_list(list,i);
   return new bvh_node(list,i, 0.0, 1.0);
-
 }
 
-
 // ./build/apps/program > output.ppm
-
 
 int main (int argc, char** argv) {
 
@@ -199,7 +217,8 @@ int main (int argc, char** argv) {
   //hittable *world = two_perlin_spheres();
   //hittable *world = globe();
   //hittable *world = simple_light();
-  hittable *world = cornell_box();
+  //hittable *world = cornell_box();
+  hittable *world = cornell_box_blocks();
 
   // vec3 lookfrom(13,2,3);
   // vec3 lookat(0,0,0);
