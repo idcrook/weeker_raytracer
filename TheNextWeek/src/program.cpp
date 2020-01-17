@@ -43,11 +43,12 @@ hittable *final() {
   hittable **boxlist2 = new hittable*[10000];
   //material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)));
   //material *white = new lambertian( new constant_texture(vec3(0.73, 1.15, 0.73)));
-  material *white = new lambertian( new constant_texture(vec3(1.25, 1.05, 0.73)));
+  material *white = new lambertian( new constant_texture(vec3(1.35, 0.95, 0.73)));
   material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)) ); // light green
   //material *ground = new lambertian( new constant_texture(vec3(0.48, 0.75, 0.83))); // light blue
   //material *ground = new lambertian( new constant_texture(vec3(0.83, 0.48, 0.73))); // pinkish
-  material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0)));
+  //material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0))); // yellow
+  material *ball_moving = new lambertian( new constant_texture(vec3(0.7, 0.3, 0.15)));
   int b = 0;
   for (int i = 0; i < nb; i++) {
     for (int j = 0; j < nb; j++) {
