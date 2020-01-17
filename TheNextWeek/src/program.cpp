@@ -36,13 +36,66 @@ vec3 color(const ray& r, hittable *world, int depth) {
   }
 }
 
-hittable *cornell_final() {
+hittable *final() {
+  int nb = 20;
   hittable **list = new hittable*[30];
   hittable **boxlist = new hittable*[10000];
-  texture *pertext = new noise_texture(0.1);
+  hittable **boxlist2 = new hittable*[10000];
+  material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)));
+  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)));
+  int b = 0;
+  for (int i = 0; i < nb; i++) {
+    for (int j = 0; j < nb; j++) {
+      float w = 100;
+      float x0 = -1000 + i*w;
+      float z0 = -1000 + j*w;
+      float y0 = 0;
+      float x1 = x0 + w;
+      float y1 = 100*(random_double()+0.01);
+      float z1 = z0 + w;
+      boxlist[b++] = new box(vec3(x0,y0,z0), vec3(x1,y1,z1), ground);
+    }
+  }
+  int l = 0;
+  list[l++] = new bvh_node(boxlist, b, 0, 1);
+  material *light = new diffuse_light( new constant_texture(vec3(7, 7, 7)));
+  list[l++] = new xz_rect(123, 423, 147, 412, 554, light);
+  vec3 center(400, 400, 200);
+  list[l++] = new moving_sphere(center, center+vec3(30, 0, 0),
+                                0, 1, 50, new lambertian(new constant_texture(vec3(0.7, 0.3, 0.1))));
+  list[l++] = new sphere(vec3(260, 150, 45), 50, new dielectric(1.5));
+  list[l++] = new sphere(vec3(0, 150, 145), 50,
+                         new metal(vec3(0.8, 0.8, 0.9), 10.0));
+  hittable *boundary = new sphere(vec3(360, 150, 145), 70, new dielectric(1.5));
+  list[l++] = boundary;
+  list[l++] = new constant_medium(boundary, 0.2,
+                                  new constant_texture(vec3(0.2, 0.4, 0.9)));
+  boundary = new sphere(vec3(0, 0, 0), 5000, new dielectric(1.5));
+  list[l++] = new constant_medium(boundary, 0.0001,
+                                  new constant_texture(vec3(1.0, 1.0, 1.0)));
   int nx, ny, nn;
   unsigned char *tex_data = stbi_load("assets/earthmap.jpg", &nx, &ny, &nn, 0);
-  material *mat =  new lambertian(new image_texture(tex_data, nx, ny));
+  material *emat =  new lambertian(new image_texture(tex_data, nx, ny));
+  list[l++] = new sphere(vec3(400, 200, 400), 100, emat);
+  texture *pertext = new noise_texture(0.1);
+  list[l++] =  new sphere(vec3(220, 280, 300), 80, new lambertian( pertext ));
+  int ns = 1000;
+  for (int j = 0; j < ns; j++) {
+    boxlist2[j] = new
+      sphere( vec3(165*random_double(), 165*random_double(), 165*random_double()), 10, white);
+  }
+  list[l++] = new
+    translate(new rotate_y(new bvh_node(boxlist2, ns, 0.0, 1.0), 15), vec3(-100,270,395));
+  return new hittable_list(list,l);
+}
+
+hittable *cornell_final() {
+  hittable **list = new hittable*[30];
+  // hittable **boxlist = new hittable*[10000];
+  // texture *pertext = new noise_texture(0.1);
+  // int nx, ny, nn;
+  // unsigned char *tex_data = stbi_load("assets/earthmap.jpg", &nx, &ny, &nn, 0);
+  // material *mat =  new lambertian(new image_texture(tex_data, nx, ny));
 
   int i = 0;
   material *red = new lambertian( new constant_texture(vec3(0.65, 0.05, 0.05)) );
@@ -50,7 +103,7 @@ hittable *cornell_final() {
   material *green = new lambertian( new constant_texture(vec3(0.12, 0.45, 0.15)) );
   material *light = new diffuse_light( new constant_texture(vec3(7, 7, 7)) );
 
-  list[i++] = new sphere(vec3(260, 50, 145), 50,mat);
+  // list[i++] = new sphere(vec3(260, 50, 145), 50,mat);
 
   list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
   list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
@@ -59,18 +112,19 @@ hittable *cornell_final() {
   list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
   list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
 
-  hittable *boundary = new sphere(vec3(160, 50, 345), 50, new dielectric(1.5));
-  list[i++] = boundary;
-  list[i++] = new constant_medium(boundary, 0.2, new constant_texture(vec3(0.2, 0.4, 0.9)));
-  list[i++] = new sphere(vec3(460, 50, 105), 50, new dielectric(1.5));
-  list[i++] = new sphere(vec3(120, 50, 205), 50, new lambertian(pertext));
-  int ns = 10000;
-  for (int j = 0; j < ns; j++) {
-    boxlist[j] = new sphere(vec3(165*random_double(), 330*random_double(), 165*random_double()), 10, white);
-  }
-  list[i++] =   new translate(new rotate_y(new bvh_node(boxlist,ns, 0.0, 1.0), 15), vec3(265,0,295));
+  // hittable *boundary = new sphere(vec3(160, 50, 345), 50, new dielectric(1.5));
+  // list[i++] = boundary;
+  // list[i++] = new constant_medium(boundary, 0.2, new constant_texture(vec3(0.2, 0.4, 0.9)));
+  // list[i++] = new sphere(vec3(460, 50, 105), 50, new dielectric(1.5));
+  // list[i++] = new sphere(vec3(120, 50, 205), 50, new lambertian(pertext));
+  // int ns = 10000;
+  // for (int j = 0; j < ns; j++) {
+  //   boxlist[j] = new sphere(vec3(165*random_double(), 330*random_double(), 165*random_double()), 10, white);
+  // }
+  // list[i++] =   new translate(new rotate_y(new bvh_node(boxlist,ns, 0.0, 1.0), 15), vec3(265,0,295));
 
-  hittable *boundary2 = new translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), new dielectric(1.5)), -18), vec3(130,0,65));
+  hittable *boundary2 = new
+    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), new dielectric(1.5)), -18), vec3(130,0,65));
   list[i++] = boundary2;
   list[i++] = new constant_medium(boundary2, 0.2, new constant_texture(vec3(0.9, 0.9, 0.9)));
   return new hittable_list(list,i);
@@ -315,7 +369,7 @@ int main (int argc, char** argv) {
     ns = 24;
   } else {
     nx = 200;
-    ny = 100;
+    ny = 200;
     ns = 10;
   }
 
