@@ -37,14 +37,14 @@ vec3 color(const ray& r, hittable *world, int depth) {
 }
 
 hittable *final() {
-  int nb = 20;
+  int nb = 21;
   hittable **list = new hittable*[30];
   hittable **boxlist = new hittable*[10000];
   hittable **boxlist2 = new hittable*[10000];
   //material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)));
   material *white = new lambertian( new constant_texture(vec3(0.73, 1.15, 0.73)));
   //material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)) ); // light green
-  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.73, 0.89))); // light blue-cyan
+  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.75, 0.83))); // light blue-cyan
   //material *ground = new lambertian( new constant_texture(vec3(0.83, 0.48, 0.73))); // pinkish
   material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0)));
   int b = 0;
@@ -74,7 +74,7 @@ hittable *final() {
 
   // metal
   list[l++] = new sphere(vec3(0, 150, 145), 50,
-                         new metal(vec3(0.8, 0.9, 0.8), 10.0));
+                         new metal(vec3(0.9, 0.8, 0.8), 10.0));
 
 
   hittable *glassy = new sphere(vec3(360, 150, 145), 70, new dielectric(1.5));
