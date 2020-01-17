@@ -1,4 +1,5 @@
 #include "float.h"
+#include "aarect.h"
 #include "bvh.h"
 #include "hittable_list.h"
 #include "material.h"
@@ -19,22 +20,34 @@ vec3 color(const ray& r, hittable *world, int depth) {
   if (world->hit(r, 0.0001, MAXFLOAT, rec)) {
     ray scattered;
     vec3 attenuation;
+    vec3 emitted = rec.mat_ptr->emitted(rec.u, rec.v, rec.p);
     if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
-      return attenuation*color(scattered, world, depth+1);
-      //return attenuation;
+      return emitted + attenuation*color(scattered, world, depth+1);
     }
     else {
-      return vec3(0,0,0);
+      return emitted;
     }
   }
   else {
-    vec3 unit_direction = unit_vector(r.direction());
-    float t = 0.5*(unit_direction.y() + 1.0);
-    return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
+    return vec3(0,0,0);
   }
 }
 
-hittable *earth() {
+
+hittable *simple_light() {
+  texture *pertext = new noise_texture(4);
+  hittable **list = new hittable*[4];
+  list[0] = new sphere(vec3(0,-1000, 0), 1000, new lambertian(pertext));
+  list[1] = new sphere(vec3(0, 2, 0), 2, new lambertian(pertext));
+  // list[2] = new sphere(vec3(0, 7, 0), 2, new lambertian(pertext));
+  list[2] = new sphere(vec3(0, 7, 0), 2,
+                       new diffuse_light(new constant_texture(vec3(4,4,4))));
+  list[3] = new xy_rect(3, 5, 1, 3, -2,
+                        new diffuse_light(new constant_texture(vec3(4,4,4))));
+  return new hittable_list(list,4);
+}
+
+hittable *globe() {
   int nx, ny, nn;
   unsigned char *tex_data = stbi_load("assets/earthmap.jpg", &nx, &ny, &nn, 0);
   material *mat =  new lambertian(new image_texture(tex_data, nx, ny));
@@ -125,27 +138,36 @@ hittable *random_scene() {
 
 int main (int argc, char** argv) {
 
-  // default value for higher resolution render
+  // default values
   bool HIGH_QUALITY_RENDER = !true;
+  bool MEDIUM_QUALITY_RENDER = !true;
 
   // handle command line arguments
   if (argc >= 2) {
-    // first command line argument is "HQ"
+    // first command line argument is "HQ"?
     if (std::string(argv[1]) == "HQ") {
       HIGH_QUALITY_RENDER = true;
+    }
+    // first command line argument is "MQ"?
+    if (std::string(argv[1]) == "MQ") {
+      MEDIUM_QUALITY_RENDER = true;
     }
   }
 
   int nx, ny, ns;
 
-  if (! HIGH_QUALITY_RENDER) {
+  if (HIGH_QUALITY_RENDER) {
+    nx = 1200;
+    ny = 800;
+    ns = 50;
+  } else if (MEDIUM_QUALITY_RENDER) {
+    nx = 400;
+    ny = 200;
+    ns = 24;
+  } else {
     nx = 200;
     ny = 100;
     ns = 10;
-  } else {
-    nx = 1200;
-    ny = 800;
-    ns = 24;
   }
 
   std::cerr << "Total Scanlines: " << ny << std::endl;
@@ -155,15 +177,17 @@ int main (int argc, char** argv) {
   //hittable *world = random_scene();
   //hittable *world = two_spheres();
   //hittable *world = two_perlin_spheres();
-  hittable *world = earth();
+  //hittable *world = globe();
+  hittable *world = simple_light();
 
   vec3 lookfrom(13,2,3);
   vec3 lookat(0,0,0);
   float dist_to_focus = 10.0;
-  //float aperture = 0.1;
   float aperture = 0.0;
+  float vfov = 20.0;
+  //float vfov = 60.0;
 
-  camera cam(lookfrom, lookat, vec3(0,1,0), 20,
+  camera cam(lookfrom, lookat, vec3(0,1,0), vfov,
              float(nx)/float(ny), aperture, dist_to_focus,
              0.0, 1.0);
 
