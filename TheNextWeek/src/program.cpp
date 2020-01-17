@@ -36,6 +36,47 @@ vec3 color(const ray& r, hittable *world, int depth) {
   }
 }
 
+hittable *cornell_final() {
+  hittable **list = new hittable*[30];
+  hittable **boxlist = new hittable*[10000];
+  texture *pertext = new noise_texture(0.1);
+  int nx, ny, nn;
+  unsigned char *tex_data = stbi_load("assets/earthmap.jpg", &nx, &ny, &nn, 0);
+  material *mat =  new lambertian(new image_texture(tex_data, nx, ny));
+
+  int i = 0;
+  material *red = new lambertian( new constant_texture(vec3(0.65, 0.05, 0.05)) );
+  material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)) );
+  material *green = new lambertian( new constant_texture(vec3(0.12, 0.45, 0.15)) );
+  material *light = new diffuse_light( new constant_texture(vec3(7, 7, 7)) );
+
+  list[i++] = new sphere(vec3(260, 50, 145), 50,mat);
+
+  list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
+  list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
+  list[i++] = new xz_rect(123, 423, 147, 412, 554, light);
+  list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
+  list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
+  list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
+
+  hittable *boundary = new sphere(vec3(160, 50, 345), 50, new dielectric(1.5));
+  list[i++] = boundary;
+  list[i++] = new constant_medium(boundary, 0.2, new constant_texture(vec3(0.2, 0.4, 0.9)));
+  list[i++] = new sphere(vec3(460, 50, 105), 50, new dielectric(1.5));
+  list[i++] = new sphere(vec3(120, 50, 205), 50, new lambertian(pertext));
+  int ns = 10000;
+  for (int j = 0; j < ns; j++) {
+    boxlist[j] = new sphere(vec3(165*random_double(), 330*random_double(), 165*random_double()), 10, white);
+  }
+  list[i++] =   new translate(new rotate_y(new bvh_node(boxlist,ns, 0.0, 1.0), 15), vec3(265,0,295));
+
+  hittable *boundary2 = new translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), new dielectric(1.5)), -18), vec3(130,0,65));
+  list[i++] = boundary2;
+  list[i++] = new constant_medium(boundary2, 0.2, new constant_texture(vec3(0.9, 0.9, 0.9)));
+  return new hittable_list(list,i);
+}
+
+
 hittable *cornell_smoke() {
     hittable **list = new hittable*[8];
     int i = 0;
@@ -65,6 +106,28 @@ hittable *cornell_smoke() {
 
     return new hittable_list(list,i);
 }
+
+hittable *cornell_balls() {
+  hittable **list = new hittable*[9];
+  int i = 0;
+  material *red = new lambertian( new constant_texture(vec3(0.65, 0.05, 0.05)) );
+  material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)) );
+  material *green = new lambertian( new constant_texture(vec3(0.12, 0.45, 0.15)) );
+  material *light = new diffuse_light( new constant_texture(vec3(5, 5, 5)) );
+  list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
+  list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
+  list[i++] = new xz_rect(113, 443, 127, 432, 554, light);
+  list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
+  list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
+  list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
+  hittable *boundary = new sphere(vec3(160, 100, 145), 100, new dielectric(1.5));
+  list[i++] = boundary;
+  list[i++] = new constant_medium(boundary, 0.1, new constant_texture(vec3(1.0, 1.0, 1.0)));
+  list[i++] = new
+    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
+  return new hittable_list(list,i);
+}
+
 
 hittable *cornell_box_blocks() {
     hittable **list = new hittable*[8];
@@ -240,6 +303,7 @@ int main (int argc, char** argv) {
   if (SUPER_QUALITY_RENDER) {
     nx = 500;
     ny = 500;
+    //nx *= 2; ny *= 2;
     ns = 10000;
   } else if (HIGH_QUALITY_RENDER) {
     nx = 500;
@@ -266,7 +330,9 @@ int main (int argc, char** argv) {
   //hittable *world = simple_light();
   //hittable *world = cornell_box();
   //hittable *world = cornell_box_blocks();
-  hittable *world = cornell_smoke();
+  //hittable *world = cornell_balls();
+  //hittable *world = cornell_smoke();
+  hittable *world = cornell_final();
 
   // vec3 lookfrom(13,2,3);
   // vec3 lookat(0,0,0);
