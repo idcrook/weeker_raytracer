@@ -33,6 +33,22 @@ vec3 color(const ray& r, hittable *world, int depth) {
   }
 }
 
+hittable *cornell_box() {
+  hittable **list = new hittable*[5];
+  int i = 0;
+  material *red = new lambertian(new constant_texture(vec3(0.65, 0.05, 0.05)));
+  material *white = new lambertian(new constant_texture(vec3(0.73, 0.73, 0.73)));
+  material *green = new lambertian(new constant_texture(vec3(0.12, 0.45, 0.15)));
+  material *light = new diffuse_light(new constant_texture(vec3(15, 15, 15)));
+
+  list[i++] = new yz_rect(0, 555, 0, 555, 555, green);
+  list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
+  list[i++] = new xz_rect(213, 343, 227, 332, 554, light);
+  list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
+  list[i++] = new xy_rect(0, 555, 0, 555, 555, white);
+
+  return new hittable_list(list,i);
+}
 
 hittable *simple_light() {
   texture *pertext = new noise_texture(4);
@@ -178,14 +194,20 @@ int main (int argc, char** argv) {
   //hittable *world = two_spheres();
   //hittable *world = two_perlin_spheres();
   //hittable *world = globe();
-  hittable *world = simple_light();
+  //hittable *world = simple_light();
+  hittable *world = cornell_box();
 
-  vec3 lookfrom(13,2,3);
-  vec3 lookat(0,0,0);
+  // vec3 lookfrom(13,2,3);
+  // vec3 lookat(0,0,0);
+  // float dist_to_focus = 10.0;
+  // float aperture = 0.0;
+  // float vfov = 20.0;
+
+  vec3 lookfrom(278, 278, -800);
+  vec3 lookat(278,278,0);
   float dist_to_focus = 10.0;
   float aperture = 0.0;
-  float vfov = 20.0;
-  //float vfov = 60.0;
+  float vfov = 40.0;
 
   camera cam(lookfrom, lookat, vec3(0,1,0), vfov,
              float(nx)/float(ny), aperture, dist_to_focus,
