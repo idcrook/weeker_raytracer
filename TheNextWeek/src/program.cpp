@@ -41,8 +41,10 @@ hittable *final() {
   hittable **list = new hittable*[30];
   hittable **boxlist = new hittable*[10000];
   hittable **boxlist2 = new hittable*[10000];
-  material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)));
-  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)));
+  //material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)));
+  material *white = new lambertian( new constant_texture(vec3(0.73, 1.23, 0.73)));
+  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.73, 0.83)));
+  material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0)));
   int b = 0;
   for (int i = 0; i < nb; i++) {
     for (int j = 0; j < nb; j++) {
@@ -62,10 +64,10 @@ hittable *final() {
   list[l++] = new xz_rect(123, 423, 147, 412, 554, light);
   vec3 center(400, 400, 200);
   list[l++] = new moving_sphere(center, center+vec3(30, 0, 0),
-                                0, 1, 50, new lambertian(new constant_texture(vec3(0.7, 0.3, 0.1))));
+                                0, 1, 50, ball_moving);
   list[l++] = new sphere(vec3(260, 150, 45), 50, new dielectric(1.5));
   list[l++] = new sphere(vec3(0, 150, 145), 50,
-                         new metal(vec3(0.8, 0.8, 0.9), 10.0));
+                         new metal(vec3(0.9, 0.8, 0.8), 10.0));
   hittable *boundary = new sphere(vec3(360, 150, 145), 70, new dielectric(1.5));
   list[l++] = boundary;
   list[l++] = new constant_medium(boundary, 0.2,
@@ -386,7 +388,8 @@ int main (int argc, char** argv) {
   //hittable *world = cornell_box_blocks();
   //hittable *world = cornell_balls();
   //hittable *world = cornell_smoke();
-  hittable *world = cornell_final();
+  //hittable *world = cornell_final();
+  hittable *world = final();
 
   // vec3 lookfrom(13,2,3);
   // vec3 lookat(0,0,0);
@@ -394,8 +397,14 @@ int main (int argc, char** argv) {
   // float aperture = 0.0;
   // float vfov = 20.0;
 
-  vec3 lookfrom(278, 278, -800);
-  vec3 lookat(278,278,0);
+  // vec3 lookfrom(278, 278, -800);
+  // vec3 lookat(278,278,0);
+  // float dist_to_focus = 10.0;
+  // float aperture = 0.0;
+  // float vfov = 40.0;
+
+  vec3 lookfrom(478, 278, -600);
+  vec3 lookat(300,278,0);
   float dist_to_focus = 10.0;
   float aperture = 0.0;
   float vfov = 40.0;
