@@ -31,4 +31,4 @@ The Next Week
 
 Image with 10,000 ray samples around each point. took 18 hours, 10 minutes
 
-![final image](img/TNW-ch10HQ.png)
+![final image](img/TNW-ch10SH2.png)
