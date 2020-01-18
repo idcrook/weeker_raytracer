@@ -44,11 +44,11 @@ hittable *final() {
   material *white = new lambertian( new constant_texture(vec3(0.73, 0.73, 0.73)));
   //material *white = new lambertian( new constant_texture(vec3(0.73, 1.15, 0.73)));
   //material *white = new lambertian( new constant_texture(vec3(1.35, 0.95, 0.73)));
-  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)) ); // light green
-  //material *ground = new lambertian( new constant_texture(vec3(0.48, 0.75, 0.83))); // light blue
+  //material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)) ); // light green
+  material *ground = new lambertian( new constant_texture(vec3(0.48, 0.75, 0.83))); // light blue
   //material *ground = new lambertian( new constant_texture(vec3(0.83, 0.48, 0.73))); // pinkish
-  //material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0))); // yellow
-  material *ball_moving = new lambertian( new constant_texture(vec3(0.7, 0.3, 0.15))); // red-orange
+  material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0))); // yellow
+  //material *ball_moving = new lambertian( new constant_texture(vec3(0.7, 0.3, 0.15))); // red-orange
   int b = 0;
   for (int i = 0; i < nb; i++) {
     for (int j = 0; j < nb; j++) {
@@ -82,7 +82,7 @@ hittable *final() {
   hittable *glassy = new sphere(vec3(360, 150, 145), 70, new dielectric(1.5));
   list[l++] = glassy;
   list[l++] = new constant_medium(glassy, 0.2,
-                                  new constant_texture(vec3(0.9, 0.4, 0.2)));
+                                  new constant_texture(vec3(0.2, 0.9, 0.4)));
   //                                  new constant_texture(vec3(0.2, 0.4, 0.9)));
 
   hittable *boundary = new sphere(vec3(0, 0, 0), 5000, new dielectric(1.5));
@@ -373,8 +373,8 @@ int main (int argc, char** argv) {
   if (SUPER_QUALITY_RENDER) {
     nx = 500;
     ny = 500;
-    //nx *= 2; ny *= 2;
-    ns = 10000;
+    nx *= 2; ny *= 2;
+    ns = 10000/4;
   } else if (HIGH_QUALITY_RENDER) {
     nx = 500;
     ny = 500;
