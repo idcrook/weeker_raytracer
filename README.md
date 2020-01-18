@@ -23,8 +23,12 @@ time ( build/apps/program >! output/chNa.ppm )
 
 In One Weekend
 
+Image took about 12.3 minutes, without   BVH. When generating same scene with BVH partitioning, took about 3 minutes.
+
 ![final image](img/IOW-ch13f.png)
 
 The Next Week
+
+Image with 10,000 ray samples around each point. took 18 hours, 10 minutes
 
 ![final image](img/TNW-ch10HQ.png)
