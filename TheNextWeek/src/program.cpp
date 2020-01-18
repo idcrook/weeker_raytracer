@@ -92,7 +92,8 @@ hittable *final() {
   unsigned char *tex_data = stbi_load("assets/earthmap.jpg", &nx, &ny, &nn, 0);
   material *emat =  new lambertian(new image_texture(tex_data, nx, ny));
   list[l++] = new sphere(vec3(400, 200, 400), 100, emat);
-  texture *pertext = new noise_texture(0.1);
+  //texture *pertext = new noise_texture(0.1);
+  texture *pertext = new noise_texture(4.0);
   list[l++] =  new sphere(vec3(220, 280, 300), 80, new lambertian( pertext ));
   int ns = 1000;
   for (int j = 0; j < ns; j++) {
