@@ -37,7 +37,7 @@ vec3 color(const ray& r, hittable *world, int depth) {
 }
 
 hittable *final() {
-  int nb = 21;
+  int nb = 22;
   hittable **list = new hittable*[30];
   hittable **boxlist = new hittable*[10000];
   hittable **boxlist2 = new hittable*[10000];
@@ -47,8 +47,10 @@ hittable *final() {
   //material *ground = new lambertian( new constant_texture(vec3(0.48, 0.83, 0.53)) ); // light green
   material *ground = new lambertian( new constant_texture(vec3(0.48, 0.75, 0.83))); // light blue
   //material *ground = new lambertian( new constant_texture(vec3(0.83, 0.48, 0.73))); // pinkish
-  material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0))); // yellow
+  //material *ball_moving = new lambertian( new constant_texture(vec3(252/255.0, 255/255.0, 56/255.0))); // yellow
   //material *ball_moving = new lambertian( new constant_texture(vec3(0.7, 0.3, 0.15))); // red-orange
+  material *ball_moving = new lambertian( new constant_texture(vec3(0.83, 0.15, 0.3))); // purplish red
+  //material *ball_moving = new lambertian( new constant_texture(vec3(0.2, 0.9, 0.4))); // green
   int b = 0;
   for (int i = 0; i < nb; i++) {
     for (int j = 0; j < nb; j++) {
@@ -82,8 +84,9 @@ hittable *final() {
   hittable *glassy = new sphere(vec3(360, 150, 145), 70, new dielectric(1.5));
   list[l++] = glassy;
   list[l++] = new constant_medium(glassy, 0.2,
-                                  new constant_texture(vec3(0.2, 0.9, 0.4)));
-  //                                  new constant_texture(vec3(0.2, 0.4, 0.9)));
+                                  new constant_texture(vec3(0.83, 0.15, 0.73)));
+                                  // new constant_texture(vec3(0.2, 0.9, 0.4)));
+                                  // new constant_texture(vec3(0.2, 0.4, 0.9)));
 
   hittable *boundary = new sphere(vec3(0, 0, 0), 5000, new dielectric(1.5));
   list[l++] = new constant_medium(boundary, 0.0001,
@@ -93,8 +96,12 @@ hittable *final() {
   material *emat =  new lambertian(new image_texture(tex_data, nx, ny));
   list[l++] = new sphere(vec3(400, 200, 400), 100, emat);
   //texture *pertext = new noise_texture(0.1);
-  texture *pertext = new noise_texture(4.0);
-  list[l++] =  new sphere(vec3(220, 280, 300), 80, new lambertian( pertext ));
+  //texture *pertext = new noise_texture(4.0);
+  //list[l++] =  new sphere(vec3(220, 280, 300), 80, new lambertian( pertext ));
+  // bubble
+  list[l++] =  new sphere(vec3(220, 280, 300), 80, new dielectric( 1.5 ));
+  list[l++] =  new sphere(vec3(220, 280, 300), -78, new dielectric( 1.5 ));
+
   int ns = 1000;
   for (int j = 0; j < ns; j++) {
     boxlist2[j] = new
