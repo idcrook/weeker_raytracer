@@ -4,6 +4,8 @@
 #include "hittable.h"
 #include "random.h"
 #include "texture.h"
+#include "onb.h"
+#include "pdf.h"
 
 vec3 random_in_unit_sphere() {
   vec3 p;
@@ -90,19 +92,22 @@ public:
     return cosine / M_PI;
   }
 
-  bool scatter(const ray& r_in,
-               const hit_record& rec, vec3& alb, ray& scattered, float& pdf) const {
-    vec3 direction;
-    do {
-      direction = random_in_unit_sphere();
-    } while (dot(direction, rec.normal) < 0);
-    //vec3 target = rec.p + rec.normal + random_in_unit_sphere();
+  bool scatter(
+               const ray& r_in,
+               const hit_record& rec,
+               vec3& alb,
+               ray& scattered,
+               float& pdf) const
+  {
+    onb uvw;
+    uvw.build_from_w(rec.normal);
+    vec3 direction = uvw.local(random_cosine_direction());
     scattered = ray(rec.p, unit_vector(direction), r_in.time());
     alb = albedo->value(rec.u, rec.v, rec.p);
-    //pdf = dot(rec.normal, scattered.direction()) / M_PI;
-    pdf = 0.5 / M_PI;
+    pdf = dot(uvw.w(), scattered.direction()) / M_PI;
     return true;
   }
+
 
   texture *albedo;
 };
@@ -175,17 +180,17 @@ public:
 
 // add an emissive material
 class diffuse_light : public material {
-    public:
-        diffuse_light(texture *a) : emit(a) {}
-        virtual bool scatter(const ray& r_in, const hit_record& rec,
-            vec3& attenuation, ray& scattered) const {
-          (void)r_in; (void)rec; (void)attenuation; (void)scattered;
-          return false;
-        }
-        virtual vec3 emitted(float u, float v, const vec3& p) const {
-            return emit->value(u, v, p);
-        }
-        texture *emit;
+public:
+  diffuse_light(texture *a) : emit(a) {}
+  virtual bool scatter(const ray& r_in, const hit_record& rec,
+                       vec3& attenuation, ray& scattered) const {
+    (void)r_in; (void)rec; (void)attenuation; (void)scattered;
+    return false;
+  }
+  virtual vec3 emitted(float u, float v, const vec3& p) const {
+    return emit->value(u, v, p);
+  }
+  texture *emit;
 };
 
 
