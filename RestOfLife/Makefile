@@ -13,7 +13,7 @@ INCLUDE  := -Iinclude/ -Isrc/
 # program.cpp found in src/
 
 SRC      :=                     \
-	$(wildcard src/*.cpp)       \
+	src/program.cpp             \
 	$(wildcard src/*.h)         \
 
 OBJECTS := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
