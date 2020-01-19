@@ -20,12 +20,16 @@
 
 vec3 color(const ray& r, hittable *world, int depth) {
   hit_record rec;
-  if (world->hit(r, 0.0001, MAXFLOAT, rec)) {
+  if (world->hit(r, 0.001, MAXFLOAT, rec)) {
     ray scattered;
     vec3 attenuation;
     vec3 emitted = rec.mat_ptr->emitted(rec.u, rec.v, rec.p);
-    if (depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered)) {
-      return emitted + attenuation*color(scattered, world, depth+1);
+    float pdf;
+    vec3 albedo;
+    if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf)) {
+      return emitted +
+        (albedo*rec.mat_ptr->scattering_pdf(r, rec, scattered)
+         * color(scattered, world, depth+1)) / pdf;
     }
     else {
       return emitted;

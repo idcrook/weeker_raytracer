@@ -57,9 +57,18 @@ float schlick(float cosine, float ref_idx) {
 
 class material  {
 public:
-  virtual bool scatter(
-                       const ray& r_in, const hit_record& rec, vec3& attenuation,
-                       ray& scattered) const = 0;
+  virtual bool scatter(const ray& r_in,
+                       const hit_record& rec, vec3& albedo, ray& scattered, float& pdf) const {
+    (void)r_in; (void)rec;  (void)albedo;  (void)scattered;  (void)pdf;
+    return false;
+  }
+
+  virtual float scattering_pdf(const ray& r_in, const hit_record& rec,
+                               const ray& scattered) const {
+    (void)r_in; (void)rec; (void)scattered;
+    return 0;
+  }
+
   // not a pure virtual function (base class returns black)
   virtual vec3 emitted(float u, float v, const vec3& p) const {
     (void)u; (void)v; (void)p;
@@ -71,11 +80,22 @@ public:
 class lambertian : public material {
 public:
   lambertian(texture *a) : albedo(a) {}
-  virtual bool scatter(const ray& r_in, const hit_record& rec,
-                       vec3& attenuation, ray& scattered) const {
+
+  float scattering_pdf(const ray& r_in,
+                       const hit_record& rec, const ray& scattered) const {
+    (void)r_in;
+    float cosine = dot(rec.normal, unit_vector(scattered.direction()));
+    if (cosine < 0)
+      return 0;
+    return cosine / M_PI;
+  }
+
+  bool scatter(const ray& r_in,
+               const hit_record& rec, vec3& alb, ray& scattered, float& pdf) const {
     vec3 target = rec.p + rec.normal + random_in_unit_sphere();
-    scattered = ray(rec.p, target-rec.p, r_in.time());
-    attenuation = albedo->value(rec.u, rec.v, rec.p);
+    scattered = ray(rec.p, unit_vector(target-rec.p), r_in.time());
+    alb = albedo->value(rec.u, rec.v, rec.p);
+    pdf = dot(rec.normal, scattered.direction()) / M_PI;
     return true;
   }
 
