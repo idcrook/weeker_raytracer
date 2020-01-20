@@ -28,7 +28,7 @@ vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
     float pdf_val;
     vec3 albedo;
     if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf_val)) {
-      hittable *light_shape = new xz_rect(213, 343, 227, 332, 554, 0);
+      //hittable *light_shape = new xz_rect(213, 343, 227, 332, 554, 0);
       hittable_pdf p0(light_shape, rec.p);
       cosine_pdf p1(rec.normal);
       mixture_pdf p(&p0, &p1);
@@ -175,7 +175,8 @@ int main (int argc, char** argv) {
         float u = float(i + random_double()) / float(nx);
         float v = float(j + random_double()) / float(ny);
         ray r = cam->get_ray(u, v);
-        col += color(r, world, &hlist, 0);
+        //col += color(r, world, &hlist, 0);
+        col += color(r, world, light_shape, 0);
       }
       col /= float(ns);
 
