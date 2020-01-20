@@ -63,14 +63,17 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
   list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
   list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
   list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
-  list[i++] = new
-    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), white), -18), vec3(130,0,65));
-
+  // replaced with sphere
   // list[i++] = new
-  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
-  material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
+  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), white), -18), vec3(130,0,65));
+  material *glass = new dielectric(1.5);
+  list[i++] = new sphere(vec3(190, 90, 190),90 , glass);
+
   list[i++] = new
-    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
+    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
+  // material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
+  // list[i++] = new
+  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
 
   *scene = new hittable_list(list,i);
   vec3 lookfrom(278, 278, -800);
@@ -129,6 +132,7 @@ int main (int argc, char** argv) {
     ns = 10;
   }
 
+  std::cerr << "Samples per point: " << ns << std::endl;
   std::cerr << "Total Scanlines: " << ny << std::endl;
 
   std::cout << "P3\n" << nx << " " << ny << "\n255\n";
@@ -143,7 +147,7 @@ int main (int argc, char** argv) {
   hittable *glass_sphere = new sphere(vec3(190, 90, 190), 90, 0);
   a[0] = light_shape;
   a[1] = glass_sphere;
-  hittable_list hlist(a,1);
+  hittable_list hlist(a,2);
 
   for (int j = ny-1; j >= 0; j--) {
     std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
@@ -155,6 +159,7 @@ int main (int argc, char** argv) {
         ray r = cam->get_ray(u, v);
         //col += color(r, world, &hlist, 0);
         col += color(r, world, light_shape, 0);
+        //col += color(r, world, glass_sphere, 0);
       }
       col /= float(ns);
 
