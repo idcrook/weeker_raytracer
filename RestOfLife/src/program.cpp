@@ -84,12 +84,13 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
 
   // list[i++] = new
   //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
-  material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.1);
+  material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
   list[i++] = new
-    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
+    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 23), vec3(265,0,295));
 
   *scene = new hittable_list(list,i);
   vec3 lookfrom(278, 278, -800);
+  //vec3 lookfrom(278, 412, -800);
   vec3 lookat(278, 278, 0);
   float dist_to_focus = 10.0;
   float aperture = 0.0;
@@ -130,7 +131,7 @@ int main (int argc, char** argv) {
     nx = 500;
     ny = 500;
     nx *= 2; ny *= 2;
-    ns = 10000/4;
+    ns = 1000/2;
   } else if (HIGH_QUALITY_RENDER) {
     nx = 500;
     ny = 500;
