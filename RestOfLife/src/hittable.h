@@ -29,6 +29,11 @@ public:
   virtual bool hit(
                    const ray& r, float t_min, float t_max, hit_record& rec) const = 0;
   virtual bool bounding_box(float t0, float t1, aabb& box) const = 0;
+
+  // stub out
+  virtual float  pdf_value(const vec3& o, const vec3& v) const  { (void)o; (void)v; return 0.0; }
+  virtual vec3 random(const vec3& o) const { (void)o; return vec3(1, 0, 0);
+  }
 };
 
 

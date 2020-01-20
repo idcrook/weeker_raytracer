@@ -6,6 +6,7 @@
 #include "hittable_list.h"
 #include "material.h"
 #include "constant_medium.h"
+#include "pdf.h"
 #include "moving_sphere.h"
 #include "sphere.h"
 #include "camera.h"
@@ -24,28 +25,17 @@ vec3 color(const ray& r, hittable *world, int depth) {
     ray scattered;
     vec3 attenuation;
     vec3 emitted = rec.mat_ptr->emitted(r, rec, rec.u, rec.v, rec.p);
-    float pdf;
+    float pdf_val;
     vec3 albedo;
-    if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf)) {
-
-      vec3 on_light = vec3(213 + random_double()*(343-213),
-                           554,
-                           227 + random_double()*(332-227));
-      vec3 to_light = on_light - rec.p;
-      float distance_squared = to_light.squared_length();
-      to_light.make_unit_vector();
-      if (dot(to_light, rec.normal) < 0)
-        return emitted;
-      float light_area = (343-213)*(332-227);
-      float light_cosine = fabs(to_light.y());
-      if (light_cosine < 0.000001)
-        return emitted;
-      pdf = distance_squared / (light_cosine * light_area);
-      scattered = ray(rec.p, to_light, r.time());
+    if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf_val)) {
+      hittable *light_shape = new xz_rect(213, 343, 227, 332, 554, 0);
+      hittable_pdf p(light_shape, rec.p);
+      scattered = ray(rec.p, p.generate(), r.time());
+      pdf_val = p.value(scattered.direction());
 
       return emitted +
         (albedo*rec.mat_ptr->scattering_pdf(r, rec, scattered)
-         * color(scattered, world, depth+1)) / pdf;
+         * color(scattered, world, depth+1)) / pdf_val;
     }
     else {
       return emitted;
@@ -65,7 +55,7 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
   material *light = new diffuse_light( new constant_texture(vec3(15, 15, 15)) );
   list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
   list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
-  // flip normals to give light source a direction
+  // light source now has a emitting direction
   list[i++] = new flip_normals(new xz_rect(213, 343, 227, 332, 554, light));
   list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
   list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
