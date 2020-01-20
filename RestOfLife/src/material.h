@@ -150,14 +150,13 @@ public:
   dielectric(float ri) : ref_idx(ri) {}
   virtual bool scatter(const ray& r_in, const hit_record& hrec, scatter_record& srec) const {
     srec.is_specular = true;
-    srec.pdf_ptr = 0;
+    srec.pdf_ptr = NULL;
     srec.attenuation = vec3(1.0, 1.0, 1.0);
 
     vec3 outward_normal;
     vec3 reflected = reflect(r_in.direction(), hrec.normal);
-    float ni_over_nt;
     vec3 refracted;
-
+    float ni_over_nt;
     float reflect_prob;
     float cosine;
 
