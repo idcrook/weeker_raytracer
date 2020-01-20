@@ -23,6 +23,7 @@ public:
   virtual vec3 generate() const = 0;
 };
 
+// occasionally underflows
 class cosine_pdf : public pdf {
 public:
   cosine_pdf(const vec3& w) { uvw.build_from_w(w); }
@@ -50,6 +51,21 @@ public:
   }
   hittable *ptr;
   vec3 o;
+};
+
+class mixture_pdf : public pdf {
+public:
+  mixture_pdf(pdf *p0, pdf *p1 ) { p[0] = p0; p[1] = p1; }
+  virtual float value(const vec3& direction) const {
+    return 0.5 * p[0]->value(direction) + 0.5 *p[1]->value(direction);
+  }
+  virtual vec3 generate() const {
+    if (random_double() < 0.5)
+      return p[0]->generate();
+    else
+      return p[1]->generate();
+  }
+  pdf *p[2];
 };
 
 

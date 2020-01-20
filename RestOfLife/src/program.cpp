@@ -29,7 +29,10 @@ vec3 color(const ray& r, hittable *world, int depth) {
     vec3 albedo;
     if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf_val)) {
       hittable *light_shape = new xz_rect(213, 343, 227, 332, 554, 0);
-      hittable_pdf p(light_shape, rec.p);
+      hittable_pdf p0(light_shape, rec.p);
+      cosine_pdf p1(rec.normal);
+      mixture_pdf p(&p0, &p1);
+
       scattered = ray(rec.p, p.generate(), r.time());
       pdf_val = p.value(scattered.direction());
 
