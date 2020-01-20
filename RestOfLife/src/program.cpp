@@ -19,6 +19,17 @@
 
 #include <iostream>
 
+
+inline vec3 de_nan(const vec3& c) {
+  vec3 temp = c;
+  // use identity to de-"NaN" a color vector
+  if (!(temp[0] == temp[0])) temp[0] = 0;
+  if (!(temp[1] == temp[1])) temp[1] = 0;
+  if (!(temp[2] == temp[2])) temp[2] = 0;
+  return temp;
+}
+
+
 vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
   hit_record hrec;
   if (world->hit(r, 0.001, MAXFLOAT, hrec)) {
@@ -157,7 +168,8 @@ int main (int argc, char** argv) {
         float u = float(i + random_double()) / float(nx);
         float v = float(j + random_double()) / float(ny);
         ray r = cam->get_ray(u, v);
-        col += color(r, world, &hlist, 0);
+        col += de_nan(color(r, world, &hlist, 0));
+        //col += color(r, world, &hlist, 0);
         //col += color(r, world, light_shape, 0);
         //col += color(r, world, glass_sphere, 0);
       }
