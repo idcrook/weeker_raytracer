@@ -20,48 +20,27 @@
 #include <iostream>
 
 vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
-  hit_record rec;
-  if (world->hit(r, 0.001, MAXFLOAT, rec)) {
-    ray scattered;
-    vec3 attenuation;
-    vec3 emitted = rec.mat_ptr->emitted(r, rec, rec.u, rec.v, rec.p);
-    float pdf_val;
-    vec3 albedo;
-    if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf_val)) {
-      //hittable *light_shape = new xz_rect(213, 343, 227, 332, 554, 0);
-      hittable_pdf p0(light_shape, rec.p);
-      cosine_pdf p1(rec.normal);
-      mixture_pdf p(&p0, &p1);
-
-      scattered = ray(rec.p, p.generate(), r.time());
-      pdf_val = p.value(scattered.direction());
-
-      return emitted +
-        (albedo*rec.mat_ptr->scattering_pdf(r, rec, scattered)
-         * color(scattered, world, light_shape, depth+1)) / pdf_val;
+  hit_record hrec;
+  if (world->hit(r, 0.001, MAXFLOAT, hrec)) {
+    scatter_record srec;
+    vec3 emitted = hrec.mat_ptr->emitted(r, hrec, hrec.u, hrec.v, hrec.p);
+    if (depth < 50 && hrec.mat_ptr->scatter(r, hrec, srec)) {
+      if (srec.is_specular) {
+        return srec.attenuation
+          * color(srec.specular_ray, world, light_shape, depth+1);
+      }
+      else {
+        hittable_pdf plight(light_shape, hrec.p);
+        mixture_pdf p(&plight, srec.pdf_ptr);
+        ray scattered = ray(hrec.p, p.generate(), r.time());
+        float pdf_val = p.value(scattered.direction());
+        //delete srec.pdf_ptr;
+        return emitted + srec.attenuation
+          * hrec.mat_ptr->scattering_pdf(r, hrec, scattered)
+          * color(scattered, world, light_shape, depth+1)
+          / pdf_val;
+      }
     }
-// vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
-//   hit_record hrec;
-//   if (world->hit(r, 0.001, MAXFLOAT, hrec)) {
-    // scatter_record srec;
-    // vec3 emitted = hrec.mat_ptr->emitted(r, hrec, hrec.u, hrec.v, hrec.p);
-    // if (depth < 50 && hrec.mat_ptr->scatter(r, hrec, srec)) {
-    //   if (srec.is_specular) {
-    //     return srec.attenuation
-    //       * color(srec.specular_ray, world, light_shape, depth+1);
-    //   }
-    //   else {
-    //     hittable_pdf plight(light_shape, hrec.p);
-    //     mixture_pdf p(&plight, srec.pdf_ptr);
-    //     ray scattered = ray(hrec.p, p.generate(), r.time());
-    //     float pdf_val = p.value(scattered.direction());
-    //     //delete srec.pdf_ptr;
-    //     return emitted + srec.attenuation
-    //       * hrec.mat_ptr->scattering_pdf(r, hrec, scattered)
-    //       * color(scattered, world, light_shape, depth+1)
-    //       / pdf_val;
-    //   }
-    // }
     else {
       return emitted;
     }

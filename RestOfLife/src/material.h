@@ -66,15 +66,15 @@ struct scatter_record
 
 class material  {
 public:
-   virtual bool scatter(const ray& r_in,
-                        const hit_record& rec, vec3& albedo, ray& scattered, float& pdf) const {
-     (void)r_in; (void)rec;  (void)albedo;  (void)scattered;  (void)pdf;
-     return false;
-   }
+   // virtual bool scatter(const ray& r_in,
+   //                      const hit_record& rec, vec3& albedo, ray& scattered, float& pdf) const {
+   //   (void)r_in; (void)rec;  (void)albedo;  (void)scattered;  (void)pdf;
+   //   return false;
+   // }
 
   virtual bool scatter(const ray& r_in,
                        const hit_record& hrec,
-                       const scatter_record& srec) const {
+                       scatter_record& srec) const {
     (void)r_in; (void)hrec; (void)srec;
     return false;
   }
@@ -109,21 +109,21 @@ public:
     return cosine / M_PI;
   }
 
-  bool scatter(
-               const ray& r_in,
-               const hit_record& rec,
-               vec3& alb,
-               ray& scattered,
-               float& pdf) const
-  {
-    onb uvw;
-    uvw.build_from_w(rec.normal);
-    vec3 direction = uvw.local(random_cosine_direction());
-    scattered = ray(rec.p, unit_vector(direction), r_in.time());
-    alb = albedo->value(rec.u, rec.v, rec.p);
-    pdf = dot(uvw.w(), scattered.direction()) / M_PI;
-    return true;
-  }
+  // bool scatter(
+  //              const ray& r_in,
+  //              const hit_record& rec,
+  //              vec3& alb,
+  //              ray& scattered,
+  //              float& pdf) const
+  // {
+  //   onb uvw;
+  //   uvw.build_from_w(rec.normal);
+  //   vec3 direction = uvw.local(random_cosine_direction());
+  //   scattered = ray(rec.p, unit_vector(direction), r_in.time());
+  //   alb = albedo->value(rec.u, rec.v, rec.p);
+  //   pdf = dot(uvw.w(), scattered.direction()) / M_PI;
+  //   return true;
+  // }
 
   bool scatter(const ray& r_in,
                const hit_record& hrec,
@@ -145,16 +145,16 @@ public:
     if (f < 1) fuzz = f; else fuzz = 1;
   }
 
-  virtual bool scatter(const ray& r_in,
-                       const hit_record& hrec,
-                       scatter_record& srec) const {
-    vec3 reflected = reflect(unit_vector(r_in.direction()), hrec.normal);
-    srec.specular_ray = ray(hrec.p, reflected + fuzz*random_in_unit_sphere());
-    srec.attenuation = albedo;
-    srec.is_specular = true;
-    srec.pdf_ptr = NULL;
-    return true;
-  }
+  // virtual bool scatter(const ray& r_in,
+  //                      const hit_record& hrec,
+  //                      scatter_record& srec) const {
+  //   vec3 reflected = reflect(unit_vector(r_in.direction()), hrec.normal);
+  //   srec.specular_ray = ray(hrec.p, reflected + fuzz*random_in_unit_sphere());
+  //   srec.attenuation = albedo;
+  //   srec.is_specular = true;
+  //   srec.pdf_ptr = NULL;
+  //   return true;
+  // }
 
   vec3 albedo;
   float fuzz;
