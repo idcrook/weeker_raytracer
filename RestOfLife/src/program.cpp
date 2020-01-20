@@ -34,7 +34,6 @@ vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
         mixture_pdf p(&plight, srec.pdf_ptr);
         ray scattered = ray(hrec.p, p.generate(), r.time());
         float pdf_val = p.value(scattered.direction());
-        //delete srec.pdf_ptr;
         return emitted + srec.attenuation
           * hrec.mat_ptr->scattering_pdf(r, hrec, scattered)
           * color(scattered, world, light_shape, depth+1)
@@ -67,11 +66,11 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
   list[i++] = new
     translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), white), -18), vec3(130,0,65));
 
-  list[i++] = new
-    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
-  // material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
   // list[i++] = new
-  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
+  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
+  material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
+  list[i++] = new
+    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
 
   *scene = new hittable_list(list,i);
   vec3 lookfrom(278, 278, -800);
