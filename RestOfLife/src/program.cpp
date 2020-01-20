@@ -23,7 +23,7 @@ vec3 color(const ray& r, hittable *world, int depth) {
   if (world->hit(r, 0.001, MAXFLOAT, rec)) {
     ray scattered;
     vec3 attenuation;
-    vec3 emitted = rec.mat_ptr->emitted(rec.u, rec.v, rec.p);
+    vec3 emitted = rec.mat_ptr->emitted(r, rec, rec.u, rec.v, rec.p);
     float pdf;
     vec3 albedo;
     if (depth < 50 && rec.mat_ptr->scatter(r, rec, albedo, scattered, pdf)) {
@@ -65,7 +65,8 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
   material *light = new diffuse_light( new constant_texture(vec3(15, 15, 15)) );
   list[i++] = new flip_normals(new yz_rect(0, 555, 0, 555, 555, green));
   list[i++] = new yz_rect(0, 555, 0, 555, 0, red);
-  list[i++] = new xz_rect(213, 343, 227, 332, 554, light);
+  // flip normals to give light source a direction
+  list[i++] = new flip_normals(new xz_rect(213, 343, 227, 332, 554, light));
   list[i++] = new flip_normals(new xz_rect(0, 555, 0, 555, 555, white));
   list[i++] = new xz_rect(0, 555, 0, 555, 0, white);
   list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));

@@ -71,10 +71,11 @@ public:
     return 0;
   }
 
-  // not a pure virtual function (base class returns black)
-  virtual vec3 emitted(float u, float v, const vec3& p) const {
-    (void)u; (void)v; (void)p;
-    return vec3(0,0,0);
+  // not a pure virtual function
+  virtual vec3 emitted(const ray& r_in, const hit_record& rec,
+                       float u, float v, const vec3& p) const {
+    (void)r_in; (void)rec; (void)u; (void)v; (void)p;
+      return vec3(0,0,0);
   }
 };
 
@@ -187,9 +188,15 @@ public:
     (void)r_in; (void)rec; (void)attenuation; (void)scattered;
     return false;
   }
-  virtual vec3 emitted(float u, float v, const vec3& p) const {
-    return emit->value(u, v, p);
+
+  virtual vec3 emitted(const ray& r_in, const hit_record& rec,
+                       float u, float v, const vec3& p) const {
+    if (dot(rec.normal, r_in.direction()) < 0.0)
+      return emit->value(u, v, p);
+    else
+      return vec3(0,0,0); // do not emit both down and up (normal dot component > 0)
   }
+
   texture *emit;
 };
 
