@@ -1,13 +1,27 @@
-CXX      := -c++
+#CXX      := -c++
+CXX      ?= -g++
 #CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror
 #CXXFLAGS := -pedantic-errors -Wall -Wextra
 CXXFLAGS := -Wall -Wextra
+
+GCC_CXXFLAGS = -DMESSAGE='"Compiled with GCC"'
+CLANG_CXXFLAGS = -DMESSAGE='"Compiled with Clang"'
+UNKNOWN_CXXFLAGS = -DMESSAGE='"Compiled with an unknown compiler"'
+
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
 BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := program
 INCLUDE  := -Iinclude/ -Isrc/
+
+ifeq ($(CXX),g++)
+  CXXFLAGS += $(GCC_CXXFLAGS)
+else ifeq ($(CXX),clang)
+  CXXFLAGS += $(CLANG_CXXFLAGS)
+else
+  CXXFLAGS += $(UNKNOWN_CXXFLAGS)
+endif
 
 # header files have implementations
 # program.cpp found in src/

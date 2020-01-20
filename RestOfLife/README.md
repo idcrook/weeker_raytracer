@@ -1,3 +1,5 @@
+# NOTES
+
 
 
 ## 3D scatter plots
@@ -34,4 +36,12 @@ now in gnuplot
 
 ```
 splot 'output/data2.txt' using 1:2:3 with points palette pointsize 3 pointtype 7
+```
+
+
+## using clang
+
+```
+sudo apt install clang
+make CXX=clang
 ```
