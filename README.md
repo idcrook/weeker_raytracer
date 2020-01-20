@@ -1,11 +1,32 @@
 # weeker_raytracer
 
-Based on v2 of https://github.com/RayTracing/raytracing.github.io, not the v3 under development
+Based on v2 of https://github.com/RayTracing/raytracing.github.io here are some examples
+
+#### Rest Of Life
+
+1000x1000 pixels with 500 ray samples around each point. took 1 hour, 8 minutes
+
+![final image](img/ROL-ch13dSH.png)
+
+#### The Next Week
+
+
+1000x1000 pixels with 2500 ray samples around each point. took over 18 hours
+
+![final image 2](img/TNW-ch10hSH.png)
+
+
+#### In One Weekend
+
+Image took about 12.3 minutes, without   BVH. When generating same scene with BVH partitioning, took about 3 minutes.
+
+![final image](img/IOW-ch13f.png)
+
 
 ## Build
 
-```
-cd TheNextWeek
+```shell
+cd ProjectSubDirectory
 make clean && make debug
 ```
 
@@ -13,26 +34,7 @@ make clean && make debug
 
 build, then
 
-```
+```shell
 # bang is used here for my zsh setup
 time ( build/apps/program >! output/chNa.ppm )
 ```
-
-
-## Examples
-
-In One Weekend
-
-Image took about 12.3 minutes, without   BVH. When generating same scene with BVH partitioning, took about 3 minutes.
-
-![final image](img/IOW-ch13f.png)
-
-The Next Week
-
-Image 500x500 with 10,000 ray samples around each point. took 18 hours, 10 minutes
-
-![final image 1](img/TNW-ch10SH2.png)
-
-Image 1000x1000 with 2,500 ray samples around each point. took 18 hours, 14 minutes
-
-![final image 2](img/TNW-ch10gSH.png)
