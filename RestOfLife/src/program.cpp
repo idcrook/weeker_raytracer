@@ -69,11 +69,11 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
   material *glass = new dielectric(1.5);
   list[i++] = new sphere(vec3(190, 90, 190),90 , glass);
 
-  list[i++] = new
-    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
-  // material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
   // list[i++] = new
-  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
+  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
+  material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.1);
+  list[i++] = new
+    translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
 
   *scene = new hittable_list(list,i);
   vec3 lookfrom(278, 278, -800);
@@ -121,7 +121,7 @@ int main (int argc, char** argv) {
   } else if (HIGH_QUALITY_RENDER) {
     nx = 500;
     ny = 500;
-    ns = 200;
+    ns = 1000;
   } else if (MEDIUM_QUALITY_RENDER) {
     nx = 400;
     ny = 400;
@@ -157,8 +157,8 @@ int main (int argc, char** argv) {
         float u = float(i + random_double()) / float(nx);
         float v = float(j + random_double()) / float(ny);
         ray r = cam->get_ray(u, v);
-        //col += color(r, world, &hlist, 0);
-        col += color(r, world, light_shape, 0);
+        col += color(r, world, &hlist, 0);
+        //col += color(r, world, light_shape, 0);
         //col += color(r, world, glass_sphere, 0);
       }
       col /= float(ns);
