@@ -37,7 +37,7 @@ vec3 color(const ray& r, hittable *world, int depth) {
 }
 
 hittable *final() {
-  int nb = 22;
+  int nb = 20;
   hittable **list = new hittable*[30];
   hittable **boxlist = new hittable*[10000];
   hittable **boxlist2 = new hittable*[10000];
@@ -73,7 +73,7 @@ hittable *final() {
   list[l++] = new moving_sphere(center, center+vec3(30, 0, 0),
                                 0, 1, 50, ball_moving);
 
-  // glassy clear
+  // clear glass sphere
   list[l++] = new sphere(vec3(260, 150, 45), 50, new dielectric(1.5));
 
   // metal
@@ -83,8 +83,9 @@ hittable *final() {
 
   hittable *glassy = new sphere(vec3(360, 150, 145), 70, new dielectric(1.5));
   list[l++] = glassy;
-  list[l++] = new constant_medium(glassy, 0.2,
-                                  new constant_texture(vec3(0.83, 0.15, 0.73)));
+  list[l++] = new constant_medium(glassy, 0.12,
+                                  new constant_texture(vec3(254/255.0, 254/255.0, 56/255.0))); // yellowish
+                                  // new constant_texture(vec3(0.83, 0.15, 0.73)));
                                   // new constant_texture(vec3(0.2, 0.9, 0.4)));
                                   // new constant_texture(vec3(0.2, 0.4, 0.9)));
 
@@ -100,7 +101,7 @@ hittable *final() {
   //list[l++] =  new sphere(vec3(220, 280, 300), 80, new lambertian( pertext ));
   // bubble
   list[l++] =  new sphere(vec3(220, 280, 300), 80, new dielectric( 1.5 ));
-  list[l++] =  new sphere(vec3(220, 280, 300), -78, new dielectric( 1.5 ));
+  list[l++] =  new sphere(vec3(220, 280, 300), -(80-0.05), new dielectric( 1.5 ));
 
   int ns = 1000;
   for (int j = 0; j < ns; j++) {
