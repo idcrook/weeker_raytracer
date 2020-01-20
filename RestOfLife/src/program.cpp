@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-vec3 color(const ray& r, hittable *world, int depth) {
+vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
   hit_record rec;
   if (world->hit(r, 0.001, MAXFLOAT, rec)) {
     ray scattered;
@@ -38,8 +38,30 @@ vec3 color(const ray& r, hittable *world, int depth) {
 
       return emitted +
         (albedo*rec.mat_ptr->scattering_pdf(r, rec, scattered)
-         * color(scattered, world, depth+1)) / pdf_val;
+         * color(scattered, world, light_shape, depth+1)) / pdf_val;
     }
+// vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
+//   hit_record hrec;
+//   if (world->hit(r, 0.001, MAXFLOAT, hrec)) {
+    // scatter_record srec;
+    // vec3 emitted = hrec.mat_ptr->emitted(r, hrec, hrec.u, hrec.v, hrec.p);
+    // if (depth < 50 && hrec.mat_ptr->scatter(r, hrec, srec)) {
+    //   if (srec.is_specular) {
+    //     return srec.attenuation
+    //       * color(srec.specular_ray, world, light_shape, depth+1);
+    //   }
+    //   else {
+    //     hittable_pdf plight(light_shape, hrec.p);
+    //     mixture_pdf p(&plight, srec.pdf_ptr);
+    //     ray scattered = ray(hrec.p, p.generate(), r.time());
+    //     float pdf_val = p.value(scattered.direction());
+    //     //delete srec.pdf_ptr;
+    //     return emitted + srec.attenuation
+    //       * hrec.mat_ptr->scattering_pdf(r, hrec, scattered)
+    //       * color(scattered, world, light_shape, depth+1)
+    //       / pdf_val;
+    //   }
+    // }
     else {
       return emitted;
     }
@@ -65,8 +87,13 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
   list[i++] = new flip_normals(new xy_rect(0, 555, 0, 555, 555, white));
   list[i++] = new
     translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 165, 165), white), -18), vec3(130,0,65));
+
   list[i++] = new
     translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
+  // material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
+  // list[i++] = new
+  //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 15), vec3(265,0,295));
+
   *scene = new hittable_list(list,i);
   vec3 lookfrom(278, 278, -800);
   vec3 lookat(278, 278, 0);
@@ -133,16 +160,22 @@ int main (int argc, char** argv) {
   float aspect = float(ny) / float(nx);
   cornell_box(&world, &cam, aspect);
 
+  hittable *a[2];
+  hittable *light_shape  = new xz_rect(213, 343, 227, 332, 554, 0);
+  hittable *glass_sphere = new sphere(vec3(190, 90, 190), 90, 0);
+  a[0] = light_shape;
+  a[1] = glass_sphere;
+  hittable_list hlist(a,1);
 
   for (int j = ny-1; j >= 0; j--) {
     std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
     for (int i = 0; i < nx; i++) {
       vec3 col(0, 0, 0);
       for (int s = 0; s < ns; s++) {
-        float u = float(i + random_double() - (1.0/2.0)) / float(nx);
-        float v = float(j + random_double() - (1.0/2.0)) / float(ny);
+        float u = float(i + random_double()) / float(nx);
+        float v = float(j + random_double()) / float(ny);
         ray r = cam->get_ray(u, v);
-        col += color(r, world, 0);
+        col += color(r, world, &hlist, 0);
       }
       col /= float(ns);
 

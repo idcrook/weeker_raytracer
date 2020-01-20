@@ -56,12 +56,26 @@ float schlick(float cosine, float ref_idx) {
   return r0 + (1-r0)*pow((1 - cosine),5);
 }
 
+struct scatter_record
+{
+  ray specular_ray;
+  bool is_specular;
+  vec3 attenuation;
+  pdf *pdf_ptr;
+};
 
 class material  {
 public:
+   virtual bool scatter(const ray& r_in,
+                        const hit_record& rec, vec3& albedo, ray& scattered, float& pdf) const {
+     (void)r_in; (void)rec;  (void)albedo;  (void)scattered;  (void)pdf;
+     return false;
+   }
+
   virtual bool scatter(const ray& r_in,
-                       const hit_record& rec, vec3& albedo, ray& scattered, float& pdf) const {
-    (void)r_in; (void)rec;  (void)albedo;  (void)scattered;  (void)pdf;
+                       const hit_record& hrec,
+                       const scatter_record& srec) const {
+    (void)r_in; (void)hrec; (void)srec;
     return false;
   }
 
@@ -75,7 +89,7 @@ public:
   virtual vec3 emitted(const ray& r_in, const hit_record& rec,
                        float u, float v, const vec3& p) const {
     (void)r_in; (void)rec; (void)u; (void)v; (void)p;
-      return vec3(0,0,0);
+    return vec3(0,0,0);
   }
 };
 
@@ -85,11 +99,13 @@ public:
   lambertian(texture *a) : albedo(a) {}
 
   float scattering_pdf(const ray& r_in,
-                       const hit_record& rec, const ray& scattered) const {
+                       const hit_record& rec,
+                       const ray& scattered) const {
     (void)r_in;
     float cosine = dot(rec.normal, unit_vector(scattered.direction()));
-    if (cosine < 0)
+    if (cosine < 0) {
       return 0;
+    }
     return cosine / M_PI;
   }
 
@@ -109,6 +125,15 @@ public:
     return true;
   }
 
+  bool scatter(const ray& r_in,
+               const hit_record& hrec,
+               scatter_record& srec) const {
+    (void)r_in;
+    srec.is_specular = false;
+    srec.attenuation = albedo->value(hrec.u, hrec.v, hrec.p);
+    srec.pdf_ptr = new cosine_pdf(hrec.normal);
+    return true;
+  }
 
   texture *albedo;
 };
@@ -119,13 +144,18 @@ public:
   metal(const vec3& a, float f) : albedo(a) {
     if (f < 1) fuzz = f; else fuzz = 1;
   }
-  virtual bool scatter(const ray& r_in, const hit_record& rec,
-                       vec3& attenuation, ray& scattered) const {
-    vec3 reflected = reflect(unit_vector(r_in.direction()), rec.normal);
-    scattered = ray(rec.p, reflected + fuzz*random_in_unit_sphere(), r_in.time());
-    attenuation = albedo;
-    return (dot(scattered.direction(), rec.normal) > 0);
+
+  virtual bool scatter(const ray& r_in,
+                       const hit_record& hrec,
+                       scatter_record& srec) const {
+    vec3 reflected = reflect(unit_vector(r_in.direction()), hrec.normal);
+    srec.specular_ray = ray(hrec.p, reflected + fuzz*random_in_unit_sphere());
+    srec.attenuation = albedo;
+    srec.is_specular = true;
+    srec.pdf_ptr = NULL;
+    return true;
   }
+
   vec3 albedo;
   float fuzz;
 };
