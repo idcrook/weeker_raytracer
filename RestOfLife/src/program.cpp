@@ -45,6 +45,8 @@ vec3 color(const ray& r, hittable *world, hittable *light_shape, int depth) {
         mixture_pdf p(&plight, srec.pdf_ptr);
         ray scattered = ray(hrec.p, p.generate(), r.time());
         float pdf_val = p.value(scattered.direction());
+        // there is a new cosine_pdf in struct that gets leaked
+        delete srec.pdf_ptr;
         return emitted + srec.attenuation
           * hrec.mat_ptr->scattering_pdf(r, hrec, scattered)
           * color(scattered, world, light_shape, depth+1)
