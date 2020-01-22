@@ -36,12 +36,14 @@ cmake --build build
 
 	```
 	cmake --build build --target inOneWeekend
+	cmake --build build --target theNextWeek
+	cmake --build build --target restOfLife
 	```
 
 Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that emacs irony-mode can know the compiler flags
 
 ```
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build`
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
 ```
 
 Run
