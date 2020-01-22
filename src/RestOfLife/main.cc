@@ -11,8 +11,6 @@
 #include "pdf.h"
 #include "moving_sphere.h"
 #include "sphere.h"
-#include "surface_texture.h"
-
 
 #include <iostream>
 

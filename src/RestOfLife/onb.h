@@ -1,7 +1,7 @@
-#ifndef ONBH
-#define ONBH
+#ifndef ONB_H
+#define ONB_H
 
-#include "vec3.h"
+#include "common/rtweekend.h"
 
 class onb {
  public:

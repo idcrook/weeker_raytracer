@@ -1,10 +1,9 @@
-#ifndef PDFH
-#define PDFH
+#ifndef PDF_H
+#define PDF_H
 
+#include "common/rtweekend.h"
 #include "hittable.h"
 #include "onb.h"
-#include "random.h"
-#include "vec3.h"
 
 
 inline vec3 random_cosine_direction() {

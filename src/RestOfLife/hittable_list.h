@@ -1,8 +1,8 @@
-#ifndef HITTABLELISTH
-#define HITTABLELISTH
+#ifndef HITTABLE_LIST_H
+#define HITTABLE_LIST_H
 
+#include "common/rtweekend.h"
 #include "hittable.h"
-#include "random.h"
 
 class hittable_list: public hittable {
 public:

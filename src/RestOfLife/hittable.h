@@ -1,8 +1,9 @@
 #ifndef HITTABLEH
 #define HITTABLEH
 
-#include "aabb.h"
-#include "ray.h"
+#include "common/rtweekend.h"
+#include "common/aabb.h"
+#include "common/ray.h"
 
 #include <float.h>
 

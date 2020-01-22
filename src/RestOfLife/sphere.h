@@ -1,10 +1,12 @@
-#ifndef SPHEREH
-#define SPHEREH
+#ifndef SPHERE_H
+#define SPHERE_H
 
+#include "common/rtweekend.h"
 #include "hittable.h"
 #include "pdf.h"
 #include "onb.h"
-#include "float.h"
+
+#include <float.h>
 
 class sphere: public hittable  {
 public:

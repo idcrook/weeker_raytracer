@@ -1,9 +1,9 @@
-#ifndef MATERIALH
-#define MATERIALH
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
+#include "common/rtweekend.h"
+#include "common/texture.h"
 #include "hittable.h"
-#include "random.h"
-#include "texture.h"
 #include "onb.h"
 #include "pdf.h"
 
