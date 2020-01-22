@@ -1,20 +1,17 @@
-#include "float.h"
+#include "common/rtweekend.h"
+#include "common/camera.h"
+#include "common/rtw_stb_image.h"
+#include "common/texture.h"
 
 #include "aarect.h"
 #include "box.h"
 #include "bvh.h"
+#include "constant_medium.h"
 #include "hittable_list.h"
 #include "material.h"
-#include "constant_medium.h"
 #include "moving_sphere.h"
 #include "sphere.h"
-#include "camera.h"
-#include "random.h"
-#include "texture.h"
-#include "surface_texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 
 #include <iostream>
 

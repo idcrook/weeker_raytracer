@@ -31,9 +31,15 @@ cmake -B build
 cmake --build build
 ```
 
--	specify the target with the `--target <program>` option, where the program may be `inOneWeekend`, `theNextWeek`, `theRestOfYourLife`
+-	specify the target with the `--target <program>` option, where the program may be `inOneWeekend`, `theNextWeek`, `restOfLife`
 
 	cmake --build build --target inOneWeekend
+
+Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that emacs irony-mode can know the compiler flags
+
+```
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build`
+```
 
 Run
 ---

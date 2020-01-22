@@ -1,6 +1,7 @@
-#ifndef SPHEREH
-#define SPHEREH
+#ifndef SPHERE_H
+#define SPHERE_H
 
+#include "common/rtweekend.h"
 #include "hittable.h"
 
 class sphere: public hittable  {

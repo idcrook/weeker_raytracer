@@ -1,8 +1,8 @@
-#ifndef HITTABLEH
-#define HITTABLEH
+#ifndef HITTABLE_H
+#define HITTABLE_H
 
-#include "aabb.h"
-#include "ray.h"
+#include "common/rtweekend.h"
+#include "common/aabb.h"
 
 #include <float.h>
 

@@ -1,8 +1,8 @@
-#ifndef BVHH
-#define BVHH
+#ifndef BVH_H
+#define BVH_H
 
+#include "common/rtweekend.h"
 #include "hittable.h"
-#include "random.h"
 
 
 class bvh_node : public hittable  {

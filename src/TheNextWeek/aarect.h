@@ -1,6 +1,7 @@
-#ifndef AARECTH
-#define AARECTH
+#ifndef AARECT_H
+#define AARECT_H
 
+#include "common/rtweekend.h"
 #include "hittable.h"
 
 

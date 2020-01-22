@@ -1,13 +1,10 @@
-#ifndef CMEDH
-#define CMEDH
+#ifndef CONSTANT_MEDIUM_H
+#define CONSTANT_MEDIUM_H
 
+#include "common/rtweekend.h"
+#include "common/texture.h"
 #include "hittable.h"
 #include "material.h"
-#include "random.h"
-#include "texture.h"
-
-#include <float.h>
-
 
 class constant_medium : public hittable  {
 public:

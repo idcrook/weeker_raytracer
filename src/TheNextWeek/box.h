@@ -1,6 +1,7 @@
-#ifndef BOXH
-#define BOXH
+#ifndef BOX_H
+#define BOX_H
 
+#include "common/rtweekend.h"
 #include "aarect.h"
 #include "hittable_list.h"
 
