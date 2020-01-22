@@ -79,9 +79,11 @@ void cornell_box(hittable **scene, camera **cam, float aspect) {
 
   // list[i++] = new
   //   translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), white),  15), vec3(265,0,295));
-  material *aluminum = new metal(vec3(0.8, 0.85, 0.88), 0.0);
+  material *aluminum = new metal(vec3(0.91, 0.92, 0.92), 0.008);
+  //material *gold = new metal(vec3(1.00, 0.71, 0.29), 0.0);
   list[i++] = new
     translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), aluminum), 23), vec3(265,0,295));
+    // translate(new rotate_y(new box(vec3(0, 0, 0), vec3(165, 330, 165), gold), 23), vec3(265,0,295));
 
   *scene = new hittable_list(list,i);
   vec3 lookfrom(278, 278, -800);
