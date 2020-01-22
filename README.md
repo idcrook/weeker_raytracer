@@ -24,7 +24,8 @@ Image took about 12.3 minutes, without BVH. When generating same scene with BVH 
 Build
 -----
 
-Using `cmake`
+-	Using `cmake`
+-	Source code needs c++11 compatible compiler
 
 ```shell
 cmake -B build
@@ -33,7 +34,9 @@ cmake --build build
 
 -	specify the target with the `--target <program>` option, where the program may be `inOneWeekend`, `theNextWeek`, `restOfLife`
 
+	```
 	cmake --build build --target inOneWeekend
+	```
 
 Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that emacs irony-mode can know the compiler flags
 
@@ -46,7 +49,7 @@ Run
 
 build, then
 
-```shell
-# bang is used here for my zsh setup
-time ( build/apps/program >! output/chNa.ppm )
+```bash
+# bang is used here for my zsh setup to clobber existing file
+time ( build/program >! output/iname.ppm )
 ```
