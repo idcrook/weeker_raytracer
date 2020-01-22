@@ -1,6 +1,7 @@
-# weeker_raytracer
+weeker_raytracer
+================
 
-Based on v2 of https://github.com/RayTracing/raytracing.github.io here are some examples
+Started with v2 of https://github.com/RayTracing/raytracing.github.io here are some examples
 
 #### Rest Of Life
 
@@ -10,31 +11,45 @@ Based on v2 of https://github.com/RayTracing/raytracing.github.io here are some 
 
 #### The Next Week
 
-
 1000x1000 pixels with 2500 ray samples around each point. took over 18 hours
 
 ![final image 2](img/TNW-ch10hSH.png)
 
-
 #### In One Weekend
 
-Image took about 12.3 minutes, without   BVH. When generating same scene with BVH partitioning, took about 3 minutes.
+Image took about 12.3 minutes, without BVH. When generating same scene with BVH partitioning, took about 3 minutes.
 
 ![final image](img/IOW-ch13f.png)
 
+Build
+-----
 
-## Build
+-	Using `cmake`
+-	Source code needs c++11 compatible compiler
 
 ```shell
-cd ProjectSubDirectory
-make clean && make debug
+cmake -B build
+cmake --build build
 ```
 
-## Run
+-	specify the target with the `--target <program>` option, where the program may be `inOneWeekend`, `theNextWeek`, `restOfLife`
+
+	```
+	cmake --build build --target inOneWeekend
+	```
+
+Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that emacs irony-mode can know the compiler flags
+
+```
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build`
+```
+
+Run
+---
 
 build, then
 
-```shell
-# bang is used here for my zsh setup
-time ( build/apps/program >! output/chNa.ppm )
+```bash
+# bang is used here for my zsh setup to clobber existing file
+time ( build/program >! output/iname.ppm )
 ```
