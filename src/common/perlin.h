@@ -1,8 +1,8 @@
-#ifndef PERLINH
-#define PERLINH
+#ifndef PERLIN_H
+#define PERLIN_H
 
-#include "random.h"
-#include "vec3.h"
+#include "common/rtweekend.h"
+
 
 
 inline float perlin_interp(vec3 c[2][2][2], float u, float v, float w) {

@@ -1,9 +1,8 @@
-#include "float.h"
+#include "common/rtweekend.h"
+#include "common/camera.h"
 #include "hittable_list.h"
 #include "material.h"
 #include "sphere.h"
-#include "camera.h"
-#include "random.h"
 
 #include <iostream>
 
@@ -85,8 +84,7 @@ int main() {
   float dist_to_focus = 10.0;
   float aperture = 0.1;
 
-  camera cam(lookfrom, lookat, vec3(0,1,0), 20,
-             float(nx)/float(ny), aperture, dist_to_focus);
+  camera cam(lookfrom, lookat, vec3(0,1,0), 20, float(nx)/float(ny), aperture, dist_to_focus);
 
   for (int j = ny-1; j >= 0; j--) {
     std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;

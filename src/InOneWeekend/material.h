@@ -1,8 +1,7 @@
-#ifndef MATERIALH
-#define MATERIALH
+#ifndef MATERIAL_H
+#define MATERIAL_H
 
-#include "hittable.h"
-#include "random.h"
+#include "common/rtweekend.h"
 
 vec3 random_in_unit_sphere() {
   vec3 p;

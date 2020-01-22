@@ -1,8 +1,7 @@
-#ifndef CAMERAH
-#define CAMERAH
+#ifndef CAMERA_H
+#define CAMERA_H
 
-#include "random.h"
-#include "ray.h"
+#include "common/rtweekend.h"
 
 vec3 random_in_unit_disk() {
   vec3 p;
@@ -14,10 +13,13 @@ vec3 random_in_unit_disk() {
 
 class camera {
 public:
+
+  camera() : camera(vec3(0,0,-1), vec3(0,0,0), vec3(0,1,0), 40, 1, 0, 10) {}
+
   camera(vec3 lookfrom, vec3 lookat, vec3 vup,
          float vfov, // vfov is top to bottom in degrees
          float aspect, float aperture, float focus_dist,
-         float t0, float t1) {
+         float t0 = 0, float t1 = 0 ) {
 
     time0 = t0;
     time1 = t1;

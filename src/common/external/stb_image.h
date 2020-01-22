@@ -111,9 +111,6 @@ RECENT REVISION HISTORY:
 #ifndef STBI_INCLUDE_STB_IMAGE_H
 #define STBI_INCLUDE_STB_IMAGE_H
 
-// turn off all warnings
-#pragma GCC system_header
-
 // DOCUMENTATION
 //
 // Limitations:

@@ -1,6 +1,7 @@
-#ifndef RAYH
-#define RAYH
-#include "vec3.h"
+#ifndef RAY_H
+#define RAY_H
+
+#include "common/vec3.h"
 
 class ray
 {

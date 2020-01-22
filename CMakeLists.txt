@@ -16,7 +16,7 @@ set ( CMAKE_CXX_STANDARD 11 )
 
 # Source
 set ( COMMON_ALL
-#  src/common/rtweekend.h
+  src/common/rtweekend.h
   src/common/camera.h
   src/common/ray.h
   src/common/vec3.h
@@ -57,17 +57,17 @@ set ( SOURCE_REST_OF_YOUR_LIFE
   src/common/perlin.h
   src/common/rtw_stb_image.h
   src/common/texture.h
-  src/TheRestOfYourLife/aarect.h
-  src/TheRestOfYourLife/box.h
-  src/TheRestOfYourLife/bvh.h
-  src/TheRestOfYourLife/hittable.h
-  src/TheRestOfYourLife/hittable_list.h
-  src/TheRestOfYourLife/material.h
-  src/TheRestOfYourLife/moving_sphere.h
-  src/TheRestOfYourLife/onb.h
-  src/TheRestOfYourLife/pdf.h
-  src/TheRestOfYourLife/sphere.h
-  src/TheRestOfYourLife/main.cc
+  src/RestOfLife/aarect.h
+  src/RestOfLife/box.h
+  src/RestOfLife/bvh.h
+  src/RestOfLife/hittable.h
+  src/RestOfLife/hittable_list.h
+  src/RestOfLife/material.h
+  src/RestOfLife/moving_sphere.h
+  src/RestOfLife/onb.h
+  src/RestOfLife/pdf.h
+  src/RestOfLife/sphere.h
+  src/RestOfLife/main.cc
 )
 
 # Executables

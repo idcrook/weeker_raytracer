@@ -1,8 +1,8 @@
-#ifndef TEXTUREH
-#define TEXTUREH
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
-#include "perlin.h"
-#include "vec3.h"
+#include "common/rtweekend.h"
+#include "common/perlin.h"
 
 class texture {
 public:

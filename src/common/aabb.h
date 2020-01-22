@@ -1,7 +1,7 @@
 #ifndef AABBH
 #define AABBH
 
-#include "ray.h"
+#include "common/rtweekend.h"
 
 
 inline float ffmin(float a, float b) { return a < b ? a : b; }
