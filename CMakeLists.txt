@@ -7,7 +7,7 @@
 cmake_minimum_required ( VERSION 3.1.0 )
 
 project ( RTWeekend
-  VERSION 3.0.0
+  VERSION 2.90.0
   LANGUAGES CXX
 )
 
@@ -74,19 +74,19 @@ set ( SOURCE_REST_OF_YOUR_LIFE
 add_executable(inOneWeekend      ${SOURCE_ONE_WEEKEND})
 add_executable(theNextWeek       ${SOURCE_NEXT_WEEK})
 add_executable(theRestOfYourLife ${SOURCE_REST_OF_YOUR_LIFE})
-add_executable(cos_cubed         src/TheRestOfYourLife/cos_cubed.cc         ${COMMON_ALL})
-add_executable(cos_density       src/TheRestOfYourLife/cos_density.cc       ${COMMON_ALL})
-add_executable(integrate_x_sq    src/TheRestOfYourLife/integrate_x_sq.cc    ${COMMON_ALL})
-add_executable(pi                src/TheRestOfYourLife/pi.cc                ${COMMON_ALL})
-add_executable(sphere_importance src/TheRestOfYourLife/sphere_importance.cc ${COMMON_ALL})
-add_executable(sphere_plot       src/TheRestOfYourLife/sphere_plot.cc       ${COMMON_ALL})
+# add_executable(cos_cubed         src/TheRestOfYourLife/cos_cubed.cc         ${COMMON_ALL})
+# add_executable(cos_density       src/TheRestOfYourLife/cos_density.cc       ${COMMON_ALL})
+# add_executable(integrate_x_sq    src/TheRestOfYourLife/integrate_x_sq.cc    ${COMMON_ALL})
+# add_executable(pi                src/TheRestOfYourLife/pi.cc                ${COMMON_ALL})
+# add_executable(sphere_importance src/TheRestOfYourLife/sphere_importance.cc ${COMMON_ALL})
+# add_executable(sphere_plot       src/TheRestOfYourLife/sphere_plot.cc       ${COMMON_ALL})
 
 target_include_directories(inOneWeekend      PRIVATE src)
 target_include_directories(theNextWeek       PRIVATE src)
 target_include_directories(theRestOfYourLife PRIVATE src)
-target_include_directories(cos_cubed         PRIVATE src)
-target_include_directories(cos_density       PRIVATE src)
-target_include_directories(integrate_x_sq    PRIVATE src)
-target_include_directories(pi                PRIVATE src)
-target_include_directories(sphere_importance PRIVATE src)
-target_include_directories(sphere_plot       PRIVATE src)
+# target_include_directories(cos_cubed         PRIVATE src)
+# target_include_directories(cos_density       PRIVATE src)
+# target_include_directories(integrate_x_sq    PRIVATE src)
+# target_include_directories(pi                PRIVATE src)
+# target_include_directories(sphere_importance PRIVATE src)
+# target_include_directories(sphere_plot       PRIVATE src)
