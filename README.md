@@ -53,7 +53,10 @@ cmake support is included.
 Code based on https://github.com/rogerallen/raytracinginoneweekendincuda
 
 ```
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build
+# or target specific SM
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+      -DCMAKE_CUDA_FLAGS="-arch=sm_75" -B build
 ```
 
 	```

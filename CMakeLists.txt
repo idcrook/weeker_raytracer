@@ -27,7 +27,6 @@ else()
   message(STATUS "No CUDA support")
 endif()
 
-
 # Source
 set ( COMMON_ALL
   src/common/rtweekend.h
@@ -54,10 +53,10 @@ set ( SOURCE_ONE_WEEKEND
 
 set ( SOURCE_ONE_WEEKEND_CUDA
   ${COMMON_ALL_CUDA}
-  # src/InOneWeekendCuda/hittable.h
-  # src/InOneWeekendCuda/hittable_list.h
+  src/InOneWeekendCuda/hittable.h
+  src/InOneWeekendCuda/hittable_list.h
   # src/InOneWeekendCuda/material.h
-  # src/InOneWeekendCuda/sphere.h
+  src/InOneWeekendCuda/sphere.h
   src/InOneWeekendCuda/main.cu
 )
 
