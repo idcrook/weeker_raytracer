@@ -2,3 +2,5 @@ add
 add_cuda
 add_block
 add_grid
+add_grid_init
+*.nsight-cuprof-report

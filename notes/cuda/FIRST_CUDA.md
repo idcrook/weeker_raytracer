@@ -53,6 +53,12 @@ nvcc add_grid.cu -o add_grid
 ./add_grid
 sudo nv-nsight-cu-cli -o add_grid ./add_grid
 nv-nsight-cu-cli --import add_grid.nsight-cuprof-report | grep -i duration
+
+nvcc add_grid_init.cu -o add_grid_init
+./add_grid_init
+sudo nv-nsight-cu-cli -o add_grid_init ./add_grid_init
+nv-nsight-cu-cli --import add_grid_init.nsight-cuprof-report | grep -i duration
+
 ```
 
 
