@@ -8,6 +8,7 @@ void add(int n, float *x, float *y)
 {
   int index = blockIdx.x * blockDim.x + threadIdx.x;
   int stride = blockDim.x * gridDim.x;
+  // printf("\rthreadIdx.x %d blockIdx.x %d      ", threadIdx.x, blockIdx.x);
   for (int i = index; i < n; i += stride)
       y[i] = x[i] + y[i];
 }
