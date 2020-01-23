@@ -37,7 +37,7 @@ set ( COMMON_ALL
 
 set ( COMMON_ALL_CUDA
   src/commonCuda/rtweekend.h
-  # src/commonCuda/camera.h
+  src/commonCuda/camera.h
   src/commonCuda/ray.h
   src/commonCuda/vec3.h
 )
