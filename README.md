@@ -68,7 +68,7 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
  - Single thread CPU: When generating same scene with BVH partitioning, took about 3 minutes.
  - CUDA GPU version: When generating same scene without BVH partitioning, less than 4 **seconds**
 
-![cuda final image](img/IOW-cu2b.png)
+![cuda final image](img/IOW-cu12b.png)
 
 
 Run
