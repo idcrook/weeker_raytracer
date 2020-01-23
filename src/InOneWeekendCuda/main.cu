@@ -15,7 +15,6 @@
    Special attention to floating point constants must be taken (e.g. 0.5 ->
    0.5f). */
 
-
 // limited version of checkCudaErrors from helper_cuda.h in CUDA examples
 #define checkCudaErrors(val) check_cuda( (val), #val, __FILE__, __LINE__ )
 
@@ -29,16 +28,38 @@ void check_cuda(cudaError_t result, char const *const func, const char *const fi
   }
 }
 
-__device__ vec3 color(const ray& r, hittable **world) {
-  hit_record rec;
-  if ((*world)->hit(r, 0.0, FLT_MAX, rec)) {
-    return 0.5f*vec3(rec.normal.x()+1.0f, rec.normal.y()+1.0f, rec.normal.z()+1.0f);
+#define RANDVEC3 vec3(curand_uniform(local_rand_state),curand_uniform(local_rand_state),curand_uniform(local_rand_state))
+
+__device__ vec3 random_in_unit_sphere(curandState *local_rand_state) {
+  vec3 p;
+  do {
+    p = 2.0f*RANDVEC3 - vec3(1,1,1);
+  } while (p.squared_length() >= 1.0f);
+  return p;
+}
+
+// Matching the C++ code would recurse enough into color() calls that
+// it was blowing up the stack, so we have to turn this into a
+// limited-depth loop instead.  Later code in the book limits to a max
+// depth of 50, so we adapt this a few chapters early on the GPU.
+__device__ vec3 color(const ray& r, hittable **world, curandState *local_rand_state) {
+  ray cur_ray = r;
+  float cur_attenuation = 1.0f;
+  for(int i = 0; i < 50; i++) {
+    hit_record rec;
+    if ((*world)->hit(cur_ray, 0.001f, FLT_MAX, rec)) {
+      vec3 target = rec.p + rec.normal + random_in_unit_sphere(local_rand_state);
+      cur_attenuation *= 0.5f;
+      cur_ray = ray(rec.p, target-rec.p);
+    }
+    else {
+      vec3 unit_direction = unit_vector(cur_ray.direction());
+      float t = 0.5f*(unit_direction.y() + 1.0f);
+      vec3 c = (1.0f-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
+      return cur_attenuation * c;
+    }
   }
-  else {
-    vec3 unit_direction = unit_vector(r.direction());
-    float t = 0.5f*(unit_direction.y() + 1.0f);
-    return (1.0f-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
-  }
+  return vec3(0.0,0.0,0.0); // exceeded recursion
 }
 
 __global__ void render_init(int max_x, int max_y, curandState *rand_state) {
@@ -61,9 +82,14 @@ __global__ void render(vec3 *fb, int max_x, int max_y, int ns, camera **cam, hit
     float u = float(i + curand_uniform(&local_rand_state)) / float(max_x);
     float v = float(j + curand_uniform(&local_rand_state)) / float(max_y);
     ray r = (*cam)->get_ray(u,v);
-    col += color(r, world);
+    col += color(r, world, &local_rand_state);
   }
-  fb[pixel_index] = col/float(ns);
+  rand_state[pixel_index] = local_rand_state;
+  col /= float(ns);
+  col[0] = sqrt(col[0]);
+  col[1] = sqrt(col[1]);
+  col[2] = sqrt(col[2]);
+  fb[pixel_index] = col;
 }
 
 __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_camera) {
@@ -151,6 +177,5 @@ int main() {
   checkCudaErrors(cudaFree(d_rand_state));
   checkCudaErrors(cudaFree(fb));
 
-  // useful for cuda-memcheck --leak-check full
   cudaDeviceReset();
 }
