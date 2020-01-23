@@ -1,4 +1,4 @@
-#ifndef VEC3_H
+#ifndef VEC3_H                     /* -*- cuda -*- */
 #define VEC3_H
 
 #include <math.h>

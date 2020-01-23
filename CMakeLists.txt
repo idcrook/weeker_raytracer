@@ -8,16 +8,24 @@ cmake_minimum_required ( VERSION 3.8 )
 
 project ( RTWeekend
   VERSION 2.95.0
-  LANGUAGES CUDA CXX
+  LANGUAGES CXX
 )
 
 # Set to c++11
 set ( CMAKE_CXX_STANDARD 11 )
 
-if(NOT DEFINED CMAKE_CUDA_STANDARD)
+include(CheckLanguage)
+check_language(CUDA)
+if(CMAKE_CUDA_COMPILER)
+  enable_language(CUDA)
+  if(NOT DEFINED CMAKE_CUDA_STANDARD)
     set(CMAKE_CUDA_STANDARD 11)
     set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  endif()
+else()
+  message(STATUS "No CUDA support")
 endif()
+
 
 # Source
 set ( COMMON_ALL
@@ -28,9 +36,9 @@ set ( COMMON_ALL
 )
 
 set ( COMMON_ALL_CUDA
-  # src/commonCuda/rtweekend.h
+  src/commonCuda/rtweekend.h
   # src/commonCuda/camera.h
-  # src/commonCuda/ray.h
+  src/commonCuda/ray.h
   src/commonCuda/vec3.h
 )
 
