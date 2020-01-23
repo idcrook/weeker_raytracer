@@ -46,6 +46,31 @@ Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that emacs irony-mode can know
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
 ```
 
+## Build CUDA
+
+cmake support is included.
+
+Code based on https://github.com/rogerallen/raytracinginoneweekendincuda
+
+```
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build
+# or target specific SM
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+      -DCMAKE_CUDA_FLAGS="-arch=sm_75" -B build
+```
+
+	```
+	cmake --build build --target inOneWeekendCuda
+	```
+
+
+ - Single thread CPU: Image took about 12.3 minutes, without BVH.
+ - Single thread CPU: When generating same scene with BVH partitioning, took about 3 minutes.
+ - CUDA GPU version: When generating same scene without BVH partitioning, less than 4 **seconds**
+
+![cuda final image](img/IOW-cu2b.png)
+
+
 Run
 ---
 
