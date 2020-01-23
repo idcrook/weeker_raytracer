@@ -27,6 +27,13 @@ set ( COMMON_ALL
   src/common/vec3.h
 )
 
+set ( COMMON_ALL_CUDA
+  # src/commonCuda/rtweekend.h
+  # src/commonCuda/camera.h
+  # src/commonCuda/ray.h
+  src/commonCuda/vec3.h
+)
+
 set ( SOURCE_ONE_WEEKEND
   ${COMMON_ALL}
   src/InOneWeekend/hittable.h
@@ -37,6 +44,7 @@ set ( SOURCE_ONE_WEEKEND
 )
 
 set ( SOURCE_ONE_WEEKEND_CUDA
+  ${COMMON_ALL_CUDA}
   # src/InOneWeekendCuda/hittable.h
   # src/InOneWeekendCuda/hittable_list.h
   # src/InOneWeekendCuda/material.h

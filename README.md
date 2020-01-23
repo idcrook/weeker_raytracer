@@ -48,14 +48,16 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
 
 ## Build CUDA
 
+cmake support is included.
+
+Code based on https://github.com/rogerallen/raytracinginoneweekendincuda
+
 ```
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
 ```
 
-
 	```
 	cmake --build build --target inOneWeekendCuda
-    build/inOneWeekendCuda >! output/cu1.ppm
 	```
 
 
