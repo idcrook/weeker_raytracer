@@ -46,6 +46,19 @@ Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that emacs irony-mode can know
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
 ```
 
+## Build CUDA
+
+```
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+```
+
+
+	```
+	cmake --build build --target inOneWeekendCuda
+    build/inOneWeekendCuda >! output/cu1.ppm
+	```
+
+
 Run
 ---
 

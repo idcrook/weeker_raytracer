@@ -1,18 +1,23 @@
-#---------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 # CMake Build Configuration for the Ray Tracing Weekend Series
 #
 # See README.md for guidance.
-#---------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 
-cmake_minimum_required ( VERSION 3.1.0 )
+cmake_minimum_required ( VERSION 3.8 )
 
 project ( RTWeekend
-  VERSION 2.90.0
-  LANGUAGES CXX
+  VERSION 2.95.0
+  LANGUAGES CUDA CXX
 )
 
 # Set to c++11
 set ( CMAKE_CXX_STANDARD 11 )
+
+if(NOT DEFINED CMAKE_CUDA_STANDARD)
+    set(CMAKE_CUDA_STANDARD 11)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+endif()
 
 # Source
 set ( COMMON_ALL
@@ -29,6 +34,14 @@ set ( SOURCE_ONE_WEEKEND
   src/InOneWeekend/material.h
   src/InOneWeekend/sphere.h
   src/InOneWeekend/main.cc
+)
+
+set ( SOURCE_ONE_WEEKEND_CUDA
+  # src/InOneWeekendCuda/hittable.h
+  # src/InOneWeekendCuda/hittable_list.h
+  # src/InOneWeekendCuda/material.h
+  # src/InOneWeekendCuda/sphere.h
+  src/InOneWeekendCuda/main.cu
 )
 
 set ( SOURCE_NEXT_WEEK
@@ -80,6 +93,8 @@ add_executable(restOfLife   ${SOURCE_REST_OF_LIFE})
 # add_executable(pi                src/RestOfLife/pi.cc                ${COMMON_ALL})
 # add_executable(sphere_importance src/RestOfLife/sphere_importance.cc ${COMMON_ALL})
 # add_executable(sphere_plot       src/RestOfLife/sphere_plot.cc       ${COMMON_ALL})
+add_executable(inOneWeekendCuda ${SOURCE_ONE_WEEKEND_CUDA})
+
 
 target_include_directories(inOneWeekend PRIVATE src)
 target_include_directories(theNextWeek  PRIVATE src)
@@ -90,3 +105,4 @@ target_include_directories(restOfLife   PRIVATE src)
 # target_include_directories(pi                PRIVATE src)
 # target_include_directories(sphere_importance PRIVATE src)
 # target_include_directories(sphere_plot       PRIVATE src)
+target_include_directories(inOneWeekendCuda PRIVATE src)
