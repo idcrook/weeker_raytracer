@@ -59,10 +59,7 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
       -DCMAKE_CUDA_FLAGS="-arch=sm_75" -B build
 ```
 
-	```
 	cmake --build build --target inOneWeekendCuda
-	```
-
 
  - Single thread CPU: Image took about 12.3 minutes, without BVH.
  - Single thread CPU: When generating same scene with BVH partitioning, took about 3 minutes.
