@@ -1,7 +1,7 @@
-#ifndef HITTABLE_H     /* -*- cuda -*- */
-#define HITTABLE_H
+#ifndef HITTABLE_CUH     /* -*- cuda -*- */
+#define HITTABLE_CUH
 
-#include "commonCuda/rtweekend.h"
+#include "commonCuda/rtweekend.cuh"
 
 class material;
 

@@ -1,7 +1,7 @@
-#ifndef RAY_H  /* -*- cuda -*- */
-#define RAY_H
+#ifndef RAY_CUH  /* -*- cuda -*- */
+#define RAY_CUH
 
-#include "commonCuda/vec3.h"
+#include "commonCuda/vec3.cuh"
 
 class ray
 {

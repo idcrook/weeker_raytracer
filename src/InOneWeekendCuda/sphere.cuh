@@ -1,7 +1,7 @@
-#ifndef SPHERE_H       /* -*- cuda -*- */
-#define SPHERE_H
+#ifndef SPHERE_CUH       /* -*- cuda -*- */
+#define SPHERE_CUH
 
-#include "hittable.h"
+#include "hittable.cuh"
 
 class sphere: public hittable  {
 public:

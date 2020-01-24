@@ -1,7 +1,7 @@
-#ifndef HITTABLE_LIST_H        /* -*- cuda -*- */
-#define HITTABLE_LIST_H
+#ifndef HITTABLE_LIST_CUH        /* -*- cuda -*- */
+#define HITTABLE_LIST_CUH
 
-#include "hittable.h"
+#include "hittable.cuh"
 
 class hittable_list: public hittable  {
 public:

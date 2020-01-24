@@ -1,8 +1,8 @@
-#ifndef MATERIAL_H             /* -*- cuda -*- */
-#define MATERIAL_H
+#ifndef MATERIAL_CUH             /* -*- cuda -*- */
+#define MATERIAL_CUH
 
-#include "commonCuda/rtweekend.h"
-#include "hittable.h"
+#include "commonCuda/rtweekend.cuh"
+#include "hittable.cuh"
 
 #include <curand_kernel.h>
 

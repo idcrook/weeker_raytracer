@@ -35,13 +35,6 @@ set ( COMMON_ALL
   src/common/vec3.h
 )
 
-set ( COMMON_ALL_CUDA
-  src/commonCuda/rtweekend.h
-  src/commonCuda/camera.h
-  src/commonCuda/ray.h
-  src/commonCuda/vec3.h
-)
-
 set ( SOURCE_ONE_WEEKEND
   ${COMMON_ALL}
   src/InOneWeekend/hittable.h
@@ -49,15 +42,6 @@ set ( SOURCE_ONE_WEEKEND
   src/InOneWeekend/material.h
   src/InOneWeekend/sphere.h
   src/InOneWeekend/main.cc
-)
-
-set ( SOURCE_ONE_WEEKEND_CUDA
-  ${COMMON_ALL_CUDA}
-  src/InOneWeekendCuda/hittable.h
-  src/InOneWeekendCuda/hittable_list.h
-  src/InOneWeekendCuda/material.h
-  src/InOneWeekendCuda/sphere.h
-  src/InOneWeekendCuda/main.cu
 )
 
 set ( SOURCE_NEXT_WEEK
@@ -98,6 +82,23 @@ set ( SOURCE_REST_OF_LIFE
   src/RestOfLife/sphere.h
   src/RestOfLife/main.cc
 )
+
+set ( COMMON_ALL_CUDA
+  src/commonCuda/rtweekend.cuh
+  src/commonCuda/camera.cuh
+  src/commonCuda/ray.cuh
+  src/commonCuda/vec3.cuh
+)
+
+set ( SOURCE_ONE_WEEKEND_CUDA
+  ${COMMON_ALL_CUDA}
+  src/InOneWeekendCuda/hittable.cuh
+  src/InOneWeekendCuda/hittable_list.cuh
+  src/InOneWeekendCuda/material.cuh
+  src/InOneWeekendCuda/sphere.cuh
+  src/InOneWeekendCuda/main.cu
+)
+
 
 # Executables
 add_executable(inOneWeekend ${SOURCE_ONE_WEEKEND})

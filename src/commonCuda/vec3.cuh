@@ -1,5 +1,5 @@
-#ifndef VEC3_H                     /* -*- cuda -*- */
-#define VEC3_H
+#ifndef VEC3_CUH                     /* -*- cuda -*- */
+#define VEC3_CUH
 
 #include <math.h>
 #include <stdlib.h>

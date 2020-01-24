@@ -1,9 +1,9 @@
 
-#include "commonCuda/rtweekend.h"
-#include "commonCuda/camera.h"
-#include "sphere.h"
-#include "hittable_list.h"
-#include "material.h"
+#include "commonCuda/rtweekend.cuh"
+#include "commonCuda/camera.cuh"
+#include "sphere.cuh"
+#include "hittable_list.cuh"
+#include "material.cuh"
 
 #include <iostream>
 #include <time.h>

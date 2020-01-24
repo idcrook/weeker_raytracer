@@ -1,7 +1,7 @@
-#ifndef CAMERA_H    /* -*- cuda -*- */
-#define CAMERA_H
+#ifndef CAMERA_CUH     /* -*- cuda -*- */
+#define CAMERA_CUH
 
-#include "commonCuda/rtweekend.h"
+#include "commonCuda/rtweekend.cuh"
 
 #include <curand_kernel.h>
 
