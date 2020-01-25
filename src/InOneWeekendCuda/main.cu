@@ -130,6 +130,7 @@ __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_c
     vec3 lookat(0,0,0);
     float dist_to_focus = 10.0; (lookfrom-lookat).length();
     float aperture = 0.1;
+    //float aperture = 0.0;
     *d_camera   = new camera(lookfrom,
                              lookat,
                              vec3(0,1,0),
@@ -149,12 +150,62 @@ __global__ void free_world(hittable **d_list, hittable **d_world, camera **d_cam
   delete *d_camera;
 }
 
-int main() {
-  int nx = 1200;
-  int ny = 800;
-  int ns = 10;
+int main (int argc, char** argv) {
+
+  // default values
+  bool SUPER_QUALITY_RENDER = !true;
+  bool HIGH_QUALITY_RENDER = !true;
+  bool MEDIUM_QUALITY_RENDER = !true;
+  bool PROFILE_RENDER = !true;
+
+  // handle command line arguments
+  if (argc >= 2) {
+    // first command line argument is "SH"?
+    if (std::string(argv[1]) == "PR") {
+      PROFILE_RENDER = true;
+    }
+    // first command line argument is "SH"?
+    if (std::string(argv[1]) == "SH") {
+      SUPER_QUALITY_RENDER = true;
+    }
+    // first command line argument is "HQ"?
+    if (std::string(argv[1]) == "HQ") {
+      HIGH_QUALITY_RENDER = true;
+    }
+    // first command line argument is "MQ"?
+    if (std::string(argv[1]) == "MQ") {
+      MEDIUM_QUALITY_RENDER = true;
+    }
+  }
+
+  int nx, ny, ns;
   int tx = 8;
   int ty = 8;
+
+  if (PROFILE_RENDER) {
+    nx = tx*8;
+    ny = ty*4;
+    ns = 10;
+  } else if (SUPER_QUALITY_RENDER) {
+    nx = 600;
+    ny = 400;
+    ns = 100;
+    nx *= 2; ny *= 2;
+    ns /= 2;
+  } else if (HIGH_QUALITY_RENDER) {
+    nx = 600;
+    ny = 400;
+    ns = 100;
+  } else if (MEDIUM_QUALITY_RENDER) {
+    nx = 1200;
+    ny = 800;
+    ns = 20;
+  } else {
+    nx = 1200;
+    ny = 800;
+    ns = 10;
+  }
+
 
   std::cerr << "Rendering a " << nx << "x" << ny << " image with " << ns << " samples per pixel ";
   std::cerr << "in " << tx << "x" << ty << " blocks.\n";
@@ -199,7 +250,8 @@ int main() {
   checkCudaErrors(cudaDeviceSynchronize());
   render<<<blocks, threads>>>(fb, nx, ny,  ns, d_camera, d_world, d_rand_state);
   checkCudaErrors(cudaGetLastError());
-  checkCudaErrors(cudaDeviceSynchronize());
+  checkCudaErrors(cudaDeviceSynchronize()); // errors when profiling
+  //cudaDeviceSynchronize(); // errors when profiling
   stop = clock();
   double timer_seconds = ((double)(stop - start)) / CLOCKS_PER_SEC;
   std::cerr << "took " << timer_seconds << " seconds.\n";
@@ -217,9 +269,11 @@ int main() {
   }
 
   // clean up
-  checkCudaErrors(cudaDeviceSynchronize());
+  checkCudaErrors(cudaDeviceSynchronize());  // errors in profiler
+  //cudaDeviceSynchronize();
   free_world<<<1,1>>>(d_list,d_world,d_camera);
   checkCudaErrors(cudaGetLastError());
+  //cudaGetLastError();
   checkCudaErrors(cudaFree(d_camera));
   checkCudaErrors(cudaFree(d_world));
   checkCudaErrors(cudaFree(d_list));
