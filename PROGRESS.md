@@ -1,18 +1,37 @@
-# ray tracing in one weekend book
+# Ray Tracing In One Weekend Book Series
+
+https://github.com/RayTracing/raytracing.github.io
+
+## Infrastructure
+
+- [x] Makefile build
+- [x] Convert to CMake build
+  - [x] Linux C++ builds
+  - [x] Linux CUDA C++ builds
+  - [x] macOS C++ builds
+  - [ ] macOS CUDA C++ builds
+
+## C++
+
+- [x] In One Weekend
+- [x] The Next Week
+- [x] Rest Of Life
+
+## CUDA C++
+
+- [x] In One Weekend
+- [ ] The Next Week
+- [ ] Rest Of Life
+
+## Optix CUDA C++
+
+- [ ] In One Weekend
+- [ ] The Next Week
+- [ ] Rest Of Life
 
 
-https://raytracing.github.io/books/RayTracingInOneWeekend.html
+## Rust lang
 
-# chapter 2
-
-created makefile and source tree
-
-```
-make
-./build/apps/program > ch2.ppm
-```
-
-- `Makefile` derived from https://www.partow.net/programming/makefile/index.html
-
-
-# chapter 3
+- [ ] In One Weekend
+- [ ] The Next Week
+- [ ] Rest Of Life
