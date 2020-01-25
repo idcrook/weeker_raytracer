@@ -33,3 +33,4 @@
 
 /build
 /output
+*.nsight-cuprof-report
