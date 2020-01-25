@@ -1,10 +1,10 @@
 # Install CUDA on Ubuntu 19.10
 
-Graphics card: 2070 Super
+Graphics card: RTX 2070 Super
  - 40 Turing SM
- - 2560 Cuda units
+ - 2560 CUDA units
 
-Try to follow the docs. didn't like gcc-9; requires gcc-8. However theres a working installed for CUDA 10.1 and toolkit available on Ubuntu 19.10
+Tried to follow the docs. didn't like gcc-9; requires gcc-8. However there is a working installer for CUDA 10.1 and toolkit available on Ubuntu 19.10
 
 
 ```
