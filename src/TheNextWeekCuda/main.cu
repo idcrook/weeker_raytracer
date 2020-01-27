@@ -2,6 +2,7 @@
 #include "commonCuda/rtweekend.cuh"
 #include "commonCuda/camera.cuh"
 #include "sphere.cuh"
+#include "moving_sphere.cuh"
 #include "hittable_list.cuh"
 #include "material.cuh"
 
@@ -108,8 +109,12 @@ __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_c
         float choose_mat = RND;
         vec3 center(a+RND,0.2,b+RND);
         if(choose_mat < 0.8f) {
-          d_list[i++] = new sphere(center, 0.2,
-                                   new lambertian(vec3(RND*RND, RND*RND, RND*RND)));
+          // d_list[i++] = new sphere(center, 0.2,
+          //                          new lambertian(vec3(RND*RND, RND*RND, RND*RND)));
+          d_list[i++] = new moving_sphere(center, center+vec3(0, 0.5*RND, 0),
+                                          0.f, 1.f,
+                                          0.2,
+                                          new lambertian(vec3(RND*RND, RND*RND, RND*RND)));
         }
         else if(choose_mat < 0.95f) {
           d_list[i++] = new sphere(center, 0.2,
@@ -129,15 +134,16 @@ __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_c
     vec3 lookfrom(13,2,3);
     vec3 lookat(0,0,0);
     float dist_to_focus = 10.0; (lookfrom-lookat).length();
-    float aperture = 0.1;
-    //float aperture = 0.0;
+    //float aperture = 0.1;
+    float aperture = 0.0;
     *d_camera   = new camera(lookfrom,
                              lookat,
                              vec3(0,1,0),
                              30.0,
                              float(nx)/float(ny),
                              aperture,
-                             dist_to_focus);
+                             dist_to_focus,
+                             0.f, 1.f);
   }
 }
 

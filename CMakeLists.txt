@@ -101,6 +101,16 @@ set ( SOURCE_ONE_WEEKEND_CUDA
 
 set ( SOURCE_NEXT_WEEK_CUDA
   ${COMMON_ALL_CUDA}
+  # src/commonCuda/aabb.h
+  # src/commonCuda/external/stb_image.h
+  # src/commonCuda/perlin.h
+  # src/commonCuda/rtw_stb_image.h
+  # src/commonCuda/texture.h
+  # src/TheNextWeekCuda/aarect.h
+  # src/TheNextWeekCuda/box.h
+  # src/TheNextWeekCuda/bvh.h
+  # src/TheNextWeekCuda/constant_medium.h
+  src/TheNextWeekCuda/moving_sphere.cuh
   src/TheNextWeekCuda/hittable.cuh
   src/TheNextWeekCuda/hittable_list.cuh
   src/TheNextWeekCuda/material.cuh
