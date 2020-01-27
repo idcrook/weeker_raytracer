@@ -68,6 +68,7 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 ```
 
 	cmake --build build --target inOneWeekendCuda
+	cmake --build build --target theNextWeekCuda
 
 
 #### CUDA Tested on
