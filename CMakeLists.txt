@@ -8,8 +8,11 @@ cmake_minimum_required ( VERSION 3.11 )
 
 project ( RTWeekend
   VERSION 2.95.0
-  LANGUAGES CXX
-)
+  )
+
+# set to match your path
+set(OptiX_INSTALL_DIR "/usr/local/nvidia/NVIDIA-OptiX-SDK-6.5.0-linux64/"
+  CACHE PATH "Path to OptiX installed location.")
 
 # Set to c++11
 set ( CMAKE_CXX_STANDARD 11 )
@@ -22,10 +25,36 @@ if(CMAKE_CUDA_COMPILER)
     set(CMAKE_CUDA_STANDARD 11)
     set(CMAKE_CUDA_STANDARD_REQUIRED ON)
   endif()
-  set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)
+  #set(CMAKE_CUDA_SEPARABLE_COMPILATION ON) # for multi-target pre-compilations
+
+  # Defines OptiX utilities and variables
+  INCLUDE(cmake/configure_optix.cmake)
 else()
   message(STATUS "No CUDA support")
 endif()
+
+# if(NOT SET_UP_CONFIGURATIONS_DONE)
+#   set(SET_UP_CONFIGURATIONS_DONE 1)
+
+#   # No reason to set CMAKE_CONFIGURATION_TYPES if it's not a multiconfig generator
+#   # Also no reason mess with CMAKE_BUILD_TYPE if it's a multiconfig generator.
+#   if(CMAKE_CONFIGURATION_TYPES) # multiconfig generator?
+#     set(CMAKE_CONFIGURATION_TYPES "Debug;Release;Profile" CACHE STRING "" FORCE)
+#   else()
+#     if(NOT CMAKE_BUILD_TYPE)
+#       #            message("Defaulting to release build.")
+#       set(CMAKE_BUILD_TYPE Release CACHE STRING "" FORCE)
+#     endif()
+#     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY HELPSTRING "Choose the type of build")
+#     # set the valid options for cmake-gui drop-down list
+#     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release;Profile")
+#   endif()
+# endif()
+# MARK_AS_ADVANCED(CUDA_SDK_ROOT_DIR)
+
+# SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+# SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+# SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
 # Source
 set ( COMMON_ALL
@@ -119,29 +148,19 @@ set ( SOURCE_NEXT_WEEK_CUDA
 )
 
 
-
 # Executables
 add_executable(inOneWeekend ${SOURCE_ONE_WEEKEND})
 add_executable(theNextWeek  ${SOURCE_NEXT_WEEK})
 add_executable(restOfLife   ${SOURCE_REST_OF_LIFE})
-# add_executable(cos_cubed         src/RestOfLife/cos_cubed.cc         ${COMMON_ALL})
-# add_executable(cos_density       src/RestOfLife/cos_density.cc       ${COMMON_ALL})
-# add_executable(integrate_x_sq    src/RestOfLife/integrate_x_sq.cc    ${COMMON_ALL})
-# add_executable(pi                src/RestOfLife/pi.cc                ${COMMON_ALL})
-# add_executable(sphere_importance src/RestOfLife/sphere_importance.cc ${COMMON_ALL})
-# add_executable(sphere_plot       src/RestOfLife/sphere_plot.cc       ${COMMON_ALL})
-add_executable(inOneWeekendCuda ${SOURCE_ONE_WEEKEND_CUDA})
-add_executable(theNextWeekCuda  ${SOURCE_NEXT_WEEK_CUDA})
-
+add_executable(inOneWeekendCuda  ${SOURCE_ONE_WEEKEND_CUDA})
+add_executable(theNextWeekCuda   ${SOURCE_NEXT_WEEK_CUDA})
 
 target_include_directories(inOneWeekend PRIVATE src)
 target_include_directories(theNextWeek  PRIVATE src)
 target_include_directories(restOfLife   PRIVATE src)
-# target_include_directories(cos_cubed         PRIVATE src)
-# target_include_directories(cos_density       PRIVATE src)
-# target_include_directories(integrate_x_sq    PRIVATE src)
-# target_include_directories(pi                PRIVATE src)
-# target_include_directories(sphere_importance PRIVATE src)
-# target_include_directories(sphere_plot       PRIVATE src)
+
 target_include_directories(inOneWeekendCuda PRIVATE src)
 target_include_directories(theNextWeekCuda  PRIVATE src)
+
+# Handled within each
+ADD_SUBDIRECTORY( src/OptiX/InOneWeekend )

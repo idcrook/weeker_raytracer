@@ -1,6 +1,6 @@
 
 #include "commonCuda/rtweekend.cuh"
-#include "commonCuda/camera.cuh"
+#include "camera.cuh"
 #include "sphere.cuh"
 #include "hittable_list.cuh"
 #include "material.cuh"
