@@ -101,7 +101,7 @@ set ( SOURCE_ONE_WEEKEND_CUDA
 
 set ( SOURCE_NEXT_WEEK_CUDA
   ${COMMON_ALL_CUDA}
-  # src/commonCuda/aabb.h
+  src/commonCuda/aabb.cuh
   # src/commonCuda/external/stb_image.h
   # src/commonCuda/perlin.h
   # src/commonCuda/rtw_stb_image.h
