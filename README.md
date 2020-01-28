@@ -103,9 +103,13 @@ Code based on
 
 ```
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build
-# or target specific SM
+
+# or set other flags
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-      -DCMAKE_CUDA_FLAGS="-arch=sm_75" -B build
+    -DCMAKE_CUDA_FLAGS="--use_fast_math --relocatable-device-code=true" \
+    -B build
+
+# --generate-line-info
 ```
 
 	cmake --build build --target inOneWeekendOptix
@@ -119,7 +123,6 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
    - nsight compute 2019.5 (manual download and install from nvidia dev site)
  - Optix 6.5.0 SDK
  - Nvidia RTX 2070 Super (Supports SM 7.5)
-
 
 # Run
 

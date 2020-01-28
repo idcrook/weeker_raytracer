@@ -15,3 +15,20 @@ sh NVIDIA-OptiX-SDK-6.5.0-linux64.sh --skip-license \
 sh NVIDIA-OptiX-SDK-7.0.0-linux64.sh --skip-license \
    --prefix=/usr/local/nvidia --include-subdir
 ```
+
+
+# configure gcc
+
+
+```
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 10
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 20
+
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 10
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 20
+
+sudo update-alternatives --config gcc
+sudo update-alternatives --config g++
+```
+
+Must set to gcc-8 for compiles to work

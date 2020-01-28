@@ -20,15 +20,14 @@ set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   )
 
-#find_package(CUDA REQUIRED)
+find_package(CUDA REQUIRED)
 find_package(OptiX REQUIRED)
 
-# #include_directories(${CUDA_TOOLKIT_INCLUDE})
-# if (CUDA_TOOLKIT_ROOT_DIR)
-# 	include_directories(${CUDA_TOOLKIT_ROOT_DIR}/include)
-# endif()
-
-# include_directories(${OptiX_INCLUDE})
+#include_directories(${CUDA_TOOLKIT_INCLUDE})
+if (CUDA_TOOLKIT_ROOT_DIR)
+	include_directories(${CUDA_TOOLKIT_ROOT_DIR}/include)
+endif()
+include_directories(${OptiX_INCLUDE})
 
 if (WIN32)
   add_definitions(-DNOMINMAX)
@@ -62,8 +61,7 @@ macro(cuda_compile_and_embed output_var cuda_file)
   set(${output_var} ${embedded_file})
 endmacro()
 
-message(STATUS "OptiX includes: ${OptiX_INCLUDE}")
-
 include_directories(${OptiX_INCLUDE})
+#message(STATUS "OptiX includes: ${OptiX_INCLUDE}")
 
 add_definitions(-D__CUDA_INCLUDE_COMPILER_INTERNAL_HEADERS__=1)
