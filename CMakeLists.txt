@@ -11,6 +11,11 @@ project ( RTWeekend
   LANGUAGES CXX
 )
 
+set(OptiX_INSTALL_DIR
+  "/usr/local/nvidia/NVIDIA-OptiX-SDK-6.5.0-linux64/"
+  CACHE PATH "Path to OptiX installed location.")
+
+
 # Set to c++11
 set ( CMAKE_CXX_STANDARD 11 )
 
@@ -23,6 +28,7 @@ if(CMAKE_CUDA_COMPILER)
     set(CMAKE_CUDA_STANDARD_REQUIRED ON)
   endif()
   set(CMAKE_CUDA_SEPARABLE_COMPILATION ON)
+  INCLUDE(cmake/configure_optix.cmake)
 else()
   message(STATUS "No CUDA support")
 endif()
@@ -118,30 +124,52 @@ set ( SOURCE_NEXT_WEEK_CUDA
   src/TheNextWeekCuda/main.cu
 )
 
+set ( COMMON_ALL_OPTIX
+  src/commonOptix/rtweekend.cuh
+  src/commonOptix/camera.cuh
+  src/commonOptix/ray.cuh
+  src/commonOptix/vec3.cuh
+)
+
+set ( SOURCE_ONE_WEEKEND_OPTIX
+  ${COMMON_ALL_OPTIX}
+  src/InOneWeekendOptix/hittable.cuh
+  src/InOneWeekendOptix/hittable_list.cuh
+  src/InOneWeekendOptix/material.cuh
+  src/InOneWeekendOptix/sphere.cuh
+  src/InOneWeekendOptix/main.cu
+)
 
 
 # Executables
 add_executable(inOneWeekend ${SOURCE_ONE_WEEKEND})
 add_executable(theNextWeek  ${SOURCE_NEXT_WEEK})
 add_executable(restOfLife   ${SOURCE_REST_OF_LIFE})
+add_executable(inOneWeekendCuda  ${SOURCE_ONE_WEEKEND_CUDA})
+add_executable(theNextWeekCuda   ${SOURCE_NEXT_WEEK_CUDA})
+add_executable(inOneWeekendOptix ${SOURCE_ONE_WEEKEND_OPTIX})
+#add_executable(theNextWeekOptix  ${SOURCE_NEXT_WEEK_OPTIX})
+
+target_include_directories(inOneWeekend PRIVATE src)
+target_include_directories(theNextWeek  PRIVATE src)
+target_include_directories(restOfLife   PRIVATE src)
+
+target_include_directories(inOneWeekendCuda PRIVATE src)
+target_include_directories(theNextWeekCuda  PRIVATE src)
+
+target_include_directories(inOneWeekendOptix PRIVATE src)
+#target_include_directories(theNextWeekOptix  PRIVATE src)
+
+
 # add_executable(cos_cubed         src/RestOfLife/cos_cubed.cc         ${COMMON_ALL})
 # add_executable(cos_density       src/RestOfLife/cos_density.cc       ${COMMON_ALL})
 # add_executable(integrate_x_sq    src/RestOfLife/integrate_x_sq.cc    ${COMMON_ALL})
 # add_executable(pi                src/RestOfLife/pi.cc                ${COMMON_ALL})
 # add_executable(sphere_importance src/RestOfLife/sphere_importance.cc ${COMMON_ALL})
 # add_executable(sphere_plot       src/RestOfLife/sphere_plot.cc       ${COMMON_ALL})
-add_executable(inOneWeekendCuda ${SOURCE_ONE_WEEKEND_CUDA})
-add_executable(theNextWeekCuda  ${SOURCE_NEXT_WEEK_CUDA})
-
-
-target_include_directories(inOneWeekend PRIVATE src)
-target_include_directories(theNextWeek  PRIVATE src)
-target_include_directories(restOfLife   PRIVATE src)
 # target_include_directories(cos_cubed         PRIVATE src)
 # target_include_directories(cos_density       PRIVATE src)
 # target_include_directories(integrate_x_sq    PRIVATE src)
 # target_include_directories(pi                PRIVATE src)
 # target_include_directories(sphere_importance PRIVATE src)
 # target_include_directories(sphere_plot       PRIVATE src)
-target_include_directories(inOneWeekendCuda PRIVATE src)
-target_include_directories(theNextWeekCuda  PRIVATE src)

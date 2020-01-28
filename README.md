@@ -93,6 +93,33 @@ Early performance comparisons
 ![cuda final image](img/IOW-cu12b.png)
 
 
+## Build OptiX
+
+
+Code based on
+ - a
+ - b
+
+
+```
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build
+# or target specific SM
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+      -DCMAKE_CUDA_FLAGS="-arch=sm_75" -B build
+```
+
+	cmake --build build --target inOneWeekendOptix
+
+
+#### OptiX Tested on
+
+ - Ubuntu Linux 19.10
+ - CUDA toolkit 10.1 V10.1.168 (from `nvidia-cuda-toolkit` installer)
+   - it installs dependency gcc-8 (gcc-9 is not yet supported in CUDA toolchain)
+   - nsight compute 2019.5 (manual download and install from nvidia dev site)
+ - Optix 6.5.0 SDK
+ - Nvidia RTX 2070 Super (Supports SM 7.5)
+
 
 # Run
 
