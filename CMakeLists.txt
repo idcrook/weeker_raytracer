@@ -99,6 +99,26 @@ set ( SOURCE_ONE_WEEKEND_CUDA
   src/InOneWeekendCuda/main.cu
 )
 
+set ( SOURCE_NEXT_WEEK_CUDA
+  ${COMMON_ALL_CUDA}
+  src/commonCuda/aabb.cuh
+  # src/commonCuda/external/stb_image.h
+  # src/commonCuda/perlin.h
+  # src/commonCuda/rtw_stb_image.h
+  src/commonCuda/texture.cuh
+  # src/TheNextWeekCuda/aarect.h
+  # src/TheNextWeekCuda/box.h
+  # src/TheNextWeekCuda/bvh.cuh
+  # src/TheNextWeekCuda/constant_medium.h
+  src/TheNextWeekCuda/moving_sphere.cuh
+  src/TheNextWeekCuda/hittable.cuh
+  src/TheNextWeekCuda/hittable_list.cuh
+  src/TheNextWeekCuda/material.cuh
+  src/TheNextWeekCuda/sphere.cuh
+  src/TheNextWeekCuda/main.cu
+)
+
+
 
 # Executables
 add_executable(inOneWeekend ${SOURCE_ONE_WEEKEND})
@@ -111,6 +131,7 @@ add_executable(restOfLife   ${SOURCE_REST_OF_LIFE})
 # add_executable(sphere_importance src/RestOfLife/sphere_importance.cc ${COMMON_ALL})
 # add_executable(sphere_plot       src/RestOfLife/sphere_plot.cc       ${COMMON_ALL})
 add_executable(inOneWeekendCuda ${SOURCE_ONE_WEEKEND_CUDA})
+add_executable(theNextWeekCuda  ${SOURCE_NEXT_WEEK_CUDA})
 
 
 target_include_directories(inOneWeekend PRIVATE src)
@@ -123,3 +144,4 @@ target_include_directories(restOfLife   PRIVATE src)
 # target_include_directories(sphere_importance PRIVATE src)
 # target_include_directories(sphere_plot       PRIVATE src)
 target_include_directories(inOneWeekendCuda PRIVATE src)
+target_include_directories(theNextWeekCuda  PRIVATE src)
