@@ -105,7 +105,7 @@ set ( SOURCE_NEXT_WEEK_CUDA
   # src/commonCuda/external/stb_image.h
   # src/commonCuda/perlin.h
   # src/commonCuda/rtw_stb_image.h
-  # src/commonCuda/texture.h
+  src/commonCuda/texture.cuh
   # src/TheNextWeekCuda/aarect.h
   # src/TheNextWeekCuda/box.h
   # src/TheNextWeekCuda/bvh.cuh

@@ -1,6 +1,7 @@
 
 #include "commonCuda/rtweekend.cuh"
 #include "commonCuda/camera.cuh"
+#include "commonCuda/texture.cuh"
 #include "sphere.cuh"
 #include "moving_sphere.cuh"
 #include "hittable_list.cuh"
@@ -103,10 +104,18 @@ __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_c
     curandState local_rand_state = *rand_state;
     // d_list[0] = new sphere(vec3(0,-1000.0,-1), 1000,
     //                        new lambertian(vec3(0.5, 0.5, 0.5)));
+    Texture *checker = new checker_texture(
+                                           new constant_texture(vec3(0.2, 0.3, 0.1)),
+                                           new constant_texture(vec3(0.9, 0.9, 0.9))
+                                           );
     d_list[0] = new moving_sphere(vec3(0,-1000.0,-1), vec3(0,-1000.0,-1),
                                   0.f, 1.f,
                                   1000,
-                                  new lambertian(vec3(0.5, 0.5, 0.5)));
+                                  new lambertian(checker));
+    // d_list[0] = new moving_sphere(vec3(0,-1000.0,-1), vec3(0,-1000.0,-1),
+    //                               0.f, 1.f,
+    //                               1000,
+    //                               new lambertian(new constant_texture(vec3(0.5, 0.5, 0.5))));
     int i = 1;
     for(int a = -11; a < 11; a++) {
       for(int b = -11; b < 11; b++) {
@@ -118,7 +127,7 @@ __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_c
           d_list[i++] = new moving_sphere(center, center+vec3(0, 0.5*RND, 0),
                                           0.f, 1.f,
                                           0.2,
-                                          new lambertian(vec3(RND*RND, RND*RND, RND*RND)));
+                                          new lambertian(new constant_texture(vec3(RND*RND, RND*RND, RND*RND))));
         }
         else if(choose_mat < 0.95f) {
           // d_list[i++] = new sphere(center, 0.2,
@@ -138,7 +147,8 @@ __global__ void create_world(hittable **d_list, hittable **d_world, camera **d_c
     // d_list[i++] = new sphere(vec3(-4, 1, 0), 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
     // d_list[i++] = new sphere(vec3(4, 1, 0),  1.0, new metal(vec3(0.7, 0.6, 0.5), 0.0));
     d_list[i++] = new moving_sphere(vec3(0, 1,0),  vec3(0, 1,0),   0.f, 1.f, 1.0, new dielectric(1.5));
-    d_list[i++] = new moving_sphere(vec3(-4, 1, 0),vec3(-4, 1, 0), 0.f, 1.f, 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
+    d_list[i++] = new moving_sphere(vec3(-4, 1, 0),vec3(-4, 1, 0), 0.f, 1.f, 1.0,
+                                    new lambertian(new constant_texture(vec3(0.4, 0.2, 0.1))));
     d_list[i++] = new moving_sphere(vec3(4, 1, 0), vec3(4, 1, 0),  0.f, 1.f, 1.0, new metal(vec3(0.7, 0.6, 0.5), 0.0));
     *rand_state = local_rand_state;
     *d_world  = new hittable_list(d_list, 22*22+1+3);
