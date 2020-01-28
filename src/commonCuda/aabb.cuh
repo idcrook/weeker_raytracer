@@ -3,6 +3,8 @@
 
 #include "commonCuda/rtweekend.cuh"
 
+#include <thrust/swap.h>
+
 __forceinline__ __device__ float ffmin(float a, float b) { return a < b ? a : b; }
 __forceinline__ __device__ float ffmax(float a, float b) { return a > b ? a : b; }
 
@@ -34,7 +36,7 @@ public:
       float t0 = (min()[a] - r.origin()[a]) * invD;
       float t1 = (max()[a] - r.origin()[a]) * invD;
       if (invD < 0.0f)
-        std::swap(t0, t1);
+        thrust::swap(t0, t1);
       tmin = t0 > tmin ? t0 : tmin;
       tmax = t1 < tmax ? t1 : tmax;
       if (tmax <= tmin)

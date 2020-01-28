@@ -108,7 +108,7 @@ set ( SOURCE_NEXT_WEEK_CUDA
   # src/commonCuda/texture.h
   # src/TheNextWeekCuda/aarect.h
   # src/TheNextWeekCuda/box.h
-  # src/TheNextWeekCuda/bvh.h
+  # src/TheNextWeekCuda/bvh.cuh
   # src/TheNextWeekCuda/constant_medium.h
   src/TheNextWeekCuda/moving_sphere.cuh
   src/TheNextWeekCuda/hittable.cuh
