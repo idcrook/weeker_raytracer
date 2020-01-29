@@ -3,6 +3,7 @@
 
 #include "raydata.cuh"
 #include "random.cuh"
+#include "camera.cuh"
 
 using namespace optix;
 
@@ -21,6 +22,15 @@ rtBuffer<float3, 2> sysOutputBuffer;
 // Ray Generation variables
 rtDeclareVariable(int, numSamples, , );
 rtDeclareVariable(int, maxRayDepth, , );
+
+inline __device__ float3 removeNaNs(float3 radiance)
+{
+    float3 r = radiance;
+    if(!(r.x == r.x)) r.x = 0.0f;
+    if(!(r.y == r.y)) r.y = 0.0f;
+    if(!(r.z == r.z)) r.z = 0.0f;
+    return r;
+}
 
 inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
 {
@@ -57,7 +67,7 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
                 0,
                 0.001f,
                 RT_DEFAULT_MAX
-                );
+            );
         }
     }
 
@@ -78,23 +88,23 @@ RT_PROGRAM void rayGenProgram()
     float3 radiance = make_float3(0.0f, 0.0f, 0.0f);
     for (int n = 0; n < numSamples; n++)
     {
-        float u = float(theLaunchIndex.x+randf(seed)) / float(theLaunchDim.x);
-        float v = float(theLaunchIndex.y+randf(seed)) / float(theLaunchDim.y);
-        float3 initialOrigin = origin;
-        float3 initialDirection = lowerLeftCorner + (u*horizontal) + (v*vertical) - origin;
-
-        optix::Ray theRay = optix::make_Ray(
-            initialOrigin,        // origin
-            initialDirection,     // direction
-            0,             // raytype
-            0.000001f,     // tmin (epsilon)
-            RT_DEFAULT_MAX // tmax
-            );
-
+        float s = float(theLaunchIndex.x+randf(seed)) / float(theLaunchDim.x);
+        float t = float(theLaunchIndex.y+randf(seed)) / float(theLaunchDim.y);
+        optix::Ray theRay = generateRay(s,t);
         float3 sampleRadiance = color(theRay, seed);
+
+        // Remove NaNs
+        sampleRadiance = removeNaNs(sampleRadiance);
+
         radiance += sampleRadiance;
     }
     radiance /= numSamples;
+
+    radiance = make_float3(
+        sqrtf(radiance.x),
+        sqrtf(radiance.y),
+        sqrtf(radiance.z)
+    );
 
     sysOutputBuffer[theLaunchIndex] = radiance;
 }

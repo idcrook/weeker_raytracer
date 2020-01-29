@@ -2,6 +2,7 @@
 #define INTRO_OPTIX_H
 
 #include "scene/ioScene.h"
+//#include "scene/ioScene3.h"
 
 #include <optix.h>
 #include <optixu/optixpp.h>

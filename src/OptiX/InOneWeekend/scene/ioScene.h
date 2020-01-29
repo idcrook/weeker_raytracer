@@ -16,6 +16,8 @@
 #include "material/ioMetalMaterial.h"
 #include "material/ioDielectricMaterial.h"
 
+#include "scene/ioCamera.h"
+
 class ioScene
 {
 public:
@@ -61,6 +63,29 @@ public:
 
       // Setting World Variable
       context["sysWorld"]->set(geometryGroup.get());
+
+      // Create and Init our scene camera
+      camera = new ioEnvironmentCamera(
+        -2.0f, 2.0f, 1.0f,
+        0.0f, 0.0f, -1.0f,
+        0.0f, 1.0f, 0.0f
+        );
+
+      // camera = new ioPerspectiveCamera(
+      // -2.0f, 2.0f, 1.0f,
+      // 0.0f, 0.0f, -1.0f,
+      // 0.0f, 1.0f, 0.0f,
+      // 90.0f, 2.0f
+      // );
+
+      // camera = new ioOrthographicCamera(
+      //   -2.0f, 2.0f, 1.0f,
+      //   0.0f, 0.0f, -1.0f,
+      //   0.0f, 1.0f, 0.0f,
+      //   5.0f, 10.0f
+      //   );
+
+      camera->init(context);
     }
 
   void destroy()
@@ -75,6 +100,9 @@ public:
         geoInstList[i].destroy();
 
       geometryGroup.destroy();
+
+      camera->destroy();
+      delete camera;
     }
 
 public:
@@ -82,6 +110,8 @@ public:
   std::vector<ioGeometry*> geometryList;
   std::vector<ioGeometryInstance> geoInstList;
   ioGeometryGroup geometryGroup;
+
+  ioCamera* camera;
 };
 
 #endif //!IO_SCENE_H
