@@ -17,7 +17,7 @@
       }                                                             \
     } while(0)
 
-extern "C" const char drawColor_ptx_c[];
+extern "C" const char drawColorGradient_ptx_c[];
 
 int main(int argc, char* argv[])
 {
@@ -27,7 +27,8 @@ int main(int argc, char* argv[])
   RTbuffer buffer;
   // Cuda program arguments (parameters)
   RTvariable resultBuffer;
-  RTvariable color;
+  RTvariable topLeftColor;
+  RTvariable bottomRightColor;
 
   // Parameters
   int width = 1200;
@@ -51,13 +52,15 @@ int main(int argc, char* argv[])
   //   Create program from ptx
   RT_CHECK( rtProgramCreateFromPTXString(
                                          context,
-                                         drawColor_ptx_c,
-                                         "drawColor",
+                                         drawColorGradient_ptx_c,
+                                         "drawColorGradient",
                                          &rayGenProgram ));
   //   Program variable plumbing
-  RT_CHECK( rtProgramDeclareVariable( rayGenProgram, "color", &color ));
+  RT_CHECK( rtProgramDeclareVariable( rayGenProgram, "topLeftColor", &topLeftColor ));
+  RT_CHECK( rtProgramDeclareVariable( rayGenProgram, "bottomRightColor", &bottomRightColor ));
   //   Set out raygen program variable now
-  RT_CHECK( rtVariableSet3f( color, 0.462f, 0.725f, 0.05f ));
+  RT_CHECK( rtVariableSet3f( topLeftColor, 0.0f, 1.0f, 0.0f ));
+  RT_CHECK( rtVariableSet3f( bottomRightColor, 1.0f, 0.0f, 1.0f ));
   //   Hook raygen program and contet
   RT_CHECK( rtContextSetRayGenerationProgram( context, 0, rayGenProgram ));
 
@@ -93,5 +96,4 @@ int main(int argc, char* argv[])
   RT_CHECK( rtBufferDestroy( buffer ));
   RT_CHECK( rtProgramDestroy( rayGenProgram));
   RT_CHECK( rtContextDestroy( context ));
-  // @Writing Variables are not explicitly destroyed
 }
