@@ -113,16 +113,20 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 ```
 
 	cmake --build build --target inOneWeekendOptix
+    cmake --build build --target inOneWeekendOptix --clean-first
+
+
+#### running optix
+
+```
+build/src/OptiX/InOneWeekend/inOneWeekendOptix > output/grad.ppm
+```
 
 
 #### OptiX Tested on
 
- - Ubuntu Linux 19.10
- - CUDA toolkit 10.1 V10.1.168 (from `nvidia-cuda-toolkit` installer)
-   - it installs dependency gcc-8 (gcc-9 is not yet supported in CUDA toolchain)
-   - nsight compute 2019.5 (manual download and install from nvidia dev site)
  - Optix 6.5.0 SDK
- - Nvidia RTX 2070 Super (Supports SM 7.5)
+ - cmake 3.13.4
 
 # Run
 
