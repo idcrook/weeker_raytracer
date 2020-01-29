@@ -37,6 +37,10 @@ cuda_compile_and_embed(
   lambertian_material_ptx_c material/lambertianMaterial.cu
   )
 
+cuda_compile_and_embed(
+  metal_material_ptx_c      material/metalMaterial.cu
+)
+
 add_executable(inOneWeekendOptix
   introOptix.h
   introOptix.cpp
@@ -47,6 +51,7 @@ add_executable(inOneWeekendOptix
   ${sphere_ptx_c}
   ${normal_material_ptx_c}
   ${lambertian_material_ptx_c}
+  ${metal_material_ptx_c}
   )
 
 
