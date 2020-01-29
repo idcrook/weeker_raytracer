@@ -22,6 +22,7 @@ public:
 private:
   int m_Nx;
   int m_Ny;
+  int m_Ns;  // number of samples
 
   optix::Context m_context;
   optix::Buffer m_outputBuffer;

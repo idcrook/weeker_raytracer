@@ -5,9 +5,9 @@
 
 using namespace optix;
 
-rtDeclareVariable(PerRayData, prd, rtPayload, );
+rtDeclareVariable(PerRayData, thePrd, rtPayload, );
 
 RT_PROGRAM void missProgram()
 {
-    prd.scatterEvent = miss;
+    thePrd.scatterEvent = miss;
 }

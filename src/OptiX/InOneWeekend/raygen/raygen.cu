@@ -2,6 +2,7 @@
 #include <optixu/optixu_math_namespace.h>
 
 #include "raydata.cuh"
+#include "random.cuh"
 
 using namespace optix;
 
@@ -15,29 +16,13 @@ rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 
 // "Global" variables
 rtDeclareVariable(rtObject, sysWorld, , );
-
 rtBuffer<float3, 2> sysOutputBuffer;
 
-RT_PROGRAM void rayGenProgram()
+// Ray Generation variables
+rtDeclareVariable(int, numSamples, , );
+
+inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
 {
-    float3 lowerLeftCorner = make_float3(-2.0f, -1.0f, -1.0f);
-    float3 horizontal = make_float3(4.0f, 0.0f, 0.0f);
-    float3 vertical = make_float3(0.0f, 2.0f, 0.0f);
-    float3 origin = make_float3(0.0f, 0.0f, 0.0f);
-
-    float u = float(theLaunchIndex.x) / float(theLaunchDim.x);
-    float v = float(theLaunchIndex.y) / float(theLaunchDim.y);
-
-    float3 direction = lowerLeftCorner + (u*horizontal) + (v*vertical) - origin;
-
-    optix::Ray theRay = optix::make_Ray(
-        origin,        // origin
-        direction,     // direction
-        0,             // raytype
-        0.000001f,     // tmin (epsilon)
-        RT_DEFAULT_MAX // tmax
-        );
-
     PerRayData thePrd;
     rtTrace(sysWorld, theRay, thePrd);
 
@@ -45,7 +30,7 @@ RT_PROGRAM void rayGenProgram()
 
     if (thePrd.scatterEvent == miss)
     { // Didn't hit anything
-        float3 unitDirection = normalize(direction);
+        float3 unitDirection = normalize(theRay.direction);
         float t = 0.5f * (unitDirection.y + 1.0f);
         drawColor = (1.0f-t) * make_float3(1.0f, 1.0f, 1.0f)
             + t * make_float3(0.5f, 0.7f, 1.0f);
@@ -55,5 +40,38 @@ RT_PROGRAM void rayGenProgram()
         drawColor = 0.5f * (thePrd.attenuation + make_float3(1.0f,1.0f,1.0f));
     }
 
-    sysOutputBuffer[theLaunchIndex] = drawColor;
+    return drawColor;
+}
+
+RT_PROGRAM void rayGenProgram()
+{
+    float3 lowerLeftCorner = make_float3(-2.0f, -1.0f, -1.0f);
+    float3 horizontal = make_float3(4.0f, 0.0f, 0.0f);
+    float3 vertical = make_float3(0.0f, 2.0f, 0.0f);
+    float3 origin = make_float3(0.0f, 0.0f, 0.0f);
+
+    uint32_t seed = tea<64>(theLaunchDim.x * theLaunchIndex.y + theLaunchIndex.x, 0);
+
+    float3 radiance = make_float3(0.0f, 0.0f, 0.0f);
+    for (int n = 0; n < numSamples; n++)
+    {
+        float s = float(theLaunchIndex.x+randf(seed)) / float(theLaunchDim.x);
+        float t = float(theLaunchIndex.y+randf(seed)) / float(theLaunchDim.y);
+        float3 initialOrigin = origin;
+        float3 initialDirection = lowerLeftCorner + (s*horizontal) + (t*vertical) - origin;
+
+        optix::Ray theRay = optix::make_Ray(
+            initialOrigin,        // origin
+            initialDirection,     // direction
+            0,             // raytype
+            0.000001f,     // tmin (epsilon)
+            RT_DEFAULT_MAX // tmax
+            );
+
+        float3 sampleRadiance = color(theRay, seed);
+        radiance += sampleRadiance;
+    }
+    radiance /= numSamples;
+
+    sysOutputBuffer[theLaunchIndex] = radiance;
 }
