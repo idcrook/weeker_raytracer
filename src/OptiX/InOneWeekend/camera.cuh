@@ -2,6 +2,7 @@
 #define CAMERA_CUH
 
 #include <optix.h>
+#include <optixu/optixu_math_namespace.h>
 
 rtDeclareVariable(float3, cameraOrigin, , );
 rtDeclareVariable(float3, cameraU, , );
@@ -12,10 +13,10 @@ rtDeclareVariable(float, cameraHalfWidth, , );
 rtDeclareVariable(int, cameraType, , );
 
 
-__device__ void perspectiveCamera(const float s, const float t, 
+__device__ void perspectiveCamera(const float s, const float t,
     float3& origin, float3& direction)
 {
-    float3 lowerLeftCorner = cameraOrigin 
+    float3 lowerLeftCorner = cameraOrigin
         - cameraHalfWidth*cameraU - cameraHalfHeight*cameraV - cameraW;
     float3 horizontal = 2.0f*cameraHalfWidth*cameraU;
     float3 vertical = 2.0f*cameraHalfHeight*cameraV;
@@ -24,14 +25,14 @@ __device__ void perspectiveCamera(const float s, const float t,
     direction = lowerLeftCorner + (s*horizontal) + (t*vertical) - cameraOrigin;
 }
 
-__device__ void environmentCamera(const float s, const float t, 
+__device__ void environmentCamera(const float s, const float t,
     float3& origin, float3& direction)
 {
     float2 d = make_float2(s*2.0f*3.14159f, t*3.14159f);
     float3 angle = make_float3(
-        cos(d.x) * sin(d.y),
-        -cos(d.y),
-        sin(d.x) * sin(d.y)
+        cosf(d.x) * sinf(d.y),
+        -cosf(d.y),
+        sinf(d.x) * sinf(d.y)
     );
 
     origin = cameraOrigin;
@@ -40,10 +41,10 @@ __device__ void environmentCamera(const float s, const float t,
     );
 }
 
-__device__ void orthographicCamera(const float s, const float t, 
+__device__ void orthographicCamera(const float s, const float t,
     float3& origin, float3& direction)
 {
-    float3 lowerLeftCorner = cameraOrigin 
+    float3 lowerLeftCorner = cameraOrigin
         - cameraHalfWidth*cameraU - cameraHalfHeight*cameraV - cameraW;
     float3 horizontal = 2.0f*cameraHalfWidth*cameraU;
     float3 vertical = 2.0f*cameraHalfHeight*cameraV;
@@ -61,8 +62,8 @@ inline __device__ optix::Ray generateRay(float s, float t)
         environmentCamera(s, t, initialOrigin, initialDirection);
     else if (cameraType == 2)
         orthographicCamera(s, t, initialOrigin, initialDirection);
-        
-    return optix::make_Ray( 
+
+    return optix::make_Ray(
         initialOrigin,        // origin
         initialDirection,     // direction
         0,             // raytype
