@@ -2,6 +2,7 @@
 #define IO_CAMERA_H
 
 #include <optix.h>
+#include <optixu/optixpp.h>
 
 class ioCamera
 {
@@ -26,7 +27,7 @@ public:
     )
     {
       float theta = vFov * 3.14159f/180.0f;
-      m_halfHeight = tan(theta/2.0f);
+      m_halfHeight = tanf(theta/2.0f);
       m_halfWidth = aspect * m_halfHeight;
       m_origin = optix::make_float3(fromX, fromY, fromZ);
       m_w = optix::normalize(
