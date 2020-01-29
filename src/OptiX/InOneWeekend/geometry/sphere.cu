@@ -8,14 +8,13 @@ rtDeclareVariable(float3, center, , );
 rtDeclareVariable(float, radius, , );
 
 // The ray that will be intersected against
-rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
-rtDeclareVariable(PerRayData, prd, rtPayload,  );
+rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
+rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 
 // The point and normal of intersection
 //   the "attribute" qualifier is used to communicate between intersection and shading programs
 //   These may only be written between rtPotentialIntersection and rtReportIntersection
-rtDeclareVariable(float3, hitRecordP, attribute hitRecordP, );
-rtDeclareVariable(float3, hitRecordNormal, attribute hitRecordNormal, );
+rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 
 inline __device__ float dot(float3 a, float3 b)
 {
@@ -38,27 +37,29 @@ RT_PROGRAM void getBounds(int pid, float result[6])
 //   As above, pid refers to a specific primitive, is ignored
 RT_PROGRAM void intersection(int pid)
 {
-    float3 oc = ray.origin - center;
-    float a = dot(ray.direction, ray.direction);
-    float b = dot(oc, ray.direction);
+    float3 oc = theRay.origin - center;
+    float a = dot(theRay.direction, theRay.direction);
+    float b = dot(oc, theRay.direction);
     float c = dot(oc, oc) - radius*radius;
     float discriminant = b*b - a*c;
 
     if (discriminant < 0.0f) return;
-        
-    float t = (-b - sqrtf(discriminant)) / a;
-    if (rtPotentialIntersection(t))
-    {
-        hitRecordP = ray.origin + t * ray.direction;
-        hitRecordNormal = (hitRecordP - center) / radius;
-        rtReportIntersection(0);
-    }
-    t = (-b + sqrtf(discriminant)) / a;
-    if (rtPotentialIntersection(t))
-    {
-        hitRecordP = ray.origin + t * ray.direction;
-        hitRecordNormal = (hitRecordP - center) / radius;
-        rtReportIntersection(0);
-    }
-}
 
+    float t = (-b - sqrtf(discriminant)) / a;
+    if (t < theRay.tmax && t > theRay.tmin)
+        if (rtPotentialIntersection(t))
+        {
+            hitRecord.point = theRay.origin + t * theRay.direction;
+            hitRecord.normal = (hitRecord.point - center) / radius;
+            rtReportIntersection(0);
+        }
+
+    t = (-b + sqrtf(discriminant)) / a;
+    if (t < theRay.tmax && t > theRay.tmin)
+        if (rtPotentialIntersection(t))
+        {
+            hitRecord.point = theRay.origin + t * theRay.direction;
+            hitRecord.normal = (hitRecord.point - center) / radius;
+            rtReportIntersection(0);
+        }
+}
