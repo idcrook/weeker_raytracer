@@ -51,8 +51,8 @@ RT_PROGRAM void rayGenProgram()
             + t * make_float3(0.5f, 0.7f, 1.0f);
     }
     else
-    {
-        // Do nothing. There are no objects in the world
+    { // hit something
+        drawColor = make_float3(1.0f, 0.0f, 0.0f);
     }
 
     resultBuffer[launchIndex] = drawColor;

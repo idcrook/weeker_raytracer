@@ -9,7 +9,16 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  miss_ptx_c miss.cu  )
+  miss_ptx_c miss.cu
+  )
+
+cuda_compile_and_embed(
+  sphere_ptx_c sphere.cu
+  )
+
+cuda_compile_and_embed(
+  material_ptx_c material.cu
+)
 
 add_executable(basics_drawColor
   basics/main.cpp
@@ -28,8 +37,11 @@ add_executable(inOneWeekendOptix
   # Compiled cuda ptx programs
   ${raygen_ptx_c}
   ${miss_ptx_c}
+  ${sphere_ptx_c}
+  ${material_ptx_c}
   )
 
 target_link_libraries(basics_drawColor          ${optix_LIBRARY})
 target_link_libraries(basics_drawColorGradient  ${optix_LIBRARY})
+
 target_link_libraries(inOneWeekendOptix  ${optix_LIBRARY})

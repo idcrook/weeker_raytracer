@@ -3,10 +3,10 @@
 
 
 typedef enum
-    {
-        miss,
-        hit
-    } ScatterEvent;
+{
+    miss,
+    hit
+} ScatterEvent;
 
 
 struct PerRayData
