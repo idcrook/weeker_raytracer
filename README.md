@@ -97,9 +97,9 @@ Early performance comparisons
 
 
 Code based on
- - a
- - b
 
+ - https://github.com/trevordblack/OptixInOneWeekend
+   - https://github.com/trevordblack/OptixInOneWeekend/tree/tdb/old_directory_structure
 
 ```
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build

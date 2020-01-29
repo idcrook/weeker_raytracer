@@ -5,19 +5,6 @@
 #include <optix.h>
 #include <optixu/optixpp.h>
 
-#define RT_CHECK( func )                                        \
-  do                                                            \
-  {                                                             \
-    RTresult code = func;                                       \
-    if( code != RT_SUCCESS ) {                                  \
-      const char* errorString;                                  \
-      rtContextGetErrorString( context, code, &errorString );   \
-      std::cout << "RT_ERROR: " << __FILE__ << ":" << __LINE__  \
-                << " - 0x" <<  std::hex << code << std::dec     \
-                << " - " << errorString << std::endl;           \
-    }                                                           \
-  } while(0)
-
 extern "C" const char raygen_ptx_c[];
 extern "C" const char miss_ptx_c[];
 extern "C" const char sphere_ptx_c[];
@@ -25,128 +12,77 @@ extern "C" const char material_ptx_c[];
 
 int main(int argc, char* argv[])
 {
-  // Primary RT Objects
-  RTcontext context = 0;
-  //    Programs and Variables
-  RTprogram rayGenProgram;
-  RTvariable rtvResultBuffer;
-  RTvariable rtvWorld;
-  RTprogram missProgram;
-  RTprogram sphereBoundingBoxProgram;
-  RTprogram sphereIntersectionProgram;
-  RTvariable rtvSphereCenter;
-  RTvariable rtvSphereRadius;
-  RTprogram sphereMatClosestHitProgram;
-  //    Result Buffer
-  RTbuffer resultBuffer;
-  //    The geometry of the world (scene)
-  RTgeometrygroup world;
-  RTacceleration acceleration;
-  //    The sole geometry occupying the world, a sphere
-  RTgeometry sphere;
-  RTgeometryinstance sphereInstance;
-  //    The Material of the Sphere
-  RTmaterial sphereMaterial;
-
-  // Parameters
   int width = 1200;
-  int height = 600; // @writing explain change from 800 to 600
+  int height = 600;
 
-  // Create Objects
-  //   Context
-  RT_CHECK( rtContextCreate( &context ));
-  RT_CHECK( rtContextSetRayTypeCount( context, 1 ));
-  RT_CHECK( rtContextSetEntryPointCount( context, 1 ));
-  //   Buffer
-  RT_CHECK( rtBufferCreate( context, RT_BUFFER_OUTPUT, &resultBuffer ));
-  RT_CHECK( rtBufferSetFormat( resultBuffer, RT_FORMAT_FLOAT3 ));
-  RT_CHECK( rtBufferSetSize2D( resultBuffer, width, height));
-  //   Acceleration
-  RT_CHECK( rtAccelerationCreate( context, &acceleration ));
-  RT_CHECK( rtAccelerationSetBuilder( acceleration, "bvh" ));
-  //   World
-  RT_CHECK( rtGeometryGroupCreate( context, &world ));
-  RT_CHECK( rtGeometryGroupSetAcceleration( world, acceleration ));
+  // Context
+  optix::Context context = optix::Context::create();
+  context->setRayTypeCount(1);
 
-  //   Sphere
-  RT_CHECK( rtGeometryCreate(context, &sphere ));
-  //     Set the number of primitives in the sphere geometry (1, just the sphere)
-  RT_CHECK( rtGeometrySetPrimitiveCount( sphere, 1 ));
-  //     Add both of the sphere programs
-  RT_CHECK( rtProgramCreateFromPTXString(
-              context,
-              sphere_ptx_c,
-              "getBounds",
-              &sphereBoundingBoxProgram ));
-  RT_CHECK( rtGeometrySetBoundingBoxProgram( sphere, sphereBoundingBoxProgram ));
-  RT_CHECK( rtProgramCreateFromPTXString(
-              context,
-              sphere_ptx_c,
-              "intersection",
-              &sphereIntersectionProgram ));
-  RT_CHECK( rtGeometrySetIntersectionProgram( sphere, sphereIntersectionProgram ));
-  //     Add Variables
-  RT_CHECK( rtContextDeclareVariable( context, "center", &rtvSphereCenter ));
-  RT_CHECK( rtContextDeclareVariable( context, "radius", &rtvSphereRadius ));
-  RT_CHECK( rtVariableSet3f( rtvSphereCenter, 0.0f, 0.0f, -1.0f ));
-  RT_CHECK( rtVariableSet1f( rtvSphereRadius, 0.5f ));
-  //   Material
-  RT_CHECK( rtMaterialCreate(context, &sphereMaterial ));
-  //     Set material closest hit program
-  RT_CHECK( rtProgramCreateFromPTXString(
-              context,
-              material_ptx_c,
-              "closestHit",
-              &sphereMatClosestHitProgram ));
-  RT_CHECK( rtMaterialSetClosestHitProgram( sphereMaterial, 0, sphereMatClosestHitProgram ));
+  // RayGen & Miss
+  context->setEntryPointCount(1);
+  context->setRayGenerationProgram(
+    0,
+    context->createProgramFromPTXString(
+      raygen_ptx_c, "rayGenProgram"
+      )
+    );
+  context->setMissProgram(
+    0,
+    context->createProgramFromPTXString(
+      miss_ptx_c, "missProgram"
+      )
+    );
 
-  // Add the sphere to the world
-  //   Put sphere within a GeometryInstance
-  RT_CHECK( rtGeometryInstanceCreate( context, &sphereInstance ));
-  RT_CHECK( rtGeometryInstanceSetGeometry( sphereInstance, sphere ));
-  //   Add a Material to the GeometryInstance
-  RT_CHECK( rtGeometryInstanceSetMaterialCount( sphereInstance, 1 ));
-  RT_CHECK( rtGeometryInstanceSetMaterial( sphereInstance, 0, sphereMaterial ));
-  //   Add that GeometryInstance to our world
-  RT_CHECK( rtGeometryGroupSetChildCount( world, 1 ));
-  RT_CHECK( rtGeometryGroupSetChild(
-              world,          // GeometryGroup
-              0,              // Index of child
-              sphereInstance  // GeometryInstance to add
-              ));
+  // Buffer
+  optix::Buffer resultBuffer = context->createBuffer(RT_BUFFER_OUTPUT);
+  resultBuffer->setFormat(RT_FORMAT_FLOAT3);
+  resultBuffer->setSize(width, height);
+  // Setting Buffer Variable
+  context["resultBuffer"]->set(resultBuffer);
 
-  // Connecting Buffer to Context
-  RT_CHECK( rtContextDeclareVariable( context, "resultBuffer", &rtvResultBuffer ));
-  RT_CHECK( rtVariableSetObject( rtvResultBuffer, resultBuffer ));
-  // Connecting World to Context
-  RT_CHECK( rtContextDeclareVariable( context, "world", &rtvWorld ));
-  RT_CHECK( rtVariableSetObject( rtvWorld, world ));
+  // Sphere
+  //   Sphere Geometry
+  optix::Geometry sphere = context->createGeometry();
+  sphere->setPrimitiveCount(1);
+  sphere->setBoundingBoxProgram(
+    context->createProgramFromPTXString(sphere_ptx_c, "getBounds")
+    );
+  sphere->setIntersectionProgram(
+    context->createProgramFromPTXString(sphere_ptx_c, "intersection")
+    );
+  sphere["center"]->setFloat(0.0f, 0.0f, -1.0f);
+  sphere["radius"]->setFloat(0.5f);
+  //   Sphere Material
+  optix::Material material = context->createMaterial();
+  optix::Program materialHit = context->createProgramFromPTXString(
+    material_ptx_c, "closestHit"
+    );
+  material->setClosestHitProgram(0, materialHit);
+  //   Sphere GeometryInstance
+  optix::GeometryInstance gi = context->createGeometryInstance();
+  gi->setGeometry(sphere);
+  gi->setMaterialCount(1);
+  gi->setMaterial(0, material);
 
-  // Set ray generation program
-  RT_CHECK( rtProgramCreateFromPTXString(
-              context,
-              raygen_ptx_c,
-              "rayGenProgram",
-              &rayGenProgram ));
-  RT_CHECK( rtContextSetRayGenerationProgram( context, 0, rayGenProgram ));
+  // World & Acceleration
+  optix::GeometryGroup world = context->createGeometryGroup();
+  world->setAcceleration(context->createAcceleration("Bvh"));
+  world->setChildCount(1);
+  world->setChild(0, gi);
+  // Setting World Variable
+  context["world"]->set(world);
 
-  // Set miss program
-  RT_CHECK( rtProgramCreateFromPTXString(
-              context,
-              miss_ptx_c,
-              "missProgram",
-              &missProgram ));
-  RT_CHECK( rtContextSetMissProgram( context, 0, missProgram ));
+  // Run
+  context->validate();
+  context->launch(
+    0,         // Program ID
+    width,     // launch dimension x
+    height     // launch dimension y
+    );
 
-  // RUN
-  RT_CHECK( rtContextValidate( context ));
-  RT_CHECK( rtContextLaunch2D( context, 0,      // Entry Point
-                               width, height ));
-
-  // Print out to terminal as PPM
-  //   Get pointer to output buffer data
-  void* bufferData;
-  RT_CHECK( rtBufferMap( resultBuffer, &bufferData ));
+  // Print Out
+  void* bufferData = resultBuffer->map();
   //   Print ppm header
   std::cout << "P3\n" << width << " " << height << "\n255\n";
   //   Parse through bufferdata
@@ -164,19 +100,13 @@ int main(int argc, char* argv[])
       std::cout << ir << " " << ig << " " << ib << "\n";
     }
   }
-  RT_CHECK( rtBufferUnmap( resultBuffer ));
+  resultBuffer->unmap();
 
-  // Explicitly destroy our objects
-  RT_CHECK( rtGeometryDestroy( sphere ));
-  RT_CHECK( rtAccelerationDestroy( acceleration ));
-  RT_CHECK( rtMaterialDestroy( sphereMaterial ));
-  RT_CHECK( rtGeometryInstanceDestroy( sphereInstance ));
-  RT_CHECK( rtGeometryGroupDestroy( world ));
-  RT_CHECK( rtBufferDestroy( resultBuffer ));
-  RT_CHECK( rtProgramDestroy( missProgram ));
-  RT_CHECK( rtProgramDestroy( rayGenProgram ));
-  RT_CHECK( rtProgramDestroy( sphereBoundingBoxProgram ));
-  RT_CHECK( rtProgramDestroy( sphereIntersectionProgram ));
-  RT_CHECK( rtProgramDestroy( sphereMatClosestHitProgram ));
-  // RT_CHECK( rtContextDestroy( context ));
+  // Destroy our objects
+  world->destroy();
+  gi->destroy();
+  sphere->destroy();
+  material->destroy();
+  resultBuffer->destroy();
+  context->destroy();
 }
