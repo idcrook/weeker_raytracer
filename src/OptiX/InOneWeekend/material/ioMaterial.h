@@ -7,22 +7,22 @@
 class ioMaterial
 {
 public:
-    ioMaterial() { }
+  ioMaterial() { }
 
-    virtual void init(optix::Context& context) = 0;
+  virtual void init(optix::Context& context) = 0;
 
-    virtual void destroy()
+  virtual void destroy()
     {
-        m_mat->destroy();
+      m_mat->destroy();
     }
 
-    optix::Material get()
+  optix::Material get()
     {
-        return m_mat;
+      return m_mat;
     }
 
 protected:
-    optix::Material m_mat;
+  optix::Material m_mat;
 };
 
 #endif //!IO_MATERIAL_H

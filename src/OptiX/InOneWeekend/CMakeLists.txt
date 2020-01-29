@@ -30,7 +30,11 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  normal_material_ptx_c material/normalMaterial.cu
+  normal_material_ptx_c     material/normalMaterial.cu
+  )
+
+cuda_compile_and_embed(
+  lambertian_material_ptx_c material/lambertianMaterial.cu
   )
 
 add_executable(inOneWeekendOptix
@@ -42,6 +46,7 @@ add_executable(inOneWeekendOptix
   ${miss_ptx_c}
   ${sphere_ptx_c}
   ${normal_material_ptx_c}
+  ${lambertian_material_ptx_c}
   )
 
 

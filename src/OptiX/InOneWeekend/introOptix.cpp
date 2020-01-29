@@ -15,6 +15,7 @@ void IntroOptix::init(int width, int height)
   m_Nx = width;
   m_Ny = height;
   m_Ns = 1024;
+  m_maxRayDepth = 50;
 
   initContext();
 
@@ -52,6 +53,7 @@ void IntroOptix::initRayGenProgram()
     raygen_ptx_c, "rayGenProgram");
   m_context->setRayGenerationProgram(0, m_rayGenProgram);
   m_context["numSamples"]->setInt(m_Ns);
+  m_context["maxRayDepth"]->setInt(m_maxRayDepth);
 }
 
 void IntroOptix::initMissProgram()

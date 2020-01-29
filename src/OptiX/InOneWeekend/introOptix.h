@@ -26,6 +26,7 @@ private:
   int m_Nx;
   int m_Ny;
   int m_Ns;
+  int m_maxRayDepth;
 
   optix::Context m_context;
   optix::Buffer m_outputBuffer;
