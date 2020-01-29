@@ -30,9 +30,8 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  material_ptx_c material/material.cu
+  normal_material_ptx_c material/normalMaterial.cu
   )
-
 
 add_executable(inOneWeekendOptix
   introOptix.h
@@ -42,7 +41,7 @@ add_executable(inOneWeekendOptix
   ${raygen_ptx_c}
   ${miss_ptx_c}
   ${sphere_ptx_c}
-  ${material_ptx_c}
+  ${normal_material_ptx_c}
   )
 
 

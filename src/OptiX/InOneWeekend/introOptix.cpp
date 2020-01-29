@@ -4,11 +4,11 @@
 #include <optixu/optixpp.h>
 
 #include "introOptix.h"
+#include "geometry/ioSphere.h"
+#include "material/ioNormalMaterial.h"
 
 extern "C" const char raygen_ptx_c[];
 extern "C" const char miss_ptx_c[];
-extern "C" const char sphere_ptx_c[];
-extern "C" const char material_ptx_c[];
 
 IntroOptix::IntroOptix() {}
 
@@ -30,10 +30,10 @@ void IntroOptix::init(int width, int height)
 
 void IntroOptix::destroy()
 {
-  m_world->destroy();
-  m_gi->destroy();
-  m_sphere->destroy();
-  m_material->destroy();
+  m_gg.destroy();
+  m_gi.destroy();
+  m_pGeometry->destroy();
+  m_pMaterial->destroy();
   m_outputBuffer->destroy();
   m_context->destroy();
 }
@@ -70,35 +70,23 @@ void IntroOptix::createScene()
 {
   // Sphere
   //   Sphere Geometry
-  m_sphere = m_context->createGeometry();
-  m_sphere->setPrimitiveCount(1);
-  m_sphere->setBoundingBoxProgram(
-    m_context->createProgramFromPTXString(sphere_ptx_c, "getBounds")
+  m_pGeometry = new ioSphere(
+    0.0f, 0.0f, -1.0f,
+    0.5f
     );
-  m_sphere->setIntersectionProgram(
-    m_context->createProgramFromPTXString(sphere_ptx_c, "intersection")
-    );
-  m_sphere["center"]->setFloat(0.0f, 0.0f, -1.0f);
-  m_sphere["radius"]->setFloat(0.5f);
+  m_pGeometry->init(m_context);
   //   Sphere Material
-  m_material = m_context->createMaterial();
-  optix::Program materialHit = m_context->createProgramFromPTXString(
-    material_ptx_c, "closestHit"
-    );
-  m_material->setClosestHitProgram(0, materialHit);
+  m_pMaterial = new ioNormalMaterial();
+  m_pMaterial->init(m_context);
   //   Sphere GeometryInstance
-  m_gi = m_context->createGeometryInstance();
-  m_gi->setGeometry(m_sphere);
-  m_gi->setMaterialCount(1);
-  m_gi->setMaterial(0, m_material);
-
+  m_gi.init(m_context);
+  m_gi.setGeometry(*m_pGeometry);
+  m_gi.setMaterial(*m_pMaterial);
   // World & Acceleration
-  m_world = m_context->createGeometryGroup();
-  m_world->setAcceleration(m_context->createAcceleration("Bvh"));
-  m_world->setChildCount(1);
-  m_world->setChild(0, m_gi);
+  m_gg.init(m_context);
+  m_gg.addChild(m_gi);
   // Setting World Variable
-  m_context["sysWorld"]->set(m_world);
+  m_context["sysWorld"]->set(m_gg.get());
 }
 
 void IntroOptix::renderFrame()
