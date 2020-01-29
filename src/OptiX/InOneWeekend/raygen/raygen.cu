@@ -6,17 +6,17 @@
 using namespace optix;
 
 // Optix program built-in indices
-rtDeclareVariable(uint2, launchIndex, rtLaunchIndex, );
-rtDeclareVariable(uint2, launchDim, rtLaunchDim, );
+rtDeclareVariable(uint2, theLaunchIndex, rtLaunchIndex, );
+rtDeclareVariable(uint2, theLaunchDim, rtLaunchDim, );
 
 // Ray state variables
-rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
-rtDeclareVariable(PerRayData, prd, rtPayload,  );
+rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
+rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 
 // "Global" variables
-rtDeclareVariable(rtObject, world, , );
+rtDeclareVariable(rtObject, sysWorld, , );
 
-rtBuffer<float3, 2> resultBuffer;
+rtBuffer<float3, 2> sysOutputBuffer;
 
 RT_PROGRAM void rayGenProgram()
 {
@@ -25,12 +25,12 @@ RT_PROGRAM void rayGenProgram()
     float3 vertical = make_float3(0.0f, 2.0f, 0.0f);
     float3 origin = make_float3(0.0f, 0.0f, 0.0f);
 
-    float u = float(launchIndex.x) / float(launchDim.x);
-    float v = float(launchIndex.y) / float(launchDim.y);
+    float u = float(theLaunchIndex.x) / float(theLaunchDim.x);
+    float v = float(theLaunchIndex.y) / float(theLaunchDim.y);
 
     float3 direction = lowerLeftCorner + (u*horizontal) + (v*vertical) - origin;
 
-    optix::Ray ray = optix::make_Ray(
+    optix::Ray theRay = optix::make_Ray(
         origin,        // origin
         direction,     // direction
         0,             // raytype
@@ -38,12 +38,12 @@ RT_PROGRAM void rayGenProgram()
         RT_DEFAULT_MAX // tmax
         );
 
-    PerRayData prd;
-    rtTrace(world, ray, prd);
+    PerRayData thePrd;
+    rtTrace(sysWorld, theRay, thePrd);
 
     float3 drawColor = make_float3(0.0f, 0.0f, 0.0f);
 
-    if (prd.scatterEvent == miss)
+    if (thePrd.scatterEvent == miss)
     { // Didn't hit anything
         float3 unitDirection = normalize(direction);
         float t = 0.5f * (unitDirection.y + 1.0f);
@@ -52,8 +52,8 @@ RT_PROGRAM void rayGenProgram()
     }
     else
     { // hit something
-        drawColor = 0.5f * (prd.attenuation + make_float3(1.0f,1.0f,1.0f));
+        drawColor = 0.5f * (thePrd.attenuation + make_float3(1.0f,1.0f,1.0f));
     }
 
-    resultBuffer[launchIndex] = drawColor;
+    sysOutputBuffer[theLaunchIndex] = drawColor;
 }
