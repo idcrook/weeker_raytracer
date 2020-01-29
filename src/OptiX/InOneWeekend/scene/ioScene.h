@@ -14,6 +14,7 @@
 #include "material/ioNormalMaterial.h"
 #include "material/ioLambertianMaterial.h"
 #include "material/ioMetalMaterial.h"
+#include "material/ioDielectricMaterial.h"
 
 class ioScene
 {
@@ -23,23 +24,17 @@ public:
   void init(optix::Context& context)
     {
       // Base Sphere
-      geometryList.push_back(new ioSphere(
-                               0.0, -100.5, -1.0f,
-                               100.0f
-                               ));
-      materialList.push_back(new ioLambertianMaterial(0.8f, 0.5f, 0.3f));
+      geometryList.push_back(new ioSphere(0.0f, -100.5f, -1.0f, 100.0f));
+      materialList.push_back(new ioLambertianMaterial(0.8f, 0.8f, 0.0f));
 
-      // Metal Spheres
-      geometryList.push_back(new ioSphere(-1.0f, 0.0f, -1.0f, 0.2f));
-      materialList.push_back(new ioMetalMaterial(0.9f, 0.9f, 0.9f, 1.0f));
-      geometryList.push_back(new ioSphere(-0.5f, 0.0f, -1.0f, 0.2f));
-      materialList.push_back(new ioMetalMaterial(0.9f, 0.9f, 0.9f, 0.75f));
-      geometryList.push_back(new ioSphere( 0.0f, 0.0f, -1.0f, 0.2f));
-      materialList.push_back(new ioMetalMaterial(0.9f, 0.9f, 0.9f, 0.5f));
-      geometryList.push_back(new ioSphere( 0.5f, 0.0f, -1.0f, 0.2f));
-      materialList.push_back(new ioMetalMaterial(0.9f, 0.9f, 0.9f, 0.25f));
-      geometryList.push_back(new ioSphere( 1.0f, 0.0f, -1.0f, 0.2f));
-      materialList.push_back(new ioMetalMaterial(0.9f, 0.9f, 0.9f, 0.0f));
+      geometryList.push_back(new ioSphere(0.0f, 0.0f, -1.0f, 0.5f));
+      materialList.push_back(new ioLambertianMaterial(0.1f, 0.2f, 0.5f));
+
+      geometryList.push_back(new ioSphere(1.0f, 0.0f, -1.0f, 0.5f));
+      materialList.push_back(new ioMetalMaterial(0.8f, 0.6f, 0.2f, 0.5f));
+
+      geometryList.push_back(new ioSphere(-1.0f, 0.0f, -1.0f, 0.5f));
+      materialList.push_back(new ioDielectricMaterial(1.5f));
 
       // init all geometry
       for(int i = 0; i < geometryList.size(); i++)

@@ -39,7 +39,11 @@ cuda_compile_and_embed(
 
 cuda_compile_and_embed(
   metal_material_ptx_c      material/metalMaterial.cu
-)
+  )
+
+cuda_compile_and_embed(
+  dielectric_material_ptx_c material/dielectricMaterial.cu
+  )
 
 add_executable(inOneWeekendOptix
   introOptix.h
@@ -52,6 +56,7 @@ add_executable(inOneWeekendOptix
   ${normal_material_ptx_c}
   ${lambertian_material_ptx_c}
   ${metal_material_ptx_c}
+  ${dielectric_material_ptx_c}
   )
 
 
