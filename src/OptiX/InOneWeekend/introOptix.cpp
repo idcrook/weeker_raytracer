@@ -4,8 +4,6 @@
 #include <optixu/optixpp.h>
 
 #include "introOptix.h"
-#include "geometry/ioSphere.h"
-#include "material/ioNormalMaterial.h"
 
 extern "C" const char raygen_ptx_c[];
 extern "C" const char miss_ptx_c[];
@@ -30,10 +28,7 @@ void IntroOptix::init(int width, int height)
 
 void IntroOptix::destroy()
 {
-  m_gg.destroy();
-  m_gi.destroy();
-  m_pGeometry->destroy();
-  m_pMaterial->destroy();
+  m_scene.destroy();
   m_outputBuffer->destroy();
   m_context->destroy();
 }
@@ -68,25 +63,7 @@ void IntroOptix::initMissProgram()
 
 void IntroOptix::createScene()
 {
-  // Sphere
-  //   Sphere Geometry
-  m_pGeometry = new ioSphere(
-    0.0f, 0.0f, -1.0f,
-    0.5f
-    );
-  m_pGeometry->init(m_context);
-  //   Sphere Material
-  m_pMaterial = new ioNormalMaterial();
-  m_pMaterial->init(m_context);
-  //   Sphere GeometryInstance
-  m_gi.init(m_context);
-  m_gi.setGeometry(*m_pGeometry);
-  m_gi.setMaterial(*m_pMaterial);
-  // World & Acceleration
-  m_gg.init(m_context);
-  m_gg.addChild(m_gi);
-  // Setting World Variable
-  m_context["sysWorld"]->set(m_gg.get());
+  m_scene.init(m_context);
 }
 
 void IntroOptix::renderFrame()
