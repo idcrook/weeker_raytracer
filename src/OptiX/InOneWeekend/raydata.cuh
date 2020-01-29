@@ -12,6 +12,7 @@ typedef enum
 struct PerRayData
 {
     ScatterEvent scatterEvent;
+    float3 attenuation;
 };
 
 

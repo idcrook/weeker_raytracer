@@ -11,6 +11,11 @@ rtDeclareVariable(float, radius, , );
 rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
 rtDeclareVariable(PerRayData, prd, rtPayload,  );
 
+// The point and normal of intersection
+//   the "attribute" qualifier is used to communicate between intersection and shading programs
+//   These may only be written between rtPotentialIntersection and rtReportIntersection
+rtDeclareVariable(float3, hitRecordP, attribute hitRecordP, );
+rtDeclareVariable(float3, hitRecordNormal, attribute hitRecordNormal, );
 
 inline __device__ float dot(float3 a, float3 b)
 {
@@ -35,16 +40,25 @@ RT_PROGRAM void intersection(int pid)
 {
     float3 oc = ray.origin - center;
     float a = dot(ray.direction, ray.direction);
-    float b = 2.0f * dot(oc, ray.direction);
+    float b = dot(oc, ray.direction);
     float c = dot(oc, oc) - radius*radius;
-    float discriminant = b*b - 4*a*c;
+    float discriminant = b*b - a*c;
 
     if (discriminant < 0.0f) return;
-
-    float d = (-b - sqrtf(discriminant)) / a;
-    if (rtPotentialIntersection(d))
+        
+    float t = (-b - sqrtf(discriminant)) / a;
+    if (rtPotentialIntersection(t))
+    {
+        hitRecordP = ray.origin + t * ray.direction;
+        hitRecordNormal = (hitRecordP - center) / radius;
         rtReportIntersection(0);
-    d = (-b + sqrtf(discriminant)) / a;
-    if (rtPotentialIntersection(d))
+    }
+    t = (-b + sqrtf(discriminant)) / a;
+    if (rtPotentialIntersection(t))
+    {
+        hitRecordP = ray.origin + t * ray.direction;
+        hitRecordNormal = (hitRecordP - center) / radius;
         rtReportIntersection(0);
+    }
 }
+

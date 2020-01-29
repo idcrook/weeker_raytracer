@@ -52,7 +52,7 @@ RT_PROGRAM void rayGenProgram()
     }
     else
     { // hit something
-        drawColor = make_float3(1.0f, 0.0f, 0.0f);
+        drawColor = 0.5f * (prd.attenuation + make_float3(1.0f,1.0f,1.0f));
     }
 
     resultBuffer[launchIndex] = drawColor;
