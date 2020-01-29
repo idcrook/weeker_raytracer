@@ -164,3 +164,4 @@ target_include_directories(theNextWeekCuda  PRIVATE src)
 
 # Handled within each
 ADD_SUBDIRECTORY( src/OptiX/InOneWeekend )
+ADD_SUBDIRECTORY( src/OptiX/TheNextWeek )
