@@ -106,10 +106,11 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build
 
 # or set other flags
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-    -DCMAKE_CUDA_FLAGS="--use_fast_math --relocatable-device-code=true" \
     -B build
 
+# -DCMAKE_CUDA_FLAGS="--use_fast_math --relocatable-device-code=true"
 # --generate-line-info
+# --verbose
 ```
 
 	cmake --build build --target inOneWeekendOptix
@@ -119,7 +120,8 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
 #### running optix
 
 ```
-build/src/OptiX/InOneWeekend/inOneWeekendOptix > output/grad.ppm
+#build/src/OptiX/InOneWeekend/inOneWeekendOptix > output/grad.ppm
+build/inOneWeekendOptix > output/optix.ppm
 ```
 
 

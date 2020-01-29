@@ -19,4 +19,3 @@ RT_PROGRAM void closestHit()
     prd.scatterEvent = hit;
     prd.attenuation = hitRecordNormal;
 }
-

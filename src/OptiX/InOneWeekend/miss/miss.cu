@@ -9,6 +9,5 @@ rtDeclareVariable(PerRayData, prd, rtPayload, );
 
 RT_PROGRAM void missProgram()
 {
-    prd.scatterEvent = miss; 
+    prd.scatterEvent = miss;
 }
-

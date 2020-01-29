@@ -45,7 +45,7 @@ RT_PROGRAM void intersection(int pid)
     float discriminant = b*b - a*c;
 
     if (discriminant < 0.0f) return;
-        
+
     float t = (-b - sqrtf(discriminant)) / a;
     if (rtPotentialIntersection(t))
     {
@@ -61,4 +61,3 @@ RT_PROGRAM void intersection(int pid)
         rtReportIntersection(0);
     }
 }
-
