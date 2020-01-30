@@ -65,7 +65,7 @@ public:
             if (chooseMat < 0.72f)
             {
               geometryList.push_back(new ioMovingSphere(x,y,z,
-                                                        x,y+0.5f,z,
+                                                        x,y+0.18f,z,
                                                         0.2f,
                                                         0.f, 1.f));
               //geometryList.push_back(new ioSphere(x,y,z, 0.2f));

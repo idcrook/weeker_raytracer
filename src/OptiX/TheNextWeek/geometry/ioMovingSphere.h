@@ -35,6 +35,7 @@ public:
       m_cx1 = x1;
       m_cy1 = y1;
       m_cz1 = z1;
+      m_r = r;
       m_t0 = t0;
       m_t1 = t1;
     }

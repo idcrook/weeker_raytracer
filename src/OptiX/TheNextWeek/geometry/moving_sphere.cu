@@ -25,7 +25,6 @@ inline __device__ float dot(float3 a, float3 b)
 }
 
 __device__ float3 center(float time) {
-    return center0;
     if (time0 == time1)
         return center0;
     else
@@ -40,8 +39,6 @@ RT_PROGRAM void getBounds(int pid, float result[6])
     optix::Aabb* box0 = (optix::Aabb*)result;
     box0->m_min = center(time0) - abs(radius);
     box0->m_max = center(time0) + abs(radius);
-
-    return;
 
     optix::Aabb box1;
     box1.m_min = center(time1) - abs(radius);
