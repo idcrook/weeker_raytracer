@@ -70,8 +70,8 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
             // ray is still alive, and got properly bounced
             sampleRadiance *= thePrd.attenuation;
             theRay = optix::make_Ray(
-                thePrd.scatter.origin,
-                thePrd.scatter.direction,
+                thePrd.scattered_origin,
+                thePrd.scattered_direction,
                 0,
                 1e-3f,
                 RT_DEFAULT_MAX

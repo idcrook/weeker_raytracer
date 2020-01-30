@@ -15,7 +15,8 @@ struct PerRayData
 {
     uint seed;
     ScatterEvent scatterEvent;
-    optix::Ray scatter;
+    float3 scattered_origin;
+    float3 scattered_direction;
     float3 attenuation;
 };
 

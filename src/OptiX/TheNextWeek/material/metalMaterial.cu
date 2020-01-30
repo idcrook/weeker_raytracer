@@ -26,17 +26,14 @@ RT_PROGRAM void closestHit()
     if (optix::dot(scatterDirection, hitRecord.normal) <= 0.0f )
     { // Ray is absorbed by the material
         thePrd.scatterEvent = Ray_Finish;
+        // thePrd.scattered_origin = hitRecord.point;
+        // thePrd.scattered_direction = scatterDirection;
         thePrd.attenuation = make_float3(0.0f, 0.0f, 0.0f);
         return;
     }
 
     thePrd.scatterEvent = Ray_Hit;
-    thePrd.scatter = optix::make_Ray(
-        hitRecord.point,
-        scatterDirection,
-        theRay.ray_type,
-        theRay.tmin,
-        theRay.tmax
-        );
+    thePrd.scattered_origin = hitRecord.point;
+    thePrd.scattered_direction = scatterDirection;
     thePrd.attenuation = color;
 }

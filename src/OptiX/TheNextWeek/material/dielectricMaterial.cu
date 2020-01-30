@@ -87,13 +87,8 @@ RT_PROGRAM void closestHit()
         printf("sinThetaI is NaN: %f", sinThetaI);
 
     thePrd.scatterEvent = Ray_Hit;
-    thePrd.scatter = optix::make_Ray(
-        hitRecord.point,
-        scatterDirection,
-        theRay.ray_type,
-        theRay.tmin,
-        theRay.tmax
-        );
+    thePrd.scattered_origin = hitRecord.point;
+    thePrd.scattered_direction = scatterDirection;
     thePrd.attenuation = make_float3(1.0f, 1.0f, 1.0f);
     // thePrd.attenuation = make_float3(0.8f, 0.85f, 0.82f); // for greenish glass
 }
