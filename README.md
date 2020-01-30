@@ -83,11 +83,11 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON  -B build
 
 # or set other flags
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-    -DCMAKE_CUDA_FLAGS="--use_fast_math --relocatable-device-code=true" \
+    -DCMAKE_CUDA_FLAGS="--use_fast_math --generate-line-info" \
     -B build
 
 # Other CMAKE_CUDA_FLAGS
-#   --generate-line-info
+#   --relocatable-device-code=true
 #   --verbose
 ```
 
