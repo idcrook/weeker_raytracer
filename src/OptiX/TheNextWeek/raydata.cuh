@@ -14,6 +14,7 @@ typedef enum
 struct PerRayData
 {
     uint seed;
+    float gatherTime;
     ScatterEvent scatterEvent;
     float3 scattered_origin;
     float3 scattered_direction;

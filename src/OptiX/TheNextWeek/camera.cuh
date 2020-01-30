@@ -8,6 +8,8 @@ rtDeclareVariable(float3, cameraOrigin, , );
 rtDeclareVariable(float3, cameraU, , );
 rtDeclareVariable(float3, cameraV, , );
 rtDeclareVariable(float3, cameraW, , );
+rtDeclareVariable(float, cameraTime0, , );
+rtDeclareVariable(float, cameraTime1, , );
 rtDeclareVariable(float, cameraHalfHeight, , );
 rtDeclareVariable(float, cameraHalfWidth, , );
 rtDeclareVariable(int, cameraType, , );

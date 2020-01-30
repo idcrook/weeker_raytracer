@@ -49,6 +49,7 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
     PerRayData thePrd;
     thePrd.seed = seed;
     float3 sampleRadiance = make_float3(1.0f, 1.0f, 1.0f);
+    thePrd.gatherTime = cameraTime0 + randf(seed)*(cameraTime1 - cameraTime0);
 
     for(int i = 0; i < maxRayDepth; i++)
     {
