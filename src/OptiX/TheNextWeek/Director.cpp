@@ -36,6 +36,17 @@ void Director::destroy()
 
 void Director::initContext()
 {
+
+  int RTX = true;
+  RTresult res;
+  res = rtGlobalSetAttribute(RT_GLOBAL_ATTRIBUTE_ENABLE_RTX, sizeof(RTX),
+                             &(RTX));
+  if (res != RT_SUCCESS) {
+    std::cerr << "Error: RTX mode is required. exiting." << std::endl;
+    exit(0);
+  } else
+    std::cerr <<"OptiX RTX execution mode is ON." << std::endl;
+
   m_context = optix::Context::create();
   m_context->setRayTypeCount(1);
 }
