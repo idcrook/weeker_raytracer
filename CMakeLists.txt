@@ -61,3 +61,4 @@ ADD_SUBDIRECTORY( src/Cpp )
 ADD_SUBDIRECTORY( src/Cuda )
 
 ADD_SUBDIRECTORY( src/OptiX/InOneWeekend )
+ADD_SUBDIRECTORY( src/OptiX/TheNextWeek )
