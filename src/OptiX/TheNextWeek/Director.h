@@ -19,8 +19,8 @@ public:
   void renderFrame();
   void printPPM();
 
-  int getWidth();
-  int getHeight();
+  // int getWidth();
+  // int getHeight();
 
 private:
   int m_Nx;

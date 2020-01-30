@@ -99,11 +99,11 @@ void Director::printPPM()
   m_outputBuffer->unmap();
 }
 
-int Director::getWidth()
-{
-  return m_Nx;
-}
-int Director::getHeight()
-{
-  return m_Ny;
-}
+// int Director::getWidth()
+// {
+//   return m_Nx;
+// }
+// int Director::getHeight()
+// {
+//   return m_Ny;
+// }
