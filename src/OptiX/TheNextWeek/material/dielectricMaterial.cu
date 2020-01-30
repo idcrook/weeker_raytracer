@@ -22,7 +22,7 @@ inline __device__ float fresnelSchlick(
 {
     float r0 = (etaI-etaT) / (etaI+etaT);
     r0 = r0*r0;
-    return r0 + (1-r0)*pow((1-cosThetaI), 5);
+    return r0 + (1.f-r0)*powf((1.f-cosThetaI), 5.f);
 }
 
 RT_PROGRAM void closestHit()
@@ -95,4 +95,5 @@ RT_PROGRAM void closestHit()
         theRay.tmax
         );
     thePrd.attenuation = make_float3(1.0f, 1.0f, 1.0f);
+    // thePrd.attenuation = make_float3(0.8f, 0.85f, 0.82f); // for greenish glass
 }
