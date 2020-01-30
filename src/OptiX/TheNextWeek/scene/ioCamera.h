@@ -12,7 +12,20 @@ public:
 
   virtual void destroy() = 0;
 
-  virtual void init(optix::Context& context) = 0;
+  virtual void init(optix::Context& context) {
+      context["cameraOrigin"]->set3fv((float*)&m_origin);
+      context["cameraU"]->set3fv((float*)&m_u);
+      context["cameraV"]->set3fv((float*)&m_v);
+      context["cameraW"]->set3fv((float*)&m_w);
+  }
+
+protected:
+  optix::float3 m_origin;
+  optix::float3 m_u;
+  optix::float3 m_v;
+  optix::float3 m_w;
+  optix::float3 m_time0;
+  optix::float3 m_time1;
 };
 
 
@@ -41,10 +54,7 @@ public:
 
   virtual void init(optix::Context& context)
     {
-      context["cameraOrigin"]->set3fv((float*)&m_origin);
-      context["cameraU"]->set3fv((float*)&m_u);
-      context["cameraV"]->set3fv((float*)&m_v);
-      context["cameraW"]->set3fv((float*)&m_w);
+      ioCamera::init(context);
       context["cameraHalfHeight"]->setFloat(m_halfHeight);
       context["cameraHalfWidth"]->setFloat(m_halfWidth);
       context["cameraType"]->setInt(0);
@@ -53,10 +63,6 @@ public:
   virtual void destroy() { }
 
 private:
-  optix::float3 m_origin;
-  optix::float3 m_u;
-  optix::float3 m_v;
-  optix::float3 m_w;
   float m_halfHeight;
   float m_halfWidth;
 };
@@ -82,20 +88,12 @@ public:
 
   virtual void init(optix::Context& context)
     {
-      context["cameraOrigin"]->set3fv((float*)&m_origin);
-      context["cameraU"]->set3fv((float*)&m_u);
-      context["cameraV"]->set3fv((float*)&m_v);
-      context["cameraW"]->set3fv((float*)&m_w);
+      ioCamera::init(context);
       context["cameraType"]->setInt(1);
     }
 
   virtual void destroy() { }
 
-private:
-  optix::float3 m_origin;
-  optix::float3 m_u;
-  optix::float3 m_v;
-  optix::float3 m_w;
 };
 
 class ioOrthographicCamera : public ioCamera
@@ -122,10 +120,7 @@ public:
 
   virtual void init(optix::Context& context)
     {
-      context["cameraOrigin"]->set3fv((float*)&m_origin);
-      context["cameraU"]->set3fv((float*)&m_u);
-      context["cameraV"]->set3fv((float*)&m_v);
-      context["cameraW"]->set3fv((float*)&m_w);
+      ioCamera::init(context);
       context["cameraHalfHeight"]->setFloat(m_halfHeight);
       context["cameraHalfWidth"]->setFloat(m_halfWidth);
       context["cameraType"]->setInt(2);
@@ -134,10 +129,6 @@ public:
   virtual void destroy() { }
 
 private:
-  optix::float3 m_origin;
-  optix::float3 m_u;
-  optix::float3 m_v;
-  optix::float3 m_w;
   float m_halfHeight;
   float m_halfWidth;
 };
