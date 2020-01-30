@@ -112,55 +112,17 @@ set ( SOURCE_REST_OF_LIFE
   src/RestOfLife/main.cc
 )
 
-set ( COMMON_ALL_CUDA
-  src/commonCuda/rtweekend.cuh
-  src/commonCuda/camera.cuh
-  src/commonCuda/ray.cuh
-  src/commonCuda/vec3.cuh
-)
-
-set ( SOURCE_ONE_WEEKEND_CUDA
-  ${COMMON_ALL_CUDA}
-  src/InOneWeekendCuda/hittable.cuh
-  src/InOneWeekendCuda/hittable_list.cuh
-  src/InOneWeekendCuda/material.cuh
-  src/InOneWeekendCuda/sphere.cuh
-  src/InOneWeekendCuda/main.cu
-)
-
-set ( SOURCE_NEXT_WEEK_CUDA
-  ${COMMON_ALL_CUDA}
-  src/commonCuda/aabb.cuh
-  # src/commonCuda/external/stb_image.h
-  # src/commonCuda/perlin.h
-  # src/commonCuda/rtw_stb_image.h
-  src/commonCuda/texture.cuh
-  # src/TheNextWeekCuda/aarect.h
-  # src/TheNextWeekCuda/box.h
-  # src/TheNextWeekCuda/bvh.cuh
-  # src/TheNextWeekCuda/constant_medium.h
-  src/TheNextWeekCuda/moving_sphere.cuh
-  src/TheNextWeekCuda/hittable.cuh
-  src/TheNextWeekCuda/hittable_list.cuh
-  src/TheNextWeekCuda/material.cuh
-  src/TheNextWeekCuda/sphere.cuh
-  src/TheNextWeekCuda/main.cu
-)
-
 
 # Executables
 add_executable(inOneWeekend ${SOURCE_ONE_WEEKEND})
 add_executable(theNextWeek  ${SOURCE_NEXT_WEEK})
 add_executable(restOfLife   ${SOURCE_REST_OF_LIFE})
-add_executable(inOneWeekendCuda  ${SOURCE_ONE_WEEKEND_CUDA})
-add_executable(theNextWeekCuda   ${SOURCE_NEXT_WEEK_CUDA})
 
 target_include_directories(inOneWeekend PRIVATE src)
 target_include_directories(theNextWeek  PRIVATE src)
 target_include_directories(restOfLife   PRIVATE src)
 
-target_include_directories(inOneWeekendCuda PRIVATE src)
-target_include_directories(theNextWeekCuda  PRIVATE src)
-
 # Handled within each
+ADD_SUBDIRECTORY( src/Cuda )
+
 ADD_SUBDIRECTORY( src/OptiX/InOneWeekend )
