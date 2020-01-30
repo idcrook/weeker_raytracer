@@ -37,15 +37,25 @@ void Director::destroy()
 void Director::initContext()
 {
 
-  int RTX = true;
+  int RTX = 1;
+  unsigned int DRV_MAJOR = 0;
+  unsigned int DRV_MINOR = 0;
+
   RTresult res;
   res = rtGlobalSetAttribute(RT_GLOBAL_ATTRIBUTE_ENABLE_RTX, sizeof(RTX),
                              &(RTX));
   if (res != RT_SUCCESS) {
-    std::cerr << "Error: RTX mode is required. exiting." << std::endl;
+    std::cerr << "Error: RTX execution strategy is required. Exiting." << std::endl;
     exit(0);
   } else
     std::cerr <<"OptiX RTX execution mode is ON." << std::endl;
+
+  res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MAJOR,
+                             sizeof(DRV_MAJOR), &(DRV_MAJOR));
+  res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MINOR,
+                             sizeof(DRV_MINOR), &(DRV_MINOR));
+  std::cerr << "Display driver version: " << DRV_MAJOR << '.' << DRV_MINOR << std::endl;
+
 
   m_context = optix::Context::create();
   m_context->setRayTypeCount(1);
