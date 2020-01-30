@@ -56,73 +56,8 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
-# Source
-set ( COMMON_ALL
-  src/common/rtweekend.h
-  src/common/camera.h
-  src/common/ray.h
-  src/common/vec3.h
-)
-
-set ( SOURCE_ONE_WEEKEND
-  ${COMMON_ALL}
-  src/InOneWeekend/hittable.h
-  src/InOneWeekend/hittable_list.h
-  src/InOneWeekend/material.h
-  src/InOneWeekend/sphere.h
-  src/InOneWeekend/main.cc
-)
-
-set ( SOURCE_NEXT_WEEK
-  ${COMMON_ALL}
-  src/common/aabb.h
-  src/common/external/stb_image.h
-  src/common/perlin.h
-  src/common/rtw_stb_image.h
-  src/common/texture.h
-  src/TheNextWeek/aarect.h
-  src/TheNextWeek/box.h
-  src/TheNextWeek/bvh.h
-  src/TheNextWeek/constant_medium.h
-  src/TheNextWeek/hittable.h
-  src/TheNextWeek/hittable_list.h
-  src/TheNextWeek/material.h
-  src/TheNextWeek/moving_sphere.h
-  src/TheNextWeek/sphere.h
-  src/TheNextWeek/main.cc
-)
-
-set ( SOURCE_REST_OF_LIFE
-  ${COMMON_ALL}
-  src/common/aabb.h
-  src/common/external/stb_image.h
-  src/common/perlin.h
-  src/common/rtw_stb_image.h
-  src/common/texture.h
-  src/RestOfLife/aarect.h
-  src/RestOfLife/box.h
-  src/RestOfLife/bvh.h
-  src/RestOfLife/hittable.h
-  src/RestOfLife/hittable_list.h
-  src/RestOfLife/material.h
-  src/RestOfLife/moving_sphere.h
-  src/RestOfLife/onb.h
-  src/RestOfLife/pdf.h
-  src/RestOfLife/sphere.h
-  src/RestOfLife/main.cc
-)
-
-
-# Executables
-add_executable(inOneWeekend ${SOURCE_ONE_WEEKEND})
-add_executable(theNextWeek  ${SOURCE_NEXT_WEEK})
-add_executable(restOfLife   ${SOURCE_REST_OF_LIFE})
-
-target_include_directories(inOneWeekend PRIVATE src)
-target_include_directories(theNextWeek  PRIVATE src)
-target_include_directories(restOfLife   PRIVATE src)
-
 # Handled within each
+ADD_SUBDIRECTORY( src/Cpp )
 ADD_SUBDIRECTORY( src/Cuda )
 
 ADD_SUBDIRECTORY( src/OptiX/InOneWeekend )
