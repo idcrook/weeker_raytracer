@@ -1,9 +1,11 @@
 ![final image](assets/img/ROL-ch13dSH.png)
 
-Implementations in C++ (CPU), CUDA C++ (GPU), and OptiX (GPU SDK). Started with v2 in C++ from Peter Shirley's [Ray Tracing In One Weekend](https://github.com/RayTracing/raytracing.github.io) Book Series.
+Started with v2 in C++ from Peter Shirley's [Ray Tracing In One Weekend](https://github.com/RayTracing/raytracing.github.io) Book Series.
 
--	Multi-platform CMake builds (C++ tested on Linux, macOS)
--	CUDA C++ and Optix 6.5 tested on Ubuntu 19.10
+-	Implementations in C++ (CPU), CUDA C++ (GPU), and OptiX (GPU SDK)
+-	Multi-platform CMake builds
+	-	C++ tested on Linux, macOS
+	-	CUDA C++ and Optix 6.5 tested on Ubuntu 19.10 (with Nvidia graphics card)
 
 Image Renders (C++ Single Thread CPU)
 -------------------------------------
@@ -22,7 +24,7 @@ Image Renders (C++ Single Thread CPU)
 
 ### Rest Of Life
 
-Top Image above: 1000x1000 pixels with 500 rays per pixel. took 1 hour, 8 minutes
+Top Image above of the Cornell box: 1000x1000 pixels with 500 rays per pixel. Took 1 hour, 8 minutes
 
 Build C++ (Cpp)
 ---------------
@@ -132,7 +134,10 @@ A `.ppm` image file is a non-binary (text) format.
 
 The `time` shell wrapper is mostly redundant in the CUDA version since it records and outputs its duration.
 
-Early performance comparisons (Ray Tracing In One Weekend final scene)
+Early performance comparisons
+-----------------------------
+
+Ray Tracing In One Weekend final scene
 
 -	Single thread CPU: Image took about **12.3 minutes**, without BVH. (4960X EE)
 -	Single thread CPU: When generating same scene with BVH partitioning, took about **3 minutes**.
