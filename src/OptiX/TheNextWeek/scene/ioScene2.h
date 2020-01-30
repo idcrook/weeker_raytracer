@@ -58,16 +58,16 @@ public:
                 );
 
                  // keep out area near medium spheres
-                if ((dist > 0.9f) |
-                    ((z_squared > 0.7f) & ((x*x - 16.0f) > -1.f)))
+                if ((dist > 0.9f) ||
+                    ((z_squared > 0.7f) && ((x*x - 16.0f) > -2.f)))
                 {
-                    if (chooseMat < 0.8f)
+                    if (chooseMat < 0.70f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioLambertianMaterial(
                             randf(seed), randf(seed), randf(seed)));
                     }
-                    else if (chooseMat < 0.95f)
+                    else if (chooseMat < 0.85f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioMetalMaterial(
@@ -76,6 +76,11 @@ public:
                             0.5f*(1.0f-randf(seed)),
                             0.5f*randf(seed))
                         );
+                    }
+                    else if (chooseMat < 0.93f)
+                    {
+                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+                        materialList.push_back(new ioDielectricMaterial(1.5f));
                     }
                     else
                     {

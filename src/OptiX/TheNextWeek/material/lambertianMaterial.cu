@@ -21,12 +21,7 @@ RT_PROGRAM void closestHit()
     float3 scatterDirection = hitRecord.normal + randomInUnitSphere(thePrd.seed);
 
     thePrd.scatterEvent = Ray_Hit;
-    thePrd.scatter = optix::make_Ray(
-        hitRecord.point,
-        scatterDirection,
-        theRay.ray_type,
-        theRay.tmin,
-        theRay.tmax
-        );
+    thePrd.scattered_origin = hitRecord.point;
+    thePrd.scattered_direction = scatterDirection;
     thePrd.attenuation = color;
 }

@@ -14,8 +14,10 @@ typedef enum
 struct PerRayData
 {
     uint seed;
+    float gatherTime;
     ScatterEvent scatterEvent;
-    optix::Ray scatter;
+    float3 scattered_origin;
+    float3 scattered_direction;
     float3 attenuation;
 };
 

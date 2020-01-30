@@ -13,6 +13,10 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
+  moving_sphere_ptx_c   geometry/moving_sphere.cu
+  )
+
+cuda_compile_and_embed(
   normal_material_ptx_c     material/normalMaterial.cu
   )
 
@@ -36,6 +40,7 @@ add_executable(theNextWeekOptix
   ${raygen_ptx_c}
   ${miss_ptx_c}
   ${sphere_ptx_c}
+  ${moving_sphere_ptx_c}
   ${normal_material_ptx_c}
   ${lambertian_material_ptx_c}
   ${metal_material_ptx_c}

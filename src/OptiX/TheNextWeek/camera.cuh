@@ -8,6 +8,8 @@ rtDeclareVariable(float3, cameraOrigin, , );
 rtDeclareVariable(float3, cameraU, , );
 rtDeclareVariable(float3, cameraV, , );
 rtDeclareVariable(float3, cameraW, , );
+rtDeclareVariable(float, cameraTime0, , );
+rtDeclareVariable(float, cameraTime1, , );
 rtDeclareVariable(float, cameraHalfHeight, , );
 rtDeclareVariable(float, cameraHalfWidth, , );
 rtDeclareVariable(int, cameraType, , );
@@ -66,9 +68,9 @@ inline __device__ optix::Ray generateRay(float s, float t)
     return optix::make_Ray(
         initialOrigin,        // origin
         initialDirection,     // direction
-        0,             // raytype
-        0.000001f,     // tmin (epsilon)
-        RT_DEFAULT_MAX // tmax
+        0,                    // raytype
+        1e-6f,                // tmin (epsilon)
+        RT_DEFAULT_MAX        // tmax
     );
 }
 
