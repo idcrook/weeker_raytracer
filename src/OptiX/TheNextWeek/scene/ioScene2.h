@@ -33,36 +33,41 @@ public:
 
         // Medium Spheres
         geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
-        materialList.push_back(new ioDielectricMaterial(1.5f));
         geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
-        materialList.push_back(new ioLambertianMaterial(0.4f, 0.2f, 0.1f));
         geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
+
+        materialList.push_back(new ioDielectricMaterial(1.5f));
+        materialList.push_back(new ioLambertianMaterial(0.4f, 0.2f, 0.1f));
         materialList.push_back(new ioMetalMaterial(0.7f, 0.6f, 0.5f, 0.0f));
 
         // Small Spheres
-        uint32_t seed = 0x314159;
+        uint32_t seed = 0x314759;
         for (int a = -11; a < 11; a++)
         {
             for (int b = -11; b < 11; b++)
             {
                 float chooseMat = randf(seed);
-                float x = a + 0.9f*randf(seed);
+                float x = a + 0.8f*randf(seed);
                 float y = 0.2f;
                 float z = b + 0.9f*randf(seed);
-                float dist = sqrt(
-                    (x-4.0f)*(x-4.0f) +
-                    (y-0.2f)*(y-0.2f) +
-                    (z)*(z)
+                float z_squared = (z)*(z);
+                float dist = sqrtf(
+                  (x-4.0f)*(x-4.0f) +
+                  //(y-0.2f)*(y-0.2f) +
+                  z_squared
                 );
-                if (dist > 0.9f)
+
+                 // keep out area near medium spheres
+                if ((dist > 0.9f) |
+                    ((z_squared > 0.7f) & ((x*x - 16.0f) > -1.f)))
                 {
-                    if (chooseMat < 0.8)
+                    if (chooseMat < 0.8f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioLambertianMaterial(
                             randf(seed), randf(seed), randf(seed)));
                     }
-                    else if (chooseMat < 0.95)
+                    else if (chooseMat < 0.95f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioMetalMaterial(
@@ -75,6 +80,8 @@ public:
                     else
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+                        materialList.push_back(new ioDielectricMaterial(1.5f));
+                        geometryList.push_back(new ioSphere(x,y,z, -(0.2f-0.007f)));
                         materialList.push_back(new ioDielectricMaterial(1.5f));
                     }
                 }

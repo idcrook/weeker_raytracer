@@ -27,8 +27,8 @@ inline __device__ float dot(float3 a, float3 b)
 RT_PROGRAM void getBounds(int pid, float result[6])
 {
     optix::Aabb* aabb = (optix::Aabb*)result;
-    aabb->m_min = center - radius;
-    aabb->m_max = center + radius;
+    aabb->m_min = center - abs(radius);
+    aabb->m_max = center + abs(radius);
 }
 
 
