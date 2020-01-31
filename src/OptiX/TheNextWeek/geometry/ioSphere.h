@@ -14,10 +14,10 @@ class ioSphere : public ioGeometry
 public:
   ioSphere()
     {
-      m_cx = 0.0f;
-      m_cy = 0.0f;
-      m_cz = 0.0f;
-      m_r = 0.0f;
+      // m_cx = 0.0f;
+      // m_cy = 0.0f;
+      // m_cz = 0.0f;
+      // m_r = 0.0f;
     }
 
   ioSphere(const float x, const float y, const float z, const float r)
@@ -28,7 +28,6 @@ public:
       m_r = r;
     }
 
-  // virtual void init(const ioMaterial &material, optix::Context& context)
   virtual void init(optix::Context& context)
     {
       m_geo = context->createGeometry();
@@ -42,10 +41,6 @@ public:
       m_geo["center"]->setFloat(m_cx, m_cy, m_cz);
       m_geo["radius"]->setFloat(m_r);
 
-      // optix::GeometryInstance gi = context->createGeometryInstance();
-      // gi->setGeometry(m_geo);
-      // gi->setMaterialCount(1);
-      // material.assignTo(gi, context);
     }
 
 private:

@@ -1,3 +1,5 @@
+#define RT_USE_TEMPLATED_RTCALLABLEPROGRAM 1
+
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
 
@@ -23,8 +25,9 @@ rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTextu
 
 RT_PROGRAM void closestHit()
 {
-    float3 scatterDirection = optix::reflect(theRay.direction, hitRecord.normal) +
-        roughness*randomInUnitSphere(thePrd.seed);
+    float3 scatterDirection =
+        optix::reflect(theRay.direction, hitRecord.normal)
+        + roughness*randomInUnitSphere(thePrd.seed);
 
     if (optix::dot(scatterDirection, hitRecord.normal) <= 0.0f )
     { // Ray is absorbed by the material
@@ -38,6 +41,6 @@ RT_PROGRAM void closestHit()
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
-    thePrd.attenuation = color;
-    //thePrd.attenuation = sampleTexture(0.f, 0.f, hitRecord.point);
+    //thePrd.attenuation = color;
+    thePrd.attenuation = sampleTexture(0.f, 0.f, hitRecord.point);
 }
