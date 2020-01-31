@@ -23,7 +23,11 @@ public:
         metal_material_ptx_c, "closestHit"
         );
       hit["color"]->setFloat(m_r, m_g, m_b);
-      hit["roughness"]->setFloat(m_roughness);
+      if (m_roughness < 1.f) {
+          hit["roughness"]->setFloat(m_roughness);
+      } else {
+          hit["roughness"]->setFloat(1.f);
+      }
       m_mat->setClosestHitProgram(0, hit);
     }
 

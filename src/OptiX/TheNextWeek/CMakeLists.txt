@@ -55,7 +55,7 @@ add_executable(theNextWeekOptix
   ${metal_material_ptx_c}
   ${dielectric_material_ptx_c}
   ${constant_texture_ptx_c}
-  # ${checkered_texture_ptx_c}
+  ${checkered_texture_ptx_c}
   )
 
 
