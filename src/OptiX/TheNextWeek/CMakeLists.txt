@@ -36,9 +36,9 @@ cuda_compile_and_embed(
   constant_texture_ptx_c    texture/constantTexture.cu
   )
 
-# cuda_compile_and_embed(
-#   checker_texture_ptx_c     texture/checkeredTexture.cu
-#   )
+cuda_compile_and_embed(
+  checkered_texture_ptx_c     texture/checkeredTexture.cu
+  )
 
 
 add_executable(theNextWeekOptix
@@ -55,7 +55,7 @@ add_executable(theNextWeekOptix
   ${metal_material_ptx_c}
   ${dielectric_material_ptx_c}
   ${constant_texture_ptx_c}
-  # ${checker_texture_ptx_c}
+  # ${checkered_texture_ptx_c}
   )
 
 
