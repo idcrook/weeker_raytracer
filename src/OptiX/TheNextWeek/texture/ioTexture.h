@@ -18,11 +18,8 @@ struct ioConstantTexture : public ioTexture {
         optix::Program textProg = g_context->createProgramFromPTXString(constant_texture_ptx_c, "constantTexture");
         textProg["color"]->setFloat(color);
         gi["constantTexture"]->setProgramId(textProg);
-
         return textProg;
     }
-
-
     const float3 color;
 };
 
