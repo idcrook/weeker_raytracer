@@ -2,6 +2,7 @@
 #define IO_SPHERE_H
 
 #include "ioGeometry.h"
+#include "material/ioMaterial.h"
 
 #include <optix.h>
 #include <optixu/optixpp.h>
@@ -27,6 +28,7 @@ public:
       m_r = r;
     }
 
+  // virtual void init(const ioMaterial &material, optix::Context& context)
   virtual void init(optix::Context& context)
     {
       m_geo = context->createGeometry();
@@ -39,6 +41,11 @@ public:
         );
       m_geo["center"]->setFloat(m_cx, m_cy, m_cz);
       m_geo["radius"]->setFloat(m_r);
+
+      // optix::GeometryInstance gi = context->createGeometryInstance();
+      // gi->setGeometry(m_geo);
+      // gi->setMaterialCount(1);
+      // material.assignTo(gi, context);
     }
 
 private:
