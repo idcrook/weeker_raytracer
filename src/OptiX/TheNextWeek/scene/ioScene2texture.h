@@ -44,12 +44,12 @@ public:
         geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
 
-        materialList.push_back(new ioDielectricMaterial(1.5f));
         materialList.push_back(new ioLambertianMaterial(0.4f, 0.2f, 0.2f));
+        materialList.push_back(new ioDielectricMaterial(1.5f));
         materialList.push_back(new ioMetalMaterial(0.7f, 0.6f, 0.5f, 0.0f));
 
-        textureList.push_back(nullptr);
         textureList.push_back(constantPurple);
+        textureList.push_back(nullptr);
         textureList.push_back(nullptr);
 
 
