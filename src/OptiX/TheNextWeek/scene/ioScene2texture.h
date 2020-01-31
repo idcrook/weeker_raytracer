@@ -29,13 +29,15 @@ public:
 
     void init(optix::Context& context) {
         ioTexture *constantGray = new ioConstantTexture(make_float3(0.7f, 0.7f, 0.5f));
-        ioTexture *constantGreen = new ioConstantTexture(make_float3(0.2f, 1.0f, 0.2f));
+        ioTexture *constantGreen = new ioConstantTexture(make_float3(0.2f, 0.3f, 0.1f));
         ioTexture *constantPurple = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.9f));
+
+        ioTexture *checkered = new ioCheckerTexture(constantGreen, new ioConstantTexture(make_float3(0.9, 0.9, 0.9)));
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
         materialList.push_back(new ioLambertianMaterial(0.5f, 0.5f, 0.5f));
-        textureList.push_back(constantGray);
+        textureList.push_back(checkered);
 
         // Medium Spheres
         geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
