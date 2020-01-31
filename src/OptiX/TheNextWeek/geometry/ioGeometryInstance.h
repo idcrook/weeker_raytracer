@@ -6,40 +6,47 @@
 
 #include "geometry/ioGeometry.h"
 #include "material/ioMaterial.h"
+#include "texture/ioTexture.h"
 
 class ioGeometryInstance
 {
 public:
-  ioGeometryInstance() { }
+    ioGeometryInstance() { }
 
-  void init(optix::Context& context)
-    {
-      m_gi = context->createGeometryInstance();
-    }
+    void init(optix::Context& context)
+        {
+            m_gi = context->createGeometryInstance();
+        }
 
-  void destroy()
-    {
-      m_gi->destroy();
-    }
+    void destroy()
+        {
+            m_gi->destroy();
+        }
 
-  optix::GeometryInstance get()
-    {
-      return m_gi;
-    }
+    optix::GeometryInstance get()
+        {
+            return m_gi;
+        }
 
-  void setGeometry(ioGeometry& geo)
-    {
-      m_gi->setGeometry(geo.get());
-    }
+    void setGeometry(ioGeometry& geo)
+        {
+            m_gi->setGeometry(geo.get());
+        }
 
-  void setMaterial(ioMaterial& mat)
-    {
-      m_gi->setMaterialCount(1);
-      m_gi->setMaterial(0, mat.get());
-    }
+    void setMaterial(ioMaterial& mat)
+        {
+            m_gi->setMaterialCount(1);
+            m_gi->setMaterial(0, mat.get());
+        }
+
+    // void setTexture(ioTexture& tex)
+    //     {
+    //         tex.assignTo(m_gi, optix::Context &g_context);
+    //     }
+
 
 private:
-  optix::GeometryInstance m_gi;
+    optix::GeometryInstance m_gi;
 };
 
 #endif //!IO_GEOMETRY_INSTANCE_H

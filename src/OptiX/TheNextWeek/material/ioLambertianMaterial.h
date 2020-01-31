@@ -2,7 +2,6 @@
 #define IO_LAMBERTIAN_MATERIAL_H
 
 #include "ioMaterial.h"
-#include "texture/ioTexture.h"
 
 #include <optix.h>
 #include <optixu/optixpp.h>

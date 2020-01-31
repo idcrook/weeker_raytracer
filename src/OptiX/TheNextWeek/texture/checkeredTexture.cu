@@ -1,6 +1,8 @@
 
 #include "texture.cuh"
 
+
+
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, odd, , );
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, even, , );
 
