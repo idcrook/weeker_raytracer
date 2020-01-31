@@ -32,6 +32,15 @@ cuda_compile_and_embed(
   dielectric_material_ptx_c material/dielectricMaterial.cu
   )
 
+cuda_compile_and_embed(
+  constant_texture_ptx_c    texture/constantTexture.cu
+  )
+
+# cuda_compile_and_embed(
+#   checker_texture_ptx_c     texture/checkeredTexture.cu
+#   )
+
+
 add_executable(theNextWeekOptix
   Director.h
   Director.cpp
@@ -45,6 +54,8 @@ add_executable(theNextWeekOptix
   ${lambertian_material_ptx_c}
   ${metal_material_ptx_c}
   ${dielectric_material_ptx_c}
+  ${constant_texture_ptx_c}
+  # ${checker_texture_ptx_c}
   )
 
 
