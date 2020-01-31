@@ -48,7 +48,8 @@ find_program(BIN2C bin2c
 #    'output_var', which can then be added to cmake targets.
 macro(cuda_compile_and_embed output_var cuda_file)
   set(c_var_name ${output_var})
-  cuda_compile_ptx(ptx_files ${cuda_file})
+  #cuda_compile_ptx(ptx_files ${cuda_file})
+  cuda_compile_ptx(ptx_files ${cuda_file} OPTIONS --relocatable-device-code=true )
   #cuda_compile_ptx(ptx_files ${cuda_file} OPTIONS --gpu-architecture=compute_75;--use_fast_math;--relocatable-device-code=true;--verbose )
   #cuda_compile_ptx(ptx_files ${cuda_file} OPTIONS --gpu-architecture=compute_75 )
   list(GET ptx_files 0 ptx_file)
