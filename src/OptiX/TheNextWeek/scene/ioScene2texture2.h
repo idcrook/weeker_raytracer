@@ -29,6 +29,8 @@ public:
     ioScene() { }
 
     void init(optix::Context& context) {
+
+        ioTexture *nullTexture = new ioNullTexture();
         ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
         ioTexture *constantGrey = new ioConstantTexture(make_float3(0.7f, 0.7f, 0.7f));
         ioTexture *constantGreen = new ioConstantTexture(make_float3(0.2f, 0.3f, 0.1f));
