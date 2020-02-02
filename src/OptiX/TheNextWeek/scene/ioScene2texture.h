@@ -110,8 +110,9 @@ public:
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {
             geometryList[i]->init(context);
-            // init all materials
-            for(int i = 0; i < geometryList.size(); i++)
+        }
+        // init all materials
+        for(int i = 0; i < geometryList.size(); i++) {
                 materialList[i]->init(context);
         }
         // GeometryInstance
