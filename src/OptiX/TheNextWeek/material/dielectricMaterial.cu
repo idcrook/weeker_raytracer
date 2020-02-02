@@ -81,10 +81,10 @@ RT_PROGRAM void closestHit()
         }
     }
 
-    if(cosThetaI > 1.0f)
-        printf("costThetaI is greater than unity: %f", cosThetaI);
-    if(!(sinThetaI == sinThetaI))
-        printf("sinThetaI is NaN: %f", sinThetaI);
+    // if(cosThetaI > 1.0f)
+    //     printf("costThetaI is greater than unity: %f", cosThetaI);
+    // if(!(sinThetaI == sinThetaI))
+    //     printf("sinThetaI is NaN: %f", sinThetaI);
 
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;

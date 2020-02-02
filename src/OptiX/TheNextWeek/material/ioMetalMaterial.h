@@ -2,6 +2,7 @@
 #define IO_METAL_MATERIAL_H
 
 #include "ioMaterial.h"
+#include "texture/ioTexture.h"
 
 #include <optix.h>
 #include <optixu/optixpp.h>
@@ -13,27 +14,29 @@ class ioMetalMaterial : public ioMaterial
 public:
   ioMetalMaterial() { }
 
-  ioMetalMaterial(float r, float g, float b, float roughness)
-    : m_r(r), m_g(g), m_b(b), m_roughness(roughness) { }
+  ioMetalMaterial(const ioTexture *t,  float fuzz) : texture(t), fuzz(fuzz) {}
 
-  virtual void init(optix::Context& context) override
+  // ioMetalMaterial(float r, float g, float b, float roughness)
+  //   : m_r(r), m_g(g), m_b(b), m_roughness(roughness) { }
+
+  virtual void assignTo(optix::GeometryInstance gi, optix::Context& context)  override
     {
       m_mat = context->createMaterial();
-      optix::Program hit = context->createProgramFromPTXString(
-        metal_material_ptx_c, "closestHit"
-        );
-      hit["color"]->setFloat(m_r, m_g, m_b);
-      if (m_roughness < 1.f) {
-          hit["roughness"]->setFloat(m_roughness);
+      m_mat->setClosestHitProgram(0, context->createProgramFromPTXString
+      (metal_material_ptx_c, "closestHit"));
+      gi->setMaterial(/*ray type:*/0, m_mat);
+      texture->assignTo(gi, context);
+
+      if (fuzz < 1.f) {
+          gi["fuzz"]->setFloat(fuzz);
       } else {
-          hit["roughness"]->setFloat(1.f);
+          gi["fuzz"]->setFloat(1.f);
       }
-      m_mat->setClosestHitProgram(0, hit);
     }
 
 private:
-  float m_r, m_g, m_b;
-  float m_roughness;
+  const ioTexture* texture;
+   float fuzz;
 };
 
 #endif //!IO_METAL_MATERIAL_H

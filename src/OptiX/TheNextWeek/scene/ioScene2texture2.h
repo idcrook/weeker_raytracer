@@ -51,7 +51,7 @@ public:
         geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
 
-        materialList.push_back(new ioLambertianMaterial(constantPurple);
+        materialList.push_back(new ioLambertianMaterial(constantPurple));
         materialList.push_back(new ioDielectricMaterial(1.5f));
         materialList.push_back(new ioMetalMaterial(constantGrey, 0.2f));
 
@@ -79,8 +79,9 @@ public:
                     if (chooseMat < 0.70f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
-                        materialList.push_back(new ioConstantTexture(
-                                                  make_float3(randf(seed), randf(seed), randf(seed))));
+                        materialList.push_back(new ioLambertianMaterial(
+                            new ioConstantTexture(make_float3(randf(seed), randf(seed), randf(seed))
+                            )));
                     }
                     else if (chooseMat < 0.85f)
                     {
@@ -110,10 +111,11 @@ public:
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {
             geometryList[i]->init(context);
-            // init all materials
-            for(int i = 0; i < geometryList.size(); i++)
-                materialList[i]->init(context);
         }
+        // init all materials
+        // for(int i = 0; i < geometryList.size(); i++) {
+        //     materialList[i]->init(context);
+        // }
         // GeometryInstance
         geoInstList.resize(geometryList.size());
         // Taking advantage of geometryList.size == materialList.size == textureList.size
@@ -122,12 +124,12 @@ public:
             geoInstList[i] = ioGeometryInstance();
             geoInstList[i].init(context);
             geoInstList[i].setGeometry(*geometryList[i]);
-            geoInstList[i].setMaterial(*materialList[i]);
-            if (textureList[i]) {
-                textureList[i]->assignTo(geoInstList[i].get(), context);
-            } else {
-                nullTexture->assignTo(geoInstList[i].get(), context);
-            }
+            geoInstList[i].setMaterial(*materialList[i], context);
+            // if (textureList[i]) {
+            //     textureList[i]->assignTo(geoInstList[i].get(), context);
+            // } else {
+            //     nullTexture->assignTo(geoInstList[i].get(), context);
+            // }
         }
 
         // World & Acceleration
@@ -168,7 +170,7 @@ public:
 public:
     std::vector<ioMaterial*> materialList;
     std::vector<ioGeometry*> geometryList;
-    std::vector<ioTexture*>  textureList;
+    //std::vector<ioTexture*>  textureList;
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
 

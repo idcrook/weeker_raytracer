@@ -12,7 +12,7 @@ class ioMaterial
 public:
     ioMaterial() { }
 
-    virtual void init(optix::Context& context) = 0;
+    //virtual void init(optix::Context& context) = 0;
 
     virtual void destroy()
         {
@@ -24,7 +24,7 @@ public:
             return m_mat;
         }
 
-    // virtual void assignTo(optix::GeometryInstance gi, optix::Context &g_context) const = 0;
+    virtual void assignTo(optix::GeometryInstance gi, optix::Context &context) = 0;
 
 protected:
     optix::Material m_mat;

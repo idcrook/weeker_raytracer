@@ -16,7 +16,8 @@ rtDeclareVariable(rtObject, sysWorld, , );
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 
 // Material variables
-rtDeclareVariable(float3, color, , );
+//rtDeclareVariable(float3, color, , );
+
 // Texture program
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTexture, , );
 
@@ -27,6 +28,5 @@ RT_PROGRAM void closestHit()
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
-    //thePrd.attenuation = color;
     thePrd.attenuation = sampleTexture(0.f, 0.f, hitRecord.point);
 }

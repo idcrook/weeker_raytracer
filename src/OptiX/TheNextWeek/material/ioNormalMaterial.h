@@ -14,7 +14,16 @@ class ioNormalMaterial : public ioMaterial
 public:
   ioNormalMaterial() { }
 
-  virtual void init(optix::Context& context) override
+  // virtual void init(optix::Context& context) override
+  //   {
+  //     m_mat = context->createMaterial();
+  //     optix::Program hit = context->createProgramFromPTXString(
+  //       normal_material_ptx_c, "closestHit"
+  //       );
+  //     m_mat->setClosestHitProgram(0, hit);
+  //   }
+
+virtual void assignTo(optix::GeometryInstance gi, optix::Context& context) 
     {
       m_mat = context->createMaterial();
       optix::Program hit = context->createProgramFromPTXString(
@@ -22,6 +31,8 @@ public:
         );
       m_mat->setClosestHitProgram(0, hit);
     }
+
 };
+
 
 #endif //!IO_NORMAL_MATERIAL_H
