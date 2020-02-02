@@ -29,7 +29,6 @@ public:
     ioScene() { }
 
     void init(optix::Context& context) {
-        ioTexture *nullTexture = new ioNullTexture();
         ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
         ioTexture *constantGrey = new ioConstantTexture(make_float3(0.7f, 0.7f, 0.7f));
         ioTexture *constantGreen = new ioConstantTexture(make_float3(0.2f, 0.3f, 0.1f));
@@ -40,7 +39,7 @@ public:
         ioTexture *black = new ioConstantTexture(make_float3( 0/255.f,  0/255.f,  0/255.f));
 
         ioTexture *checkered = new ioCheckerTexture(reallyDarkGrey, saddleBrown);
-        //ioTexture *checkered = new ioCheckerTexture(black, saddleBrown);
+        //ioTexture *checkered = new ioCheckerTexture(constantGrey, saddleBrown);
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
@@ -53,10 +52,10 @@ public:
 
         materialList.push_back(new ioLambertianMaterial(constantPurple));
         materialList.push_back(new ioDielectricMaterial(1.5f));
-        materialList.push_back(new ioMetalMaterial(constantGrey, 0.2f));
+        materialList.push_back(new ioMetalMaterial(constantGrey, 0.12f));
 
         // Small Spheres
-        uint32_t seed = 0x314759;
+        uint32_t seed = 0x6314759;
         for (int a = -11; a < 11; a++)
         {
             for (int b = -11; b < 11; b++)
@@ -67,12 +66,12 @@ public:
                 float z = b + 0.9f*randf(seed);
                 float z_squared = (z)*(z);
                 float dist = sqrtf(
-                  (x-4.0f)*(x-4.0f) +
-                  //(y-0.2f)*(y-0.2f) +
-                  z_squared
-                );
+                    (x-4.0f)*(x-4.0f) +
+                    //(y-0.2f)*(y-0.2f) +
+                    z_squared
+                    );
 
-                 // keep out area near medium spheres
+                // keep out area near medium spheres
                 if ((dist > 0.9f) ||
                     ((z_squared > 0.7f) && ((x*x - 16.0f) > -2.f)))
                 {
@@ -80,17 +79,17 @@ public:
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioLambertianMaterial(
-                            new ioConstantTexture(make_float3(randf(seed), randf(seed), randf(seed))
-                            )));
+                                                   new ioConstantTexture(make_float3(randf(seed), randf(seed), randf(seed))
+                                                       )));
                     }
                     else if (chooseMat < 0.85f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioMetalMaterial(
-                            new ioConstantTexture(make_float3(0.5f*(1.0f-randf(seed)),
-                                                             0.5f*(1.0f-randf(seed)),
-                                                             0.5f*(1.0f-randf(seed)))), 
-                                                             0.5f*randf(seed)));
+                                                   new ioConstantTexture(make_float3(0.5f*(1.0f-randf(seed)),
+                                                                                     0.5f*(1.0f-randf(seed)),
+                                                                                     0.5f*(1.0f-randf(seed)))),
+                                                   0.5f*randf(seed)));
                     }
                     else if (chooseMat < 0.93f)
                     {
@@ -112,24 +111,16 @@ public:
         for(int i = 0; i < geometryList.size(); i++) {
             geometryList[i]->init(context);
         }
-        // init all materials
-        // for(int i = 0; i < geometryList.size(); i++) {
-        //     materialList[i]->init(context);
-        // }
         // GeometryInstance
         geoInstList.resize(geometryList.size());
-        // Taking advantage of geometryList.size == materialList.size == textureList.size
+
+        // Taking advantage of geometryList.size == materialList.size
         for (int i = 0; i < geoInstList.size(); i++)
         {
             geoInstList[i] = ioGeometryInstance();
             geoInstList[i].init(context);
             geoInstList[i].setGeometry(*geometryList[i]);
-            geoInstList[i].setMaterial(*materialList[i], context);
-            // if (textureList[i]) {
-            //     textureList[i]->assignTo(geoInstList[i].get(), context);
-            // } else {
-            //     nullTexture->assignTo(geoInstList[i].get(), context);
-            // }
+            materialList[i]->assignTo(geoInstList[i].get(), context);
         }
 
         // World & Acceleration

@@ -34,3 +34,6 @@
 /build
 /output
 *.nsight-cuprof-report
+.cuda-gdbinit
+CMakeCache.txt
+/CMakeFiles/

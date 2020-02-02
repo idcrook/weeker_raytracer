@@ -33,13 +33,14 @@ public:
             m_gi->setGeometry(geo.get());
         }
 
-    void setMaterial(ioMaterial& mat, optix::Context& context)
-        {
-            m_gi->setMaterialCount(1);
-            m_gi->setMaterial(0, mat.get());
-            mat.assignTo(m_gi, context);
+    //void setMaterial(ioMaterial& mat, optix::Context& context)
+    // void setMaterial(ioMaterial& mat)
+    //     {
+    //         //m_gi->setMaterialCount(1);
+    //         //mat.assignTo(m_gi, context);
+    //         //m_gi->setMaterial(0, mat.get());
 
-        }
+    //     }
 
     // void setTexture(ioTexture& tex)
     //     {

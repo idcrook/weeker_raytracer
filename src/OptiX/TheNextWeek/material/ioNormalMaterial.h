@@ -23,9 +23,10 @@ public:
   //     m_mat->setClosestHitProgram(0, hit);
   //   }
 
-virtual void assignTo(optix::GeometryInstance gi, optix::Context& context) 
+virtual void assignTo(optix::GeometryInstance gi, optix::Context& context)
     {
       m_mat = context->createMaterial();
+      //gi->setMaterialCount(0);
       optix::Program hit = context->createProgramFromPTXString(
         normal_material_ptx_c, "closestHit"
         );

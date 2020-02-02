@@ -28,6 +28,7 @@ public:
 virtual void assignTo(optix::GeometryInstance gi, optix::Context& context)  override
     {
       m_mat = context->createMaterial();
+      gi->setMaterialCount(1);
       m_mat->setClosestHitProgram(0, context->createProgramFromPTXString(
         dielectric_material_ptx_c, "closestHit"
         ));
