@@ -58,10 +58,10 @@ public:
         geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
 
-        materialList.push_back(new ioMetalMaterial(constantGrey, 0.12f));
+        materialList.push_back(new ioMetalMaterial(constantGrey, 0.4f));
         materialList.push_back(new ioDielectricMaterial(1.5f));
-        //materialList.push_back(new ioLambertianMaterial(noise2));
         materialList.push_back(new ioLambertianMaterial(earthGlobeImage));
+        //materialList.push_back(new ioLambertianMaterial(noise2));
 
         // Small Spheres
         uint32_t seed = 0x6314759;
@@ -147,9 +147,23 @@ public:
             0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
             20.0f, float(Nx) / float(Ny),
-            /*aperture*/0.1f,
+            /*aperture*/0.12f,
             /*focus_distance*/10.f
             );
+
+        // camera = new ioOrthographicCamera(
+        //     13.0f, 2.0f, 3.0f,
+        //     -1.2f, 0.0f, 0.0f,
+        //     0.0f, 1.0f, 0.0f,
+        //     3.5f, 7.f
+        //     );
+
+        // camera = new ioEnvironmentCamera(
+        //     -1.0f, 2.0f, 1.0f,
+        //     0.0f, 0.0f, -2.0f,
+        //     0.0f, 1.0f, 0.0f
+        //     );
+
         camera->init(context);
     }
 

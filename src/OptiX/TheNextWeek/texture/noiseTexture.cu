@@ -48,7 +48,8 @@ inline __device__ float noise(float3 p) {
 inline __device__ float turb(float3 p){
     float accum = 0;
     float3 temp_p = p;
-    float weight = 1.0;
+    //float weight = 1.0;
+    float weight = 0.8;
 
     for (int i = 0; i < 7; i++) {
         accum += weight * noise(temp_p);
@@ -61,5 +62,6 @@ inline __device__ float turb(float3 p){
 
 
 RT_CALLABLE_PROGRAM float3 sampleTexture(float u, float v, float3 p) {
-    return make_float3(1, 1, 1) * 0.5f * (1 + sinf(scale * p.z + 10.f * turb(p)));
+    //return make_float3(1, 1, 1) * 0.5f * (1 + sinf(scale * p.z + 10.f * turb(p)));
+    return make_float3(.5, .5, .5) * 0.5f * (1 + sinf(scale * p.z + 10.f * turb(p)));
 }
