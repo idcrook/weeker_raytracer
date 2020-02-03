@@ -11,8 +11,8 @@
 #endif
 
 
-// #pragma GCC system_header
-#define STB_IMAGE_IMPLEMENTATION
+// Implementation must #define STB_IMAGE_IMPLEMENTATION
+#pragma GCC system_header
 #include "stb_image.h"
 
 

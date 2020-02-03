@@ -3,6 +3,8 @@
 
 #include <random>
 
+#include "../external/rtw_stb_image.h"
+
 #include <optix.h>
 #include <optixu/optixpp.h>
 
@@ -149,7 +151,8 @@ struct ioImageTexture : public ioTexture{
 
     optix::TextureSampler loadTexture(optix::Context context, const std::string fileName) const {
         int nx, ny, nn;
-        unsigned char *tex_data = nullptr; //stbi_load((char*)fileName.c_str(), &nx, &ny, &nn, 0);
+        //unsigned char *tex_data = nullptr; //stbi_load((char*)fileName.c_str(), &nx, &ny, &nn, 0);
+        unsigned char *tex_data = stbi_load((char*)fileName.c_str(), &nx, &ny, &nn, 0);
 
         optix::TextureSampler sampler = context->createTextureSampler();
         sampler->setWrapMode(0, RT_WRAP_REPEAT);
