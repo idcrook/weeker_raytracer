@@ -3,8 +3,9 @@
 #include <chrono>
 
 // Image I/O
-// must #define STB_IMAGE_IMPLEMENTATION and do it only once (e.g. in .cpp file)
+// define STB_IMAGE*_IMPLEMENTATION-s only once (e.g. in .cpp file)
 #define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../external/rtw_stb_image.h"
 
 // optix

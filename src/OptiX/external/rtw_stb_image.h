@@ -11,9 +11,12 @@
 #endif
 
 
-// Implementation must #define STB_IMAGE_IMPLEMENTATION
 #pragma GCC system_header
+// Implementation must #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+// Implementation must #define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 
 
 // Restore warning levels.
