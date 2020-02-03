@@ -44,6 +44,10 @@ cuda_compile_and_embed(
   checkered_texture_ptx_c   texture/checkeredTexture.cu
   )
 
+cuda_compile_and_embed(
+  noise_texture_ptx_c       texture/noiseTexture.cu
+  )
+
 
 add_executable(theNextWeekOptix
   Director.h
@@ -61,6 +65,7 @@ add_executable(theNextWeekOptix
   ${null_texture_ptx_c}
   ${constant_texture_ptx_c}
   ${checkered_texture_ptx_c}
+  ${noise_texture_ptx_c}
   )
 
 
