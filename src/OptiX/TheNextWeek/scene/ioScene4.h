@@ -57,8 +57,8 @@ public:
 
         materialList.push_back(new ioDielectricMaterial(1.5f));
         materialList.push_back(new ioMetalMaterial(constantGrey, 0.12f));
-        //materialList.push_back(new ioLambertianMaterial(noise4));
-        materialList.push_back(new ioLambertianMaterial(constantPurple));
+        materialList.push_back(new ioLambertianMaterial(noise4));
+        //materialList.push_back(new ioLambertianMaterial(constantPurple));
 
         // Small Spheres
         uint32_t seed = 0x6314759;
