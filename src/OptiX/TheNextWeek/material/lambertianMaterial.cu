@@ -27,5 +27,5 @@ RT_PROGRAM void closestHit()
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
-    thePrd.attenuation = sampleTexture(0.f, 0.f, hitRecord.point);
+    thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
 }

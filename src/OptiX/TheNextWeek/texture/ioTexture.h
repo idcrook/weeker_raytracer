@@ -2,6 +2,7 @@
 #define IO_TEXTURE_H
 
 #include <random>
+#include <iostream>
 
 #include "../external/rtw_stb_image.h"
 
@@ -151,9 +152,8 @@ struct ioImageTexture : public ioTexture{
 
     optix::TextureSampler loadTexture(optix::Context context, const std::string fileName) const {
         int nx, ny, nn;
-        //unsigned char *tex_data = nullptr; //stbi_load((char*)fileName.c_str(), &nx, &ny, &nn, 0);
         unsigned char *tex_data = stbi_load((char*)fileName.c_str(), &nx, &ny, &nn, 0);
-
+        std::cerr << "image " << fileName << " loaded: (" << nx << 'x' << ny << ") depth: " << nn << std::endl;
         optix::TextureSampler sampler = context->createTextureSampler();
         sampler->setWrapMode(0, RT_WRAP_REPEAT);
         sampler->setWrapMode(1, RT_WRAP_REPEAT);
@@ -171,6 +171,11 @@ struct ioImageTexture : public ioTexture{
             for (int j = 0; j < ny; ++j) {
                 int bindex = (j * nx + i) * 4;
                 int iindex = ((ny - j - 1) * nx + i) * nn;
+                if (false) { // (i==0) {
+                    std::cerr << static_cast<unsigned int>(tex_data[iindex + 0]) << ' '
+                              << static_cast<unsigned int>(tex_data[iindex + 1]) << ' '
+                              << static_cast<unsigned int>(tex_data[iindex + 2]) << '\t' ;
+                }
 
                 data[bindex + 0] = tex_data[iindex + 0];
                 data[bindex + 1] = tex_data[iindex + 1];
