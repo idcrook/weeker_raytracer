@@ -2,10 +2,8 @@
 #define RAYDATA_CUH
 
 #include <optix.h>
-
-#ifndef CUDART_PI_F
-#define CUDART_PI_F 3.141592654f
-#endif
+// defines CUDART_PI_F
+#include "math_constants.h"
 
 typedef enum
 {
