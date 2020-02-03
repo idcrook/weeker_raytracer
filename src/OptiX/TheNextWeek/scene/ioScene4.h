@@ -43,75 +43,76 @@ public:
         ioTexture *checkered = new ioCheckerTexture(reallyDarkGrey, saddleBrown);
         //ioTexture *checkered = new ioCheckerTexture(constantGrey, saddleBrown);
 
+        ioTexture *noise2 = new ioNoiseTexture(2.f);
         ioTexture *noise4 = new ioNoiseTexture(4.f);
 
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
-        materialList.push_back(new ioLambertianMaterial(checkered));
+        materialList.push_back(new ioLambertianMaterial(noise2));
 
         // Medium Spheres
         geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
 
+        materialList.push_back(new ioLambertianMaterial(constantPurple));
         materialList.push_back(new ioDielectricMaterial(1.5f));
         materialList.push_back(new ioMetalMaterial(constantGrey, 0.12f));
-        materialList.push_back(new ioLambertianMaterial(noise4));
-        //materialList.push_back(new ioLambertianMaterial(constantPurple));
+        //materialList.push_back(new ioLambertianMaterial(noise2));
 
         // Small Spheres
         uint32_t seed = 0x6314759;
-        for (int a = -11; a < 11; a++)
-        {
-            for (int b = -11; b < 11; b++)
-            {
-                float chooseMat = randf(seed);
-                float x = a + 0.8f*randf(seed);
-                float y = 0.2f;
-                float z = b + 0.9f*randf(seed);
-                float z_squared = (z)*(z);
-                float dist = sqrtf(
-                    (x-4.0f)*(x-4.0f) +
-                    //(y-0.2f)*(y-0.2f) +
-                    z_squared
-                    );
+        // for (int a = -11; a < 11; a++)
+        // {
+        //     for (int b = -11; b < 11; b++)
+        //     {
+        //         float chooseMat = randf(seed);
+        //         float x = a + 0.8f*randf(seed);
+        //         float y = 0.2f;
+        //         float z = b + 0.9f*randf(seed);
+        //         float z_squared = (z)*(z);
+        //         float dist = sqrtf(
+        //             (x-4.0f)*(x-4.0f) +
+        //             //(y-0.2f)*(y-0.2f) +
+        //             z_squared
+        //             );
 
-                // keep out area near medium spheres
-                if ((dist > 0.9f) ||
-                    ((z_squared > 0.7f) && ((x*x - 16.0f) > -2.f)))
-                {
-                    if (chooseMat < 0.70f)
-                    {
-                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
-                        materialList.push_back(new ioLambertianMaterial(
-                                                   new ioConstantTexture(make_float3(randf(seed), randf(seed), randf(seed))
-                                                       )));
-                    }
-                    else if (chooseMat < 0.85f)
-                    {
-                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
-                        materialList.push_back(new ioMetalMaterial(
-                                                   new ioConstantTexture(make_float3(0.5f*(1.0f-randf(seed)),
-                                                                                     0.5f*(1.0f-randf(seed)),
-                                                                                     0.5f*(1.0f-randf(seed)))),
-                                                   0.5f*randf(seed)));
-                    }
-                    else if (chooseMat < 0.93f)
-                    {
-                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
-                        materialList.push_back(new ioDielectricMaterial(1.5f));
-                    }
-                    else
-                    {
-                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
-                        materialList.push_back(new ioDielectricMaterial(1.5f));
-                        geometryList.push_back(new ioSphere(x,y,z, -(0.2f-0.007f)));
-                        materialList.push_back(new ioDielectricMaterial(1.5f));
-                    }
-                }
-            }
-        }
+        //         // keep out area near medium spheres
+        //         if ((dist > 0.9f) ||
+        //             ((z_squared > 0.7f) && ((x*x - 16.0f) > -2.f)))
+        //         {
+        //             if (chooseMat < 0.70f)
+        //             {
+        //                 geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+        //                 materialList.push_back(new ioLambertianMaterial(
+        //                                            new ioConstantTexture(make_float3(randf(seed), randf(seed), randf(seed))
+        //                                                )));
+        //             }
+        //             else if (chooseMat < 0.85f)
+        //             {
+        //                 geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+        //                 materialList.push_back(new ioMetalMaterial(
+        //                                            new ioConstantTexture(make_float3(0.5f*(1.0f-randf(seed)),
+        //                                                                              0.5f*(1.0f-randf(seed)),
+        //                                                                              0.5f*(1.0f-randf(seed)))),
+        //                                            0.5f*randf(seed)));
+        //             }
+        //             else if (chooseMat < 0.93f)
+        //             {
+        //                 geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+        //                 materialList.push_back(new ioDielectricMaterial(1.5f));
+        //             }
+        //             else
+        //             {
+        //                 geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+        //                 materialList.push_back(new ioDielectricMaterial(1.5f));
+        //                 geometryList.push_back(new ioSphere(x,y,z, -(0.2f-0.007f)));
+        //                 materialList.push_back(new ioDielectricMaterial(1.5f));
+        //             }
+        //         }
+        //     }
+        // }
 
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {
@@ -123,7 +124,7 @@ public:
         // Taking advantage of geometryList.size == materialList.size
         for (int i = 0; i < geoInstList.size(); i++)
         {
-            std::cerr << i << std::endl;
+            //std::cerr << i << std::endl;
             geoInstList[i] = ioGeometryInstance();
             geoInstList[i].init(context);
             geoInstList[i].setGeometry(*geometryList[i]);

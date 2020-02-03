@@ -10,6 +10,7 @@ extern "C" const char null_texture_ptx_c[];
 extern "C" const char constant_texture_ptx_c[];
 extern "C" const char checkered_texture_ptx_c[];
 extern "C" const char noise_texture_ptx_c[];
+extern "C" const char image_texture_ptx_c[];
 
 static __inline__ float localRnd() {
  // static std::random_device rd;  //Will be used to obtain a seed for the rand
@@ -142,5 +143,64 @@ struct ioNoiseTexture : public ioTexture {
     const float scale;
 };
 
+
+struct ioImageTexture : public ioTexture{
+    ioImageTexture(const std::string f) : fileName(f) {}
+
+    optix::TextureSampler loadTexture(optix::Context context, const std::string fileName) const {
+        int nx, ny, nn;
+        unsigned char *tex_data = nullptr; //stbi_load((char*)fileName.c_str(), &nx, &ny, &nn, 0);
+
+        optix::TextureSampler sampler = context->createTextureSampler();
+        sampler->setWrapMode(0, RT_WRAP_REPEAT);
+        sampler->setWrapMode(1, RT_WRAP_REPEAT);
+        sampler->setWrapMode(2, RT_WRAP_REPEAT);
+        sampler->setIndexingMode(RT_TEXTURE_INDEX_NORMALIZED_COORDINATES);
+        sampler->setReadMode(RT_TEXTURE_READ_NORMALIZED_FLOAT);
+        sampler->setMaxAnisotropy(1.0f);
+        sampler->setMipLevelCount(1u);
+        sampler->setArraySize(1u);
+
+        optix::Buffer buffer = context->createBuffer(RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_BYTE4, nx, ny);
+        unsigned char * data = static_cast<unsigned char *>(buffer->map());
+
+        for (int i = 0; i < nx; ++i) {
+            for (int j = 0; j < ny; ++j) {
+                int bindex = (j * nx + i) * 4;
+                int iindex = ((ny - j - 1) * nx + i) * nn;
+
+                data[bindex + 0] = tex_data[iindex + 0];
+                data[bindex + 1] = tex_data[iindex + 1];
+                data[bindex + 2] = tex_data[iindex + 2];
+
+                if(nn == 4)
+                    data[bindex + 3] = tex_data[iindex + 3];
+                else//3-channel images
+                    data[bindex + 3] = (unsigned char)255;
+            }
+        }
+
+        buffer->unmap();
+        sampler->setBuffer(buffer);
+        sampler->setFilteringModes(RT_FILTER_LINEAR, RT_FILTER_LINEAR, RT_FILTER_NONE);
+        return sampler;
+    }
+
+    virtual optix::Program assignTo(optix::GeometryInstance gi, optix::Context &g_context) const override {
+        optix::Program textProg =  getProgram(g_context);
+        textProg["data"]->setTextureSampler(loadTexture(g_context, fileName));
+        gi["sampleTexture"]->setProgramId(textProg);
+        return textProg;
+    }
+
+    virtual optix::Program getProgram(optix::Context &g_context) const override {
+        optix::Program textProg = g_context->createProgramFromPTXString(image_texture_ptx_c, "sampleTexture");
+        return textProg;
+    }
+
+
+
+    const std::string fileName;
+};
 
 #endif

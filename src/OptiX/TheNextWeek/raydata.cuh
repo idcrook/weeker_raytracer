@@ -3,6 +3,10 @@
 
 #include <optix.h>
 
+#ifndef CUDART_PI_F
+#define CUDART_PI_F 3.141592654f
+#endif
+
 typedef enum
 {
     Ray_Miss,
@@ -18,6 +22,7 @@ struct PerRayData
     ScatterEvent scatterEvent;
     float3 scattered_origin;
     float3 scattered_direction;
+    float3 emitted;
     float3 attenuation;
 };
 

@@ -15,6 +15,16 @@ rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 //   the "attribute" qualifier is used to communicate between intersection and shading programs
 //   These may only be written between rtPotentialIntersection and rtReportIntersection
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
+rtDeclareVariable(float, hit_rec_u, attribute hit_rec_u, );
+rtDeclareVariable(float, hit_rec_v, attribute hit_rec_v, );
+
+inline __device__ void get_sphere_uv(const float3 p) {
+	float phi = atan2(p.z, p.x);
+	float theta = asin(p.y);
+
+	hit_rec_u = 1 - (phi + CUDART_PI_F) / (2 * CUDART_PI_F);
+	hit_rec_v = (theta + CUDART_PI_F / 2) / CUDART_PI_F;
+}
 
 inline __device__ float dot(float3 a, float3 b)
 {
@@ -51,6 +61,7 @@ RT_PROGRAM void intersection(int pid)
         {
             hitRecord.point = theRay.origin + t * theRay.direction;
             hitRecord.normal = (hitRecord.point - center) / radius;
+            get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
 
@@ -60,6 +71,7 @@ RT_PROGRAM void intersection(int pid)
         {
             hitRecord.point = theRay.origin + t * theRay.direction;
             hitRecord.normal = (hitRecord.point - center) / radius;
+            get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
 }

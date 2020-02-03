@@ -1,6 +1,7 @@
 #ifndef DIRECTOR_H
 #define DIRECTOR_H
 
+// Include before the optix includes
 #include "scene/ioScene.h"
 
 #include <optix.h>

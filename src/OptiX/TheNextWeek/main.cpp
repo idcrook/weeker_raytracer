@@ -2,6 +2,9 @@
 #include <iostream>
 #include <chrono>
 
+// Image I/O
+#include "../external/rtw_stb_image.h"
+
 // optix
 #include <optix.h>
 #include <optixu/optixpp.h>
