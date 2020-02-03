@@ -17,7 +17,6 @@ rtDeclareVariable(rtObject, sysWorld, , );
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 
 // Material variables
-//rtDeclareVariable(float3, color, , );
 rtDeclareVariable(float, fuzz, , );
 
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTexture, , );

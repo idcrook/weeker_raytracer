@@ -12,8 +12,6 @@ class ioMaterial
 public:
     ioMaterial() { }
 
-    //virtual void init(optix::Context& context) = 0;
-
     virtual void destroy()
         {
             m_mat->destroy();
