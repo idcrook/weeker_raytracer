@@ -28,7 +28,7 @@ class ioScene
 public:
     ioScene() { }
 
-    void init(optix::Context& context) {
+    void init(optix::Context& context, int Nx, int Ny) {
 
         ioTexture *nullTexture = new ioNullTexture();
         ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
@@ -146,7 +146,9 @@ public:
             13.0f, 2.0f, 3.0f,
             0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
-            20.0f, 2.0f
+            20.0f, float(Nx) / float(Ny),
+            /*aperture*/0.f,
+            /*focus_distance*/10.f
             );
         camera->init(context);
     }

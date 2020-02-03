@@ -85,7 +85,7 @@ void Director::initMissProgram()
 
 void Director::createScene()
 {
-  m_scene.init(m_context);
+    m_scene.init(m_context, m_Nx, m_Ny);
 }
 
 void Director::renderFrame()

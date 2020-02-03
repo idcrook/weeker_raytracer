@@ -5,7 +5,21 @@
 #include <optix_world.h>
 #include <optixu/optixu_math_namespace.h>
 
+// defines CUDART_PI_F
+#include "math_constants.h"
+
 #include "random.cuh"
+
+
+inline __device__ float3 random_in_unit_disk(uint32_t& seed) {
+    float a = randf(seed) * 2.0f * CUDART_PI_F;
+
+    float3 xy = make_float3(sinf(a), cosf(a), 0);
+    xy *= sqrtf(randf(seed));
+
+  return xy;
+}
+
 
 inline __device__ float3 randomInUnitSphere(uint32_t& seed)
 {
