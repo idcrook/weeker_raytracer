@@ -11,19 +11,18 @@ rtDeclareVariable(float, radius, , );
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
 rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 
-// The point and normal of intersection
+// The point and normal of intersection. and uv-space location
 //   the "attribute" qualifier is used to communicate between intersection and shading programs
 //   These may only be written between rtPotentialIntersection and rtReportIntersection
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
-rtDeclareVariable(float, hit_rec_u, attribute hit_rec_u, );
-rtDeclareVariable(float, hit_rec_v, attribute hit_rec_v, );
 
+// assume p is normalized direction vector
 inline __device__ void get_sphere_uv(const float3 p) {
 	float phi = atan2(p.z, p.x);
 	float theta = asin(p.y);
 
-	hit_rec_u = 1 - (phi + CUDART_PI_F) / (2 * CUDART_PI_F);
-	hit_rec_v = (theta + CUDART_PI_F / 2) / CUDART_PI_F;
+	hitRecord.u = 1 - (phi + CUDART_PI_F) / (2.f * CUDART_PI_F);
+	hitRecord.v = (theta + CUDART_PIO2_F) / CUDART_PI_F;
 }
 
 inline __device__ float dot(float3 a, float3 b)

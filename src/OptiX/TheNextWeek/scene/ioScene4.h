@@ -49,7 +49,8 @@ public:
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
-        materialList.push_back(new ioLambertianMaterial(noise2));
+        //materialList.push_back(new ioLambertianMaterial(noise2));
+        materialList.push_back(new ioLambertianMaterial(checkered));
 
         // Medium Spheres
         geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
