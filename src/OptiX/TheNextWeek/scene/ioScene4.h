@@ -147,7 +147,7 @@ public:
             0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
             20.0f, float(Nx) / float(Ny),
-            /*aperture*/0.f,
+            /*aperture*/0.1f,
             /*focus_distance*/10.f
             );
         camera->init(context);

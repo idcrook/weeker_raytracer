@@ -44,6 +44,7 @@ public:
         context["cameraW"]->set3fv((float*)&m_w);
         context["cameraTime0"]->setFloat(m_time0);
         context["cameraTime1"]->setFloat(m_time1);
+        context["cameraLensRadius"]->setFloat(m_lensRadius);
     }
 
 protected:
@@ -53,6 +54,7 @@ protected:
     float3 m_w;
     float m_time0;
     float m_time1;
+    float m_lensRadius = 0.f;
 };
 
 
@@ -71,7 +73,6 @@ public:
                    upX, upY, upZ,
                    t0, t1)
         {
-
             m_lensRadius = aperture / 2.0f;
 
             // vFov is top to bottom in degrees
@@ -94,6 +95,7 @@ public:
             context["cameraLowerLeftCorner"]->set3fv(&m_lowerLeftCorner.x);
             context["cameraHorizontal"]->set3fv(&m_horizontal.x);
             context["cameraVertical"]->set3fv(&m_vertical.x);
+            context["cameraLensRadius"]->setFloat(m_lensRadius);
             context["cameraType"]->setInt(0);
         }
 
@@ -103,8 +105,6 @@ private:
     float3 m_lowerLeftCorner;
     float3 m_horizontal;
     float3 m_vertical;
-    float m_lensRadius;
-
 };
 
 class ioEnvironmentCamera : public ioCamera

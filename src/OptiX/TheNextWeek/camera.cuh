@@ -6,24 +6,30 @@
 
 // defines CUDART_PI_F
 #include "math_constants.h"
+#include "sampling.cuh"
 
 rtDeclareVariable(float3, cameraOrigin, , );
 rtDeclareVariable(float3, cameraU, , );
 rtDeclareVariable(float3, cameraV, , );
 rtDeclareVariable(float3, cameraW, , );
+rtDeclareVariable(float, cameraTime0, , );
+rtDeclareVariable(float, cameraTime1, , );
+rtDeclareVariable(float, cameraLensRadius, , );
+
 rtDeclareVariable(float3, cameraLowerLeftCorner, , );
 rtDeclareVariable(float3, cameraHorizontal, , );
 rtDeclareVariable(float3, cameraVertical, , );
-rtDeclareVariable(float, cameraTime0, , );
-rtDeclareVariable(float, cameraTime1, , );
+
 rtDeclareVariable(int, cameraType, , );
 
 
-__device__ void perspectiveCamera(const float s, const float t,
+__device__ void perspectiveCamera(const float s, const float t, uint32_t& seed,
     float3& origin, float3& direction)
 {
-    origin = cameraOrigin;
-    direction = cameraLowerLeftCorner + (s*cameraHorizontal) + (t*cameraVertical) - cameraOrigin;
+    const float3 rd = cameraLensRadius * random_in_unit_disk(seed);
+    const float3 lens_offset = cameraU*rd.x + cameraV*rd.y;
+    origin = cameraOrigin + lens_offset;
+    direction = cameraLowerLeftCorner + (s*cameraHorizontal) + (t*cameraVertical) - origin;
 }
 
 __device__ void environmentCamera(const float s, const float t,
@@ -49,11 +55,11 @@ __device__ void orthographicCamera(const float s, const float t,
     direction = -optix::normalize(cameraW);
 }
 
-inline __device__ optix::Ray generateRay(float s, float t)
+inline __device__ optix::Ray generateRay(float s, float t, uint32_t& seed)
 {
     float3 initialOrigin, initialDirection;
     if (cameraType == 0)
-        perspectiveCamera(s, t, initialOrigin, initialDirection);
+        perspectiveCamera(s, t, seed, initialOrigin, initialDirection);
     else if (cameraType == 1)
         environmentCamera(s, t, initialOrigin, initialDirection);
     else if (cameraType == 2)
