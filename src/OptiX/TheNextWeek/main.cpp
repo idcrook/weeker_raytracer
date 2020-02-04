@@ -20,7 +20,8 @@ int main(int argc, char* argv[])
   Director optixSingleton = Director();
 
   auto start = std::chrono::system_clock::now();
-  optixSingleton.init(1200, 600);
+  //optixSingleton.init(1200, 600);
+  optixSingleton.init(560, 560);
   optixSingleton.createScene();
   optixSingleton.renderFrame();
   auto stop = std::chrono::system_clock::now();
