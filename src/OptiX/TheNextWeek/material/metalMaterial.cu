@@ -21,6 +21,9 @@ rtDeclareVariable(float, fuzz, , );
 
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTexture, , );
 
+inline __device__ float3 emitted(){
+    return make_float3(0.f, 0.f, 0.f);
+}
 
 RT_PROGRAM void closestHit()
 {
@@ -38,6 +41,7 @@ RT_PROGRAM void closestHit()
         return;
     }
 
+    thePrd.emitted = emitted();
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;

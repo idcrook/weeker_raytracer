@@ -25,6 +25,10 @@ inline __device__ float fresnelSchlick(
     return r0 + (1.f-r0)*powf((1.f-cosThetaI), 5.f);
 }
 
+inline __device__ float3 emitted(){
+    return make_float3(0.f, 0.f, 0.f);
+}
+
 RT_PROGRAM void closestHit()
 {
     // Get the ray's unit direction
@@ -86,6 +90,7 @@ RT_PROGRAM void closestHit()
     // if(!(sinThetaI == sinThetaI))
     //     printf("sinThetaI is NaN: %f", sinThetaI);
 
+    thePrd.emitted = emitted();
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
