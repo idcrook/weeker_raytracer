@@ -9,11 +9,15 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  sphere_ptx_c   geometry/sphere.cu
+  sphere_ptx_c          geometry/sphere.cu
   )
 
 cuda_compile_and_embed(
   moving_sphere_ptx_c   geometry/moving_sphere.cu
+  )
+
+cuda_compile_and_embed(
+  aarect_ptx_c          geometry/aarect.cu
   )
 
 cuda_compile_and_embed(
@@ -30,6 +34,10 @@ cuda_compile_and_embed(
 
 cuda_compile_and_embed(
   dielectric_material_ptx_c material/dielectricMaterial.cu
+  )
+
+cuda_compile_and_embed(
+  diffuse_light_material_ptx_c material/diffuseLight.cu
   )
 
 cuda_compile_and_embed(
@@ -66,6 +74,7 @@ add_executable(theNextWeekOptix
   ${lambertian_material_ptx_c}
   ${metal_material_ptx_c}
   ${dielectric_material_ptx_c}
+  ${diffuse_light_material_ptx_c}
   ${null_texture_ptx_c}
   ${constant_texture_ptx_c}
   ${checkered_texture_ptx_c}

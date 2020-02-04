@@ -12,12 +12,14 @@
 #include "geometry/ioGeometryGroup.h"
 
 #include "geometry/ioSphere.h"
+#include "geometry/ioAARect.h"
 
 #include "texture/ioTexture.h"
 #include "material/ioNormalMaterial.h"
 #include "material/ioLambertianMaterial.h"
 #include "material/ioMetalMaterial.h"
 #include "material/ioDielectricMaterial.h"
+#include "material/ioDiffuseLightMaterial.h"
 
 #include "scene/ioCamera.h"
 
