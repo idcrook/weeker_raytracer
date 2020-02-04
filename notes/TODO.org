@@ -5,5 +5,12 @@
  - [X] remove callableprog.cuh
  - [X] move camera.cuh to scene/ <2020-02-04 Tue>
  - [X] make lib/ directory for .cuh helpers
- - [ ] make helper math lib
+ - [X] make helper math lib (lib/vector_utils.cuh)
  - [ ] consolidate dot() and cross() if applicable
+
+*** add command line options
+
+ - [ ] debug (turn on rtPrintf)
+ - [ ] verbose?
+ - [ ] scene selection
+ - [ ] dimensions like image width, height, number of samples

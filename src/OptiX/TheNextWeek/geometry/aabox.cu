@@ -2,6 +2,7 @@
 #include <optix_world.h>
 
 #include "../lib/raydata.cuh"
+#include "../lib/vector_utils.cuh"
 
 /*! the parameters that describe each the box */
 rtDeclareVariable(float3, boxMin, , );
@@ -25,10 +26,11 @@ static __device__ float3 boxNormal(float t, float3 t0, float3 t1) {
 RT_PROGRAM void hitBox(int pid) {
     float3 t0 = (boxMin - theRay.origin) / theRay.direction;
     float3 t1 = (boxMax - theRay.origin) / theRay.direction;
-    // float tmin = max_component(min_vec(t0, t1));
-    // float tmax = min_component(max_vec(t0, t1));
-    float tmin = t0.x;
-    float tmax = t1.z;
+    float tmin = max_component(min_vec(t0, t1));
+    float tmax = min_component(max_vec(t0, t1));
+
+    // rtPrintf("boxMin(%f,%f,%f)\n", boxMin.x, boxMin.y, boxMin.z);
+    // rtPrintf("boxMax(%f,%f,%f)\n", boxMax.x, boxMax.y, boxMax.z);
 
     if(tmin <= tmax) {
       bool check_second = true;
@@ -73,6 +75,8 @@ RT_PROGRAM void hitBox(int pid) {
   geometry per box, the'pid' parameter is ignored */
 RT_PROGRAM void getBounds(int pid, float result[6]) {
   optix::Aabb* aabb = (optix::Aabb*)result;
+  // rtPrintf("boxMin(%f,%f,%f)\n", boxMin.x, boxMin.y, boxMin.z);
+  // rtPrintf("boxMax(%f,%f,%f)\n", boxMax.x, boxMax.y, boxMax.z);
   aabb->m_min = boxMin;
   aabb->m_max = boxMax;
 }

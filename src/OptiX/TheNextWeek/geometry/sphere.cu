@@ -61,6 +61,7 @@ RT_PROGRAM void intersection(int pid)
             hitRecord.point = theRay.origin + t * theRay.direction;
             hitRecord.normal = (hitRecord.point - center) / radius;
             get_sphere_uv(hitRecord.normal);
+            //rtPrintf("theHR(%f,%f,%f)\n", hitRecord.point.x, hitRecord.point.y, hitRecord.point.z);
             rtReportIntersection(0);
         }
 

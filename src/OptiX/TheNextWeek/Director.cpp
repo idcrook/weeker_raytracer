@@ -58,6 +58,11 @@ void Director::initContext()
 
   m_context = optix::Context::create();
   m_context->setRayTypeCount(1);
+
+  // Set Output Debugging via rtPrintf
+  //m_context->setPrintEnabled(1);
+  //m_context->setPrintBufferSize(4096);
+
 }
 
 void Director::initOutputBuffer()

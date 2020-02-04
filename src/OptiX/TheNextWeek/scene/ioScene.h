@@ -64,7 +64,7 @@ public:
         geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
         materialList.push_back(wallWhite);
 
-        // box
+        // box ioAABox not working
         // float3 p0 = make_float3(265.f, 0.f, 295.f);
         // float3 p1 = make_float3(165.f, 330.f, 165.f);
         // geometryList.push_back(new ioAABox(p0, p1));
