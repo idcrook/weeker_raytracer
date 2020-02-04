@@ -8,7 +8,7 @@
 // defines CUDART_PI_F
 #include "math_constants.h"
 
-#include "random.cuh"
+#include "../lib/random.cuh"
 
 
 inline __device__ float3 random_in_unit_disk(uint32_t& seed) {

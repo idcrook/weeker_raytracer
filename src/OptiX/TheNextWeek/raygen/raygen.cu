@@ -1,9 +1,9 @@
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
 
-#include "raydata.cuh"
-#include "random.cuh"
-#include "camera.cuh"
+#include "../lib/raydata.cuh"
+#include "../lib/random.cuh"
+#include "../scene/camera.cuh"
 
 using namespace optix;
 

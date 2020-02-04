@@ -1,7 +1,7 @@
 #include <optix.h>
 #include <optix_world.h>
 
-#include "raydata.cuh"
+#include "../lib/raydata.cuh"
 
 // Sphere variables
 rtDeclareVariable(float3, center, , );

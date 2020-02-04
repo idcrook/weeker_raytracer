@@ -24,7 +24,8 @@
 
 #include "scene/ioCamera.h"
 
-#include "random.cuh"
+// needed for randf()
+#include "../lib/random.cuh"
 
 class ioScene
 {

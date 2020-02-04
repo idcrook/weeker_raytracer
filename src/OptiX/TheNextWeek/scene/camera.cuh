@@ -6,7 +6,7 @@
 
 // defines CUDART_PI_F
 #include "math_constants.h"
-#include "sampling.cuh"
+#include "../lib/sampling.cuh"
 
 rtDeclareVariable(float3, cameraOrigin, , );
 rtDeclareVariable(float3, cameraU, , );

@@ -1,9 +1,7 @@
-#define RT_USE_TEMPLATED_RTCALLABLEPROGRAM 1
-
 #include <optix.h>
 
-#include "raydata.cuh"
-#include "sampling.cuh"
+#include "../lib/raydata.cuh"
+#include "../lib/sampling.cuh"
 
 // Ray state variables
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );

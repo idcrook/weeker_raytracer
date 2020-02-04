@@ -1,7 +1,7 @@
 #include <optix.h>
 #include <optix_world.h>
 
-#include "raydata.cuh"
+#include "../lib/raydata.cuh"
 
 /*! the parameters that describe each individual rectangle */
 rtDeclareVariable(float,  a0, , );

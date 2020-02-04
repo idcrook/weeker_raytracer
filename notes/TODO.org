@@ -2,5 +2,8 @@
 
 ** code tasks
 
- - [ ] move camera.cuh to scene/ <2020-02-04 Tue>
- - [ ] make utility __device__  math lib
+ - [X] remove callableprog.cuh
+ - [X] move camera.cuh to scene/ <2020-02-04 Tue>
+ - [X] make lib/ directory for .cuh helpers
+ - [ ] make helper math lib
+ - [ ] consolidate dot() and cross() if applicable
