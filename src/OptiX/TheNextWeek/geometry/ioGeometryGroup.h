@@ -14,7 +14,9 @@ public:
   void init(optix::Context& context)
     {
       m_gg = context->createGeometryGroup();
-      m_gg->setAcceleration(context->createAcceleration("Bvh"));
+      // NoAccel, Bvh, Sbvh, Trbvh
+      //m_gg->setAcceleration(context->createAcceleration("NoAccel")); // faster than Trbvh with early empty Cornell box
+      m_gg->setAcceleration(context->createAcceleration("Trbvh"));
       m_gg->setChildCount(0);
     }
 

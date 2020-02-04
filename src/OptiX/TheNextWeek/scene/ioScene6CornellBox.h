@@ -37,11 +37,11 @@ public:
         ioMaterial *wallWhite = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.73f, 0.73f, 0.73f)));
         ioTexture* light15 =  new ioConstantTexture(make_float3(15.f, 15.f, 15.f));
 
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, X_AXIS)); //*green, g_context)); // left wall
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f, false, X_AXIS)); //*red, g_context)); // right wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, X_AXIS)); // left wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f, false, X_AXIS));  // right wall
         geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, false, Y_AXIS)); // light
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, Y_AXIS)); // roof
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f, false, Y_AXIS)); //floor
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f, false, Y_AXIS));  //floor
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, Z_AXIS)); // back wall
 
         materialList.push_back(wallGreen);
@@ -124,7 +124,6 @@ public:
     //std::vector<ioTexture*>  textureList;
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
-
     ioCamera* camera;
 };
 
