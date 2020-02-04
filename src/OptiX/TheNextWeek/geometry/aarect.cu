@@ -59,7 +59,7 @@ RT_PROGRAM void hitRectY(int pid) {
         return;
 
     if (rtPotentialIntersection(t)) {
-        hitRecord.p = theRay.origin + t * theRay.direction;
+        hitRecord.point = theRay.origin + t * theRay.direction;
 
         hitRecord.normal = make_float3(0.f, 1.f, 0.f);
 
@@ -84,7 +84,7 @@ RT_PROGRAM void hitRectZ(int pid) {
         return;
 
     if (rtPotentialIntersection(t)) {
-        hitRecord.p = theRay.origin + t * theRay.direction;
+        hitRecord.point = theRay.origin + t * theRay.direction;
 
         hitRecord.normal = make_float3(0.f, 0.f, 1.f);
 

@@ -23,6 +23,9 @@ rtBuffer<float3, 2> sysOutputBuffer;
 rtDeclareVariable(int, numSamples, , );
 rtDeclareVariable(int, maxRayDepth, , );
 
+// "sky" illumination for misses
+rtDeclareVariable(int, skyLight, , );
+
 inline __device__ float3 removeNaNs(float3 radiance)
 {
     float3 r = radiance;
@@ -34,13 +37,16 @@ inline __device__ float3 removeNaNs(float3 radiance)
 
 inline __device__ float3 missColor(const optix::Ray &theRay)
 {
-  float3 unitDirection = normalize(theRay.direction);
-  float t = 0.5f * (unitDirection.y + 1.0f);
-  // "sky" gradient
-  float3 missColor = (1.0f-t) * make_float3(1.0f, 1.0f, 1.0f)
-      + t * make_float3(0.5f, 0.7f, 1.0f);
-
-  return missColor;
+    if (skyLight) {
+        float3 unitDirection = normalize(theRay.direction);
+        float t = 0.5f * (unitDirection.y + 1.0f);
+        // "sky" gradient
+        float3 missColor = (1.0f-t) * make_float3(1.0f, 1.0f, 1.0f)
+            + t * make_float3(0.5f, 0.7f, 1.0f);
+        return missColor;
+    } else {
+        return make_float3(0.0f); // darkness in the void
+    }
 }
 
 
@@ -64,12 +70,12 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
         }
         else if (thePrd.scatterEvent == Ray_Cancel)
         {
-            return make_float3(0.f);
+            return sampleRadiance * thePrd.emitted;
         }
         else
         {
             // ray is still alive, and got properly bounced
-            sampleRadiance *= thePrd.attenuation;
+            sampleRadiance = thePrd.emitted + sampleRadiance * thePrd.attenuation;
             theRay = optix::make_Ray(
                 thePrd.scattered_origin,
                 thePrd.scattered_direction,
