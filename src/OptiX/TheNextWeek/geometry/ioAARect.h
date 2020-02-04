@@ -2,7 +2,6 @@
 #define IO_AA_RECT_H
 
 #include "ioGeometry.h"
-#include "material/ioMaterial.h"
 
 #include <optix.h>
 #include <optixu/optixpp.h>

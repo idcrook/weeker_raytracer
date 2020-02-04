@@ -21,6 +21,10 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
+  aabox_ptx_c          geometry/aabox.cu
+  )
+
+cuda_compile_and_embed(
   normal_material_ptx_c     material/normalMaterial.cu
   )
 
@@ -71,6 +75,7 @@ add_executable(theNextWeekOptix
   ${sphere_ptx_c}
   ${moving_sphere_ptx_c}
   ${aarect_ptx_c}
+  ${aabox_ptx_c}
   ${normal_material_ptx_c}
   ${lambertian_material_ptx_c}
   ${metal_material_ptx_c}

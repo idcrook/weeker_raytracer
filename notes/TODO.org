@@ -1,0 +1,6 @@
+
+
+** code tasks
+
+ - [ ] move camera.cuh to scene/ <2020-02-04 Tue>
+ - [ ] make utility __device__  math lib
