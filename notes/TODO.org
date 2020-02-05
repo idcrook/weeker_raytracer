@@ -10,8 +10,11 @@
 
  - [ ] debug (turn on rtPrintf)
  - [ ] verbose?
- - [ ] scene selection
- - [ ] dimensions like image width, height, number of samples
+ - [X] scene selection
+ - [-] image parameters
+   - [ ] image width
+   - [ ] image height
+   - [X] number of samples
 
 
 * DONE
