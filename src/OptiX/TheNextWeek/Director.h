@@ -11,39 +11,39 @@
 class Director
 {
 public:
-  Director();
+    Director();
 
-  void init(int width, int height);
-  void destroy();
+    void init(unsigned int width, unsigned int height, unsigned int samples);
+    void destroy();
 
-  void createScene();
-  void renderFrame();
-  void printPPM();
+    void createScene();
+    void renderFrame();
+    void printPPM();
 
-  // int getWidth();
-  // int getHeight();
+    // int getWidth();
+    // int getHeight();
 
 private:
-  int m_Nx;
-  int m_Ny;
-  int m_Ns;
-  int m_maxRayDepth;
+    int m_Nx;
+    int m_Ny;
+    int m_Ns;
+    int m_maxRayDepth;
 
-  optix::Context m_context;
-  optix::Buffer m_outputBuffer;
+    optix::Context m_context;
+    optix::Buffer m_outputBuffer;
 
-  optix::Program m_rayGenProgram;
-  optix::Program m_missProgram;
-  // optix::Program m_exceptionProgram;
+    optix::Program m_rayGenProgram;
+    optix::Program m_missProgram;
+    // optix::Program m_exceptionProgram;
 
-  // Scene Objects
-  ioScene m_scene;
+    // Scene Objects
+    ioScene m_scene;
 
-  void initContext();
-  void initOutputBuffer();
-  void initRayGenProgram();
-  void initMissProgram();
-  // void initExceptionProgram();
+    void initContext();
+    void initOutputBuffer();
+    void initRayGenProgram();
+    void initMissProgram();
+    // void initExceptionProgram();
 };
 
 #endif //!DIRECTOR_H

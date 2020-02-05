@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 
     auto start = std::chrono::system_clock::now();
     //optixSingleton.init(1200, 600);
-    optixSingleton.init(560, 560); // cornell box resolution
+    optixSingleton.init(560, 560, Ns); // cornell box resolution
     std::cerr << "Scene number selected: " << Nscene << std::endl;
     std::cerr << "Number of rays sent per pixel: " << Ns << std::endl;
     optixSingleton.createScene();
