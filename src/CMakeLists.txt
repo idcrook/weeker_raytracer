@@ -28,7 +28,7 @@ if(CMAKE_CUDA_COMPILER)
   #set(CMAKE_CUDA_SEPARABLE_COMPILATION ON) # for multi-target pre-compilations
 
   # Defines OptiX utilities and variables
-  INCLUDE(cmake/configure_optix.cmake)
+  INCLUDE(CMake/configure_optix.cmake)
 else()
   message(STATUS "No CUDA support")
 endif()
@@ -57,10 +57,10 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 
 # Handled within each
-ADD_SUBDIRECTORY( src/Cpp )
+ADD_SUBDIRECTORY( Cpp )
 
 if(CMAKE_CUDA_COMPILER)   # Only if CUDA is available
-  ADD_SUBDIRECTORY( src/Cuda )
-  ADD_SUBDIRECTORY( src/OptiX/InOneWeekend )
-  ADD_SUBDIRECTORY( src/OptiX/TheNextWeek )
+  ADD_SUBDIRECTORY( Cuda )
+  ADD_SUBDIRECTORY( OptiX/InOneWeekend )
+  ADD_SUBDIRECTORY( OptiX/TheNextWeek )
 endif()

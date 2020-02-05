@@ -3,16 +3,8 @@
 
 ** code tasks
 
-- [X] remove callableprog.cuh
-- [X] move camera.cuh to scene/ <2020-02-04 Tue>
-- [X] make lib/ directory for .cuh helpers
-- [X] make helper math lib (lib/vector_utils.cuh)
 - [ ] consolidate dot() and cross() if applicable
 - [ ] add Exception program
-- [ ] push cmake/ and CMakeLists.txt into src/ directory
-   - [ ] move files and update path/relative paths
-   - [ ] check that all targets still build
-   - [ ] Update and trim readme
 
 *** add command line options
 
@@ -20,3 +12,18 @@
  - [ ] verbose?
  - [ ] scene selection
  - [ ] dimensions like image width, height, number of samples
+
+
+* DONE
+
+** code tasks
+
+- [x] remove callableprog.cuh
+- [x] move camera.cuh to scene/ <2020-02-04 Tue>
+- [x] make lib/ directory for .cuh helpers
+- [x] make helper math lib (lib/vector_utils.cuh)
+
+- [x] push cmake/ and CMakeLists.txt into src/ directory
+  - [x] move files and update path/relative paths
+  - [x] check that all targets still build
+  - [x] Update and trim readme
