@@ -7,6 +7,7 @@
 
 extern "C" const char raygen_ptx_c[];
 extern "C" const char miss_ptx_c[];
+// extern "C" const char exception_ptx_c[];
 
 Director::Director() {}
 
@@ -15,6 +16,7 @@ void Director::init(int width, int height)
   m_Nx = width;
   m_Ny = height;
   m_Ns = 1024;
+  //m_Ns = 1024 * 10;
   m_maxRayDepth = 50;
 
   initContext();
@@ -87,6 +89,13 @@ void Director::initMissProgram()
     miss_ptx_c, "missProgram");
   m_context->setMissProgram(0, m_missProgram);
 }
+
+// void Director::initExceptionProgram()
+// {
+//   m_missProgram = m_context->createProgramFromPTXString(
+//     exception_ptx_c, "exceptionProgram");
+//   m_context->setMissProgram(0, m_missProgram);
+// }
 
 void Director::createScene()
 {
