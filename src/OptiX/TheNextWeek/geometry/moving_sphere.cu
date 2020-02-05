@@ -1,7 +1,7 @@
 #include <optix.h>
 #include <optix_world.h>
 
-#include "raydata.cuh"
+#include "../lib/raydata.cuh"
 
 // Sphere variables
 rtDeclareVariable(float3, center0, , );
@@ -14,10 +14,18 @@ rtDeclareVariable(float, time1, , );
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
 rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 
-// The point and normal of intersection
+// The point and normal of intersection. and uv-space location
 //   the "attribute" qualifier is used to communicate between intersection and shading programs
 //   These may only be written between rtPotentialIntersection and rtReportIntersection
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
+
+inline __device__ void get_sphere_uv(const float3 p) {
+	float phi = atan2(p.z, p.x);
+	float theta = asin(p.y);
+
+	hitRecord.u = 1 - (phi + CUDART_PI_F) / (2.f * CUDART_PI_F);
+	hitRecord.v = (theta + CUDART_PIO2_F) / CUDART_PI_F;
+}
 
 inline __device__ float dot(float3 a, float3 b)
 {
@@ -67,6 +75,7 @@ RT_PROGRAM void intersection(int pid)
         {
             hitRecord.point = theRay.origin + t * theRay.direction;
             hitRecord.normal = (hitRecord.point - center(thePrd.gatherTime)) / radius;
+            get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
 
@@ -76,6 +85,7 @@ RT_PROGRAM void intersection(int pid)
         {
             hitRecord.point = theRay.origin + t * theRay.direction;
             hitRecord.normal = (hitRecord.point - center(thePrd.gatherTime)) / radius;
+            get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
 }

@@ -1,0 +1,29 @@
+
+* TODOs for this project
+
+** code tasks
+
+- [ ] consolidate dot() and cross() if applicable
+- [ ] add Exception program
+
+*** add command line options
+
+ - [ ] debug (turn on rtPrintf)
+ - [ ] verbose?
+ - [ ] scene selection
+ - [ ] dimensions like image width, height, number of samples
+
+
+* DONE
+
+** code tasks
+
+- [x] remove callableprog.cuh
+- [x] move camera.cuh to scene/ <2020-02-04 Tue>
+- [x] make lib/ directory for .cuh helpers
+- [x] make helper math lib (lib/vector_utils.cuh)
+
+- [x] push cmake/ and CMakeLists.txt into src/ directory
+  - [x] move files and update path/relative paths
+  - [x] check that all targets still build
+  - [x] Update and trim readme

@@ -2,6 +2,8 @@
 #define RAYDATA_CUH
 
 #include <optix.h>
+// defines CUDART_PI_F
+#include "math_constants.h"
 
 typedef enum
 {
@@ -18,6 +20,7 @@ struct PerRayData
     ScatterEvent scatterEvent;
     float3 scattered_origin;
     float3 scattered_direction;
+    float3 emitted;
     float3 attenuation;
 };
 

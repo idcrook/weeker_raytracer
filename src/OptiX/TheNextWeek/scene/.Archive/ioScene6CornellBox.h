@@ -13,7 +13,6 @@
 
 #include "geometry/ioSphere.h"
 #include "geometry/ioAARect.h"
-#include "geometry/ioAABox.h"
 
 #include "texture/ioTexture.h"
 #include "material/ioNormalMaterial.h"
@@ -24,8 +23,7 @@
 
 #include "scene/ioCamera.h"
 
-// needed for randf()
-#include "../lib/random.cuh"
+#include "random.cuh"
 
 class ioScene
 {
@@ -52,23 +50,6 @@ public:
         materialList.push_back(wallWhite);
         materialList.push_back(wallWhite);
         materialList.push_back(wallWhite);
-
-        // place some objects in the box
-
-        //  Sphere
-        //geometryList.push_back(new ioSphere(265.f, 165.f, 295.f, 165.f));
-        geometryList.push_back(new ioSphere(185.f, 75.f, 155.f, 75.f));
-        materialList.push_back(wallWhite);
-
-        // bigger Sphere
-        geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
-        materialList.push_back(wallWhite);
-
-        // box ioAABox not working
-        // float3 p0 = make_float3(265.f, 0.f, 295.f);
-        // float3 p1 = make_float3(165.f, 330.f, 165.f);
-        // geometryList.push_back(new ioAABox(p0, p1));
-        // materialList.push_back(wallWhite);
 
         uint32_t seed = 0x6314759;
 

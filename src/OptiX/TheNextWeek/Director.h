@@ -1,6 +1,7 @@
 #ifndef DIRECTOR_H
 #define DIRECTOR_H
 
+// Include before the optix includes
 #include "scene/ioScene.h"
 
 #include <optix.h>
@@ -33,6 +34,7 @@ private:
 
   optix::Program m_rayGenProgram;
   optix::Program m_missProgram;
+  // optix::Program m_exceptionProgram;
 
   // Scene Objects
   ioScene m_scene;
@@ -41,6 +43,7 @@ private:
   void initOutputBuffer();
   void initRayGenProgram();
   void initMissProgram();
+  // void initExceptionProgram();
 };
 
 #endif //!DIRECTOR_H

@@ -7,6 +7,7 @@
 
 extern "C" const char raygen_ptx_c[];
 extern "C" const char miss_ptx_c[];
+// extern "C" const char exception_ptx_c[];
 
 Director::Director() {}
 
@@ -15,6 +16,7 @@ void Director::init(int width, int height)
   m_Nx = width;
   m_Ny = height;
   m_Ns = 1024;
+  //m_Ns = 1024 * 10;
   m_maxRayDepth = 50;
 
   initContext();
@@ -42,6 +44,12 @@ void Director::initContext()
   unsigned int DRV_MINOR = 0;
 
   RTresult res;
+  res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MAJOR,
+                             sizeof(DRV_MAJOR), &(DRV_MAJOR));
+  res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MINOR,
+                             sizeof(DRV_MINOR), &(DRV_MINOR));
+  std::cerr << "Display driver version: " << DRV_MAJOR << '.' << DRV_MINOR << std::endl;
+
   res = rtGlobalSetAttribute(RT_GLOBAL_ATTRIBUTE_ENABLE_RTX, sizeof(RTX),
                              &(RTX));
   if (res != RT_SUCCESS) {
@@ -50,15 +58,13 @@ void Director::initContext()
   } else
     std::cerr <<"OptiX RTX execution mode is ON." << std::endl;
 
-  res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MAJOR,
-                             sizeof(DRV_MAJOR), &(DRV_MAJOR));
-  res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MINOR,
-                             sizeof(DRV_MINOR), &(DRV_MINOR));
-  std::cerr << "Display driver version: " << DRV_MAJOR << '.' << DRV_MINOR << std::endl;
-
-
   m_context = optix::Context::create();
   m_context->setRayTypeCount(1);
+
+  // Set Output Debugging via rtPrintf
+  //m_context->setPrintEnabled(1);
+  //m_context->setPrintBufferSize(4096);
+
 }
 
 void Director::initOutputBuffer()
@@ -84,9 +90,16 @@ void Director::initMissProgram()
   m_context->setMissProgram(0, m_missProgram);
 }
 
+// void Director::initExceptionProgram()
+// {
+//   m_missProgram = m_context->createProgramFromPTXString(
+//     exception_ptx_c, "exceptionProgram");
+//   m_context->setMissProgram(0, m_missProgram);
+// }
+
 void Director::createScene()
 {
-  m_scene.init(m_context);
+    m_scene.init(m_context, m_Nx, m_Ny);
 }
 
 void Director::renderFrame()

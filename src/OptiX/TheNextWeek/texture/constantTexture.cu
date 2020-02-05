@@ -1,4 +1,3 @@
-
 #include "texture.cuh"
 
 rtDeclareVariable(float3, color, , );

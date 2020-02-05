@@ -15,14 +15,15 @@ public:
 
   ioDielectricMaterial(float eta) : m_eta(eta) { }
 
-  virtual void init(optix::Context& context) override
+virtual void assignTo(optix::GeometryInstance gi, optix::Context& context)  override
     {
       m_mat = context->createMaterial();
-      optix::Program hit = context->createProgramFromPTXString(
+      gi->setMaterialCount(1);
+      m_mat->setClosestHitProgram(0, context->createProgramFromPTXString(
         dielectric_material_ptx_c, "closestHit"
-        );
-      hit["eta"]->setFloat(m_eta);
-      m_mat->setClosestHitProgram(0, hit);
+        ));
+      gi->setMaterial(/*ray type:*/0, m_mat);
+      gi["eta"]->setFloat(m_eta);
     }
 
 private:

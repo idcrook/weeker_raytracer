@@ -9,7 +9,7 @@ https://github.com/RayTracing/raytracing.github.io
   - [x] Linux C++ builds
   - [x] Linux CUDA C++ builds
   - [x] macOS C++ builds
-  - [ ] macOS CUDA C++ builds
+  - [N/A] macOS CUDA C++ builds
 
 ## C++
 
@@ -23,10 +23,10 @@ https://github.com/RayTracing/raytracing.github.io
 - [ ] The Next Week
 - [ ] Rest Of Life
 
-## Optix CUDA C++
+## Optix
 
-- [ ] In One Weekend
-- [ ] The Next Week
+- [x] In One Weekend
+- [WIP] The Next Week
 - [ ] Rest Of Life
 
 

@@ -30,6 +30,7 @@ public:
 
     void init(optix::Context& context) {
         ioTexture *nullTexture = new ioNullTexture();
+        ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
         ioTexture *constantGrey = new ioConstantTexture(make_float3(0.7f, 0.7f, 0.7f));
         ioTexture *constantGreen = new ioConstantTexture(make_float3(0.2f, 0.3f, 0.1f));
         ioTexture *constantPurple = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.9f));
@@ -43,22 +44,16 @@ public:
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
-        materialList.push_back(new ioLambertianMaterial(0.5f, 0.5f, 0.5f));
-        textureList.push_back(checkered);
+        materialList.push_back(new ioLambertianMaterial(checkered));
 
         // Medium Spheres
         geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
         geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
 
-        materialList.push_back(new ioLambertianMaterial(0.4f, 0.2f, 0.2f));
+        materialList.push_back(new ioLambertianMaterial(constantPurple);
         materialList.push_back(new ioDielectricMaterial(1.5f));
-        materialList.push_back(new ioMetalMaterial(0.7f, 0.6f, 0.5f, 0.2f));
-
-        textureList.push_back(constantPurple);
-        textureList.push_back(nullptr);
-        textureList.push_back(constantGrey);
-
+        materialList.push_back(new ioMetalMaterial(constantGrey, 0.2f));
 
         // Small Spheres
         uint32_t seed = 0x314759;
@@ -84,38 +79,29 @@ public:
                     if (chooseMat < 0.70f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
-                        materialList.push_back(new ioLambertianMaterial(1.f, 1.f, 1.f));
-                        textureList.push_back(new ioConstantTexture(
+                        materialList.push_back(new ioConstantTexture(
                                                   make_float3(randf(seed), randf(seed), randf(seed))));
-
                     }
                     else if (chooseMat < 0.85f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioMetalMaterial(
-                            0.5f, 0.5f, 0.5f, 0.5f*randf(seed))
-                            );
-                        textureList.push_back(new ioConstantTexture(
-                                                  make_float3(0.5f*(1.0f-randf(seed)),
-                                                              0.5f*(1.0f-randf(seed)),
-                                                              0.5f*(1.0f-randf(seed))))
-                                                  );
-
+                            new ioConstantTexture(make_float3(0.5f*(1.0f-randf(seed)),
+                                                             0.5f*(1.0f-randf(seed)),
+                                                             0.5f*(1.0f-randf(seed)))), 
+                                                             0.5f*randf(seed)));
                     }
                     else if (chooseMat < 0.93f)
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioDielectricMaterial(1.5f));
-                        textureList.push_back(nullptr);
                     }
                     else
                     {
                         geometryList.push_back(new ioSphere(x,y,z, 0.2f));
                         materialList.push_back(new ioDielectricMaterial(1.5f));
-                        textureList.push_back(nullptr);
                         geometryList.push_back(new ioSphere(x,y,z, -(0.2f-0.007f)));
                         materialList.push_back(new ioDielectricMaterial(1.5f));
-                        textureList.push_back(nullptr);
                     }
                 }
             }

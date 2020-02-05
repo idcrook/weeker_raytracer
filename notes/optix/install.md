@@ -34,17 +34,60 @@ sudo update-alternatives --config g++
 Must set to gcc-8 for compiles to work
 
 
-## runtime error
+
+## install SDK examples
+
+Optix 6.5
 
 ```
-build/src/OptiX/InOneWeekend/inOneWeekendOptix >! output/intro_1.ppm
-terminate called after throwing an instance of 'optix::Exception'
-  what():  Variable not found (Details: Function "RTresult _rtContextValidate(RTcontext)" caught exception: Variable "Unresolved reference to variable world from _Z13rayGenProgramv" not found in scope)
-[1]    19505 abort (core dumped)  build/src/OptiX/InOneWeekend/inOneWeekendOptix >| output/intro_1.ppm
+# there may be other dependencies
+sudo apt-get install freeglut3-dev
+cd /usr/local/nvidia/NVIDIA-OptiX-SDK-6.5.0-linux64/SDK
+cmake -B build .
+cmake --build build
+```
 
 
-strings build/src/OptiX/InOneWeekend/CMakeFiles/inOneWeekendOptix.dir/cuda_compile_ptx_3_generated_raygen.cu.ptx_embedded.c.o | grep _Z13rayGenProgramv
-	// .globl	_Z13rayGenProgramv
-.visible .entry _Z13rayGenProgramv(
-──────────────────────────────────────────────────────────────
+Optix 7.0
+
+installs, but with warnings about OpenEXR missing
+
+```
+Could NOT find OpenEXR (missing: OpenEXR_IlmImf_RELEASE OpenEXR_Half_RELEASE OpenEXR_Iex_RELEASE OpenEXR_Imath_RELEASE Open
+EXR_IlmThread_RELEASE OpenEXR_INCLUDE_DIR) (found version "")
+CMake Warning at optixDemandTexture/CMakeLists.txt:62 (message):
+  OpenEXR not found (see OpenEXR_ROOT).  Will use procedural texture in
+  optixDemandTexture.
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11")
+-- Found ZlibStatic: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11")
+-- Could NOT find OpenEXR (missing: OpenEXR_IlmImf_RELEASE OpenEXR_Half_RELEASE OpenEXR_Iex_RELEASE OpenEXR_Imath_RELEASE Open
+EXR_IlmThread_RELEASE OpenEXR_INCLUDE_DIR) (found version "")
+CMake Warning at optixDemandTextureAdvanced/CMakeLists.txt:62 (message):
+  OpenEXR not found (see OpenEXR_ROOT).  Will use procedural texture in
+  optixDemandTextureAdvanced.
+```
+
+build
+
+```
+# there may be other dependencies
+sudo  apt install openexr openexr-doc openexr-viewers libopenexr-dev
+cd /usr/local/nvidia/NVIDIA-OptiX-SDK-7.0.0-linux64/SDK
+cmake -B build .
+cmake --build build
+```
+
+still have openexr related warnings
+
+```
+Could NOT find OpenEXR (missing: OpenEXR_INCLUDE_DIR) (found version "")
+CMake Warning at optixDemandTexture/CMakeLists.txt:62 (message):
+  OpenEXR not found (see OpenEXR_ROOT).  Will use procedural texture in
+  optixDemandTexture.
+-- Found ZLIB: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11")
+-- Found ZlibStatic: /usr/lib/x86_64-linux-gnu/libz.so (found version "1.2.11")
+-- Could NOT find OpenEXR (missing: OpenEXR_INCLUDE_DIR) (found version "")
+CMake Warning at optixDemandTextureAdvanced/CMakeLists.txt:62 (message):
+  OpenEXR not found (see OpenEXR_ROOT).  Will use procedural texture in
+  optixDemandTextureAdvanced.
 ```

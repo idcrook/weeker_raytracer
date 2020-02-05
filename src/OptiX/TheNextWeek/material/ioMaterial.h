@@ -12,19 +12,19 @@ class ioMaterial
 public:
     ioMaterial() { }
 
-    virtual void init(optix::Context& context) = 0;
-
-    virtual void destroy()
-        {
+    virtual void destroy() {
+        // in case materials are re-used, only need to be destroyed once
+        if (m_mat) {
             m_mat->destroy();
+            m_mat = nullptr;
         }
+    }
 
-    optix::Material get()
-        {
-            return m_mat;
-        }
+    optix::Material get() {
+        return m_mat;
+    }
 
-    // virtual void assignTo(optix::GeometryInstance gi, optix::Context &g_context) const = 0;
+    virtual void assignTo(optix::GeometryInstance gi, optix::Context &context) = 0;
 
 protected:
     optix::Material m_mat;

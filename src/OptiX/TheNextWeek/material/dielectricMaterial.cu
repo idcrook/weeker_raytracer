@@ -1,8 +1,8 @@
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
 
-#include "raydata.cuh"
-#include "sampling.cuh"
+#include "../lib/raydata.cuh"
+#include "../lib/sampling.cuh"
 
 // Ray state variables
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
@@ -23,6 +23,10 @@ inline __device__ float fresnelSchlick(
     float r0 = (etaI-etaT) / (etaI+etaT);
     r0 = r0*r0;
     return r0 + (1.f-r0)*powf((1.f-cosThetaI), 5.f);
+}
+
+inline __device__ float3 emitted(){
+    return make_float3(0.f, 0.f, 0.f);
 }
 
 RT_PROGRAM void closestHit()
@@ -81,11 +85,12 @@ RT_PROGRAM void closestHit()
         }
     }
 
-    if(cosThetaI > 1.0f)
-        printf("costThetaI is greater than unity: %f", cosThetaI);
-    if(!(sinThetaI == sinThetaI))
-        printf("sinThetaI is NaN: %f", sinThetaI);
+    // if(cosThetaI > 1.0f)
+    //     printf("costThetaI is greater than unity: %f", cosThetaI);
+    // if(!(sinThetaI == sinThetaI))
+    //     printf("sinThetaI is NaN: %f", sinThetaI);
 
+    thePrd.emitted = emitted();
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
