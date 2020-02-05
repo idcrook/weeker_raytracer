@@ -34,17 +34,15 @@ sudo update-alternatives --config g++
 Must set to gcc-8 for compiles to work
 
 
-## runtime error
+
+## install SDK examples
+
+Optix 6.5
 
 ```
-build/src/OptiX/InOneWeekend/inOneWeekendOptix >! output/intro_1.ppm
-terminate called after throwing an instance of 'optix::Exception'
-  what():  Variable not found (Details: Function "RTresult _rtContextValidate(RTcontext)" caught exception: Variable "Unresolved reference to variable world from _Z13rayGenProgramv" not found in scope)
-[1]    19505 abort (core dumped)  build/src/OptiX/InOneWeekend/inOneWeekendOptix >| output/intro_1.ppm
-
-
-strings build/src/OptiX/InOneWeekend/CMakeFiles/inOneWeekendOptix.dir/cuda_compile_ptx_3_generated_raygen.cu.ptx_embedded.c.o | grep _Z13rayGenProgramv
-	// .globl	_Z13rayGenProgramv
-.visible .entry _Z13rayGenProgramv(
-──────────────────────────────────────────────────────────────
+# there may be other dependencies
+sudo apt-get install freeglut3-dev
+cd /usr/local/nvidia/NVIDIA-OptiX-SDK-6.5.0-linux64/SDK
+cmake -B build .
+cmake --build build
 ```
