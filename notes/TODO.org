@@ -1,10 +1,14 @@
 
 * TODOs for this project
 
+** code cleanup tasks
+
+- [ ] consolidate dot() and cross() if applicable
+- [ ] add Exception program
 
 ** feature impl. tasks
 
-- [ ] multiple, selectable scenes
+- [X] multiple, selectable scenes
 - [ ] Instances (ch7 TNW) and Group and Transform optixpp objects
 - [ ] Volumes (ch8 TNW) aka participating media
 
@@ -16,10 +20,6 @@
 - [ ] Chapter 8 - Mixture Densities
 - [ ] Chapter 10 - Cleaning Up PDF Management
 
-** code cleanup tasks
-
-- [ ] consolidate dot() and cross() if applicable
-- [ ] add Exception program
 
 
 * DONE

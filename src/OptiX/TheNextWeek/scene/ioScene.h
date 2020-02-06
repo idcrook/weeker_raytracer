@@ -32,7 +32,39 @@ class ioScene
 public:
     ioScene() { }
 
-    void init(optix::Context& context, int Nx, int Ny, int Nscene) {
+    int init(optix::Context& context, int Nx, int Ny, int Nscene) {
+
+        optix::GeometryGroup world;
+
+        switch(Nscene){
+        case 0:
+            // Nx = Ny = 1080;
+            world = CornellBox(context, Nx, Ny);
+            break;
+        case 1:
+            world = MovingSpheres(context, Nx, Ny);
+            break;
+        case 2:
+            world = InOneWeekend(context, Nx, Ny);
+            break;
+        default:
+            printf("Error: scene unknown.\n");
+            //system("PAUSE");
+            return 1;
+        }
+
+        // created in each scene
+        camera->init(context);
+
+        // Setting World Variable
+        context["sysWorld"]->set(world);
+    }
+
+    optix::GeometryGroup InOneWeekend(optix::Context& context, int Nx, int Ny)  {}
+    optix::GeometryGroup MovingSpheres(optix::Context& context, int Nx, int Ny) {}
+
+    optix::GeometryGroup CornellBox(optix::Context& context, int Nx, int Ny) {
+
         sceneDescription = "Cornell box";
 
         ioMaterial *wallRed = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.65f, 0.05f, 0.05f)));
@@ -95,9 +127,6 @@ public:
         for (int i = 0; i < geoInstList.size(); i++)
             geometryGroup.addChild(geoInstList[i]);
 
-        // Setting World Variable
-        context["sysWorld"]->set(geometryGroup.get());
-
         // Create and Init our scene camera
         camera = new ioPerspectiveCamera(
             278.f, 278.f, -800.f,
@@ -108,18 +137,14 @@ public:
             /*focus_distance*/10.f
             );
 
-        // camera = new ioOrthographicCamera(
-        //     13.0f, 2.0f, 3.0f,
-        //     -1.2f, 0.0f, 0.0f,
-        //     0.0f, 1.0f, 0.0f,
-        //     3.5f, 7.f
-        //     );
-
-        camera->init(context);
-
         //context["skyLight"]->setInt(true);
         context["skyLight"]->setInt(false);
+
+        return geometryGroup.get();
     }
+
+
+
 
     void destroy()
         {
@@ -141,10 +166,10 @@ public:
 public:
     std::vector<ioMaterial*> materialList;
     std::vector<ioGeometry*> geometryList;
-    //std::vector<ioTexture*>  textureList;
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
     ioCamera* camera;
+    //optix::GeometryGroup world;
     std::string sceneDescription;
 };
 
