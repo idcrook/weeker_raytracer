@@ -8,8 +8,8 @@
 
 *** add command line options
 
- - [ ] debug (turn on rtPrintf)
- - [ ] verbose?
+ - [ ] debug (turn on rtPrintf, e.g.)
+ - [X] verbose?
  - [X] scene selection
  - [-] image parameters
    - [ ] image width

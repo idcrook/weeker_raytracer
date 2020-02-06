@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 
     int Nscene = 0;
     int Ns = 1024;
+    bool Qverbose = false;
 
     InputParser cl_input(argc, argv);
     if(cl_input.cmdOptionExists("-h")){
@@ -38,12 +39,17 @@ int main(int argc, char* argv[])
     -dy Ny         (TBD) Output image height (y dimension)
 
     -h             This help message.
-    -v             (TBD) Verbose
+    -v             Verbose output.
     -g             (TBD) Debug
 
 )";
         std::exit( exit_code );
     }
+
+    if(cl_input.cmdOptionExists("-v")) {
+        Qverbose = true;
+    }
+
     const std::string &sceneNumber = cl_input.getCmdOption("-s");
     try {
         if (!sceneNumber.empty()){
@@ -79,14 +85,18 @@ int main(int argc, char* argv[])
         std::cerr << "Invalid scene number: " << sceneNumber << std::endl;
     }
 
-    Director optixSingleton = Director();
+    Director optixSingleton = Director(Qverbose);
 
 
     auto start = std::chrono::system_clock::now();
     //optixSingleton.init(1200, 600);
-    optixSingleton.init(560, 560, Ns); // cornell box resolution
-    std::cerr << "INFO: Number of rays sent per pixel: " << Ns << std::endl;
-    std::cerr << "INFO: Scene number selected: " << Nscene << std::endl;
+    //optixSingleton.init(560, 560, Ns); // cornell box resolution
+    optixSingleton.init(1120, 1120, Ns); // cornell box resolution
+
+    if (Qverbose) {
+        std::cerr << "INFO: Number of rays sent per pixel: " << Ns << std::endl;
+        std::cerr << "INFO: Scene number selected: " << Nscene << std::endl;
+    }
     optixSingleton.createScene(Nscene);
 
     optixSingleton.renderFrame();

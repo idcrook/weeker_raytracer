@@ -9,8 +9,6 @@ extern "C" const char raygen_ptx_c[];
 extern "C" const char miss_ptx_c[];
 // extern "C" const char exception_ptx_c[];
 
-Director::Director() {}
-
 void Director::init(unsigned int width, unsigned int height,
                     unsigned int samples)
 {
@@ -44,19 +42,22 @@ void Director::initContext()
     unsigned int DRV_MINOR = 0;
 
     RTresult res;
-    res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MAJOR,
-                               sizeof(DRV_MAJOR), &(DRV_MAJOR));
-    res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MINOR,
-                               sizeof(DRV_MINOR), &(DRV_MINOR));
-    std::cerr << "Display driver version: " << DRV_MAJOR << '.' << DRV_MINOR << std::endl;
+    if (_verbose) {
+        res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MAJOR,
+                                   sizeof(DRV_MAJOR), &(DRV_MAJOR));
+        res = rtGlobalGetAttribute(RT_GLOBAL_ATTRIBUTE_DISPLAY_DRIVER_VERSION_MINOR,
+                                   sizeof(DRV_MINOR), &(DRV_MINOR));
+        std::cerr << "INFO: Display driver version: " << DRV_MAJOR << '.' << DRV_MINOR << std::endl;
+    }
 
     res = rtGlobalSetAttribute(RT_GLOBAL_ATTRIBUTE_ENABLE_RTX, sizeof(RTX),
                                &(RTX));
     if (res != RT_SUCCESS) {
         std::cerr << "Error: RTX execution strategy is required. Exiting." << std::endl;
         exit(0);
-    } else
-        std::cerr <<"OptiX RTX execution mode is ON." << std::endl;
+    } else if (_verbose) {
+        std::cerr <<"INFO: OptiX RTX execution mode is ON." << std::endl;
+    }
 
     m_context = optix::Context::create();
     m_context->setRayTypeCount(1);

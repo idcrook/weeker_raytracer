@@ -11,7 +11,7 @@
 class Director
 {
 public:
-    Director();
+    Director(bool verbose) : _verbose(verbose) {}
 
     void init(unsigned int width, unsigned int height, unsigned int samples);
     void destroy();
