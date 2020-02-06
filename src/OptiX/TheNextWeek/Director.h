@@ -16,18 +16,17 @@ public:
     void init(unsigned int width, unsigned int height, unsigned int samples);
     void destroy();
 
-    void createScene();
+    void createScene(unsigned int sceneNumber);
     void renderFrame();
     void printPPM();
-
-    // int getWidth();
-    // int getHeight();
 
 private:
     int m_Nx;
     int m_Ny;
     int m_Ns;
     int m_maxRayDepth;
+
+    bool _verbose = false;
 
     optix::Context m_context;
     optix::Buffer m_outputBuffer;

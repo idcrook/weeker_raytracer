@@ -32,7 +32,8 @@ class ioScene
 public:
     ioScene() { }
 
-    void init(optix::Context& context, int Nx, int Ny) {
+    void init(optix::Context& context, int Nx, int Ny, int Nscene) {
+        sceneDescription = "Cornell box";
 
         ioMaterial *wallRed = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.65f, 0.05f, 0.05f)));
         ioMaterial *wallGreen = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.12f, 0.45f, 0.15f)));
@@ -144,6 +145,7 @@ public:
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
     ioCamera* camera;
+    std::string sceneDescription;
 };
 
 #endif //!IO_SCENE_H

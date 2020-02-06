@@ -97,9 +97,13 @@ void Director::initMissProgram()
 //   m_context->setMissProgram(0, m_missProgram);
 // }
 
-void Director::createScene()
+void Director::createScene(unsigned int sceneNumber)
 {
-    m_scene.init(m_context, m_Nx, m_Ny);
+    m_scene.init(m_context, m_Nx, m_Ny, sceneNumber);
+    if (_verbose) {
+        std::string desc = m_scene.sceneDescription;
+        std::cerr << "INFO: Scene description: " << desc << std::endl;
+    }
 }
 
 void Director::renderFrame()
@@ -132,12 +136,3 @@ void Director::printPPM()
     }
     m_outputBuffer->unmap();
 }
-
-// int Director::getWidth()
-// {
-//   return m_Nx;
-// }
-// int Director::getHeight()
-// {
-//   return m_Ny;
-// }
