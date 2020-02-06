@@ -5,7 +5,7 @@
 
 // Image I/O
 // define STB_IMAGE*_IMPLEMENTATION-s only once (e.g. in .cpp file)
-#define STB_IMAGE_IMPLEMENTATION1
+#define STB_IMAGE_IMPLEMENTATION
 // #define STB_IMAGE_WRITE_IMPLEMENTATION // not yet used
 #include "../external/rtw_stb_image.h"
 
@@ -29,9 +29,10 @@
 int main(int argc, char* argv[])
 {
     int exit_code = EXIT_SUCCESS;
+
+    // default values
     int Nx = 1200;
     int Ny = 600;
-
     int Nscene = 0;
     int Ns = 1024;
     bool Qverbose = false;
@@ -39,12 +40,12 @@ int main(int argc, char* argv[])
 
     InputParser cl_input(argc, argv);
     if(cl_input.cmdOptionExists("-h")){
-        std::cout << std::endl <<  " HELP - " << argv[0] << std::endl;
-        std::cout << R"(
+        std::cerr << std::endl <<  " HELP - " << argv[0] << std::endl;
+        std::cerr << R"(
     -s N           Scene Selection number N (N: 0, 1, 2, etc.)
-    -n N           Sample each pixel N times (N: 1, 2, etc.)
-    -dx Nx         (TBD) Output image width (x dimension)
-    -dy Ny         (TBD) Output image height (y dimension)
+    -ns N          Sample each pixel N times (N: 1, 2, etc.)
+    -dx Nx         Output image width (x dimension)
+    -dy Ny         Output image height (y dimension)
 
     -h             This help message.
     -v             Verbose output.
@@ -76,7 +77,7 @@ int main(int argc, char* argv[])
         std::cerr << "Invalid scene number: " << sceneNumber << std::endl;
     }
 
-    const std::string &numberOfSamples = cl_input.getCmdOption("-n");
+    const std::string &numberOfSamples = cl_input.getCmdOption("-ns");
     try {
         if (!numberOfSamples.empty()){
             std::size_t pos;
