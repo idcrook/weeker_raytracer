@@ -11,7 +11,7 @@
 class Director
 {
 public:
-    Director(bool verbose) : _verbose(verbose) {}
+    Director(bool verbose, bool debug) : _verbose(verbose), _debug(debug) {}
 
     void init(unsigned int width, unsigned int height, unsigned int samples);
     void destroy();
@@ -25,8 +25,6 @@ private:
     int m_Ny;
     int m_Ns;
     int m_maxRayDepth;
-
-    bool _verbose = false;
 
     optix::Context m_context;
     optix::Buffer m_outputBuffer;
@@ -43,6 +41,9 @@ private:
     void initRayGenProgram();
     void initMissProgram();
     // void initExceptionProgram();
+
+    bool _verbose = false;
+    bool _debug = false;
 };
 
 #endif //!DIRECTOR_H

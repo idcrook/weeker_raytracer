@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
     int Nscene = 0;
     int Ns = 1024;
     bool Qverbose = false;
+    bool Qdebug = false;
 
     InputParser cl_input(argc, argv);
     if(cl_input.cmdOptionExists("-h")){
@@ -40,15 +41,17 @@ int main(int argc, char* argv[])
 
     -h             This help message.
     -v             Verbose output.
-    -g             (TBD) Debug
+    -g             Debug output.
 
 )";
         std::exit( exit_code );
     }
 
-    if(cl_input.cmdOptionExists("-v")) {
+    if(cl_input.cmdOptionExists("-v"))
         Qverbose = true;
-    }
+
+    if(cl_input.cmdOptionExists("-g"))
+        Qdebug = true;
 
     const std::string &sceneNumber = cl_input.getCmdOption("-s");
     try {
@@ -85,7 +88,7 @@ int main(int argc, char* argv[])
         std::cerr << "Invalid scene number: " << sceneNumber << std::endl;
     }
 
-    Director optixSingleton = Director(Qverbose);
+    Director optixSingleton = Director(Qverbose, Qdebug);
 
 
     auto start = std::chrono::system_clock::now();

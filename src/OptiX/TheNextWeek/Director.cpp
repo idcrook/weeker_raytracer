@@ -63,8 +63,10 @@ void Director::initContext()
     m_context->setRayTypeCount(1);
 
     // Set Output Debugging via rtPrintf
-    //m_context->setPrintEnabled(1);
-    //m_context->setPrintBufferSize(4096);
+    if (_debug) {
+        m_context->setPrintEnabled(1);
+        // default: 32676? // m_context->setPrintBufferSize(4096);
+    }
 
 }
 
