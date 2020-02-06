@@ -18,12 +18,19 @@
 // Parse command line arguments and options
 #include "InputParser.h"
 
-#define Nscene_MAX  (3)
+#define Nx_MIN  (320)
+#define Ny_MIN  (200)
+// set maximum resolution to standard 4K dimensions
+#define Nx_MAX  (3840)
+#define Ny_MAX  (2160)
+#define Nscene_MAX  (3)   // will need to track actuals
 #define Ns_MAX  (1024*10)
 
 int main(int argc, char* argv[])
 {
     int exit_code = EXIT_SUCCESS;
+    int Nx = 1200;
+    int Ny = 600;
 
     int Nscene = 0;
     int Ns = 1024;
@@ -85,18 +92,62 @@ int main(int argc, char* argv[])
             }
         }
     } catch (std::invalid_argument const &ex) {
-        std::cerr << "Invalid scene number: " << sceneNumber << std::endl;
+        std::cerr << "Invalid number of samples: " << numberOfSamples << std::endl;
+    }
+
+    const std::string &dimWidth = cl_input.getCmdOption("-dx");
+    try {
+        if (!dimWidth.empty()){
+            std::size_t pos;
+            int x = std::stoi(dimWidth, &pos);
+            // std::cerr << pos << std::endl;
+            if (x >= Nx_MIN and x <= Nx_MAX) {
+                Nx = x;
+            } else {
+                std::cerr << "WARNING: Width (-dx) " << x << " out of range. ";
+                if (x > Nx_MAX) {
+                    Nx = Nx_MAX;
+                }
+                if (x < Nx_MIN) {
+                    Nx = Nx_MIN;
+                }
+                std::cerr << "Using a value of " << Nx <<std::endl;
+            }
+        }
+    } catch (std::invalid_argument const &ex) {
+        std::cerr << "Invalid image width (-dx): " << dimWidth << std::endl;
+    }
+
+    const std::string &dimHeight = cl_input.getCmdOption("-dy");
+    try {
+        if (!dimHeight.empty()){
+            std::size_t pos;
+            int x = std::stoi(dimHeight, &pos);
+            // std::cerr << pos << std::endl;
+            if (x >= Ny_MIN and x <= Ny_MAX) {
+                Ny = x;
+            } else {
+                std::cerr << "WARNING: Width (-dy) " << x << " out of range. ";
+                if (x > Ny_MAX) {
+                    Ny = Ny_MAX;
+                }
+                if (x < Ny_MIN) {
+                    Ny = Ny_MIN;
+                }
+                std::cerr << "Using a value of " << Nx <<std::endl;
+            }
+        }
+    } catch (std::invalid_argument const &ex) {
+        std::cerr << "Invalid image height (-dy): " << dimHeight << std::endl;
     }
 
     Director optixSingleton = Director(Qverbose, Qdebug);
 
-
     auto start = std::chrono::system_clock::now();
-    //optixSingleton.init(1200, 600);
-    //optixSingleton.init(560, 560, Ns); // cornell box resolution
-    optixSingleton.init(1120, 1120, Ns); // cornell box resolution
+    optixSingleton.init(Nx, Ny, Ns);
 
     if (Qverbose) {
+        std::cerr << "INFO: Output image dimensions: " << Nx << 'x' << Ny << std::endl;
         std::cerr << "INFO: Number of rays sent per pixel: " << Ns << std::endl;
         std::cerr << "INFO: Scene number selected: " << Nscene << std::endl;
     }
