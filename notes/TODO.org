@@ -10,6 +10,7 @@
 
 - [X] multiple, selectable scenes
 - [ ] Instances (ch7 TNW) and Group and Transform optixpp objects
+   - [ ] add progress output, useful for longer running jobs
 - [ ] Volumes (ch8 TNW) aka participating media
 
 ** Rest Of Life feature breakdown

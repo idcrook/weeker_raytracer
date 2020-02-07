@@ -102,7 +102,12 @@ void Director::initMissProgram()
 
 void Director::createScene(unsigned int sceneNumber)
 {
-    m_scene.init(m_context, m_Nx, m_Ny, sceneNumber);
+    int error = m_scene.init(m_context, m_Nx, m_Ny, sceneNumber);
+    if (error) {
+        int exit_code = EXIT_FAILURE;
+        std::exit( exit_code );
+    }
+
     if (_verbose) {
         std::string desc = m_scene.sceneDescription;
         std::cerr << "INFO: Scene description: " << desc << std::endl;

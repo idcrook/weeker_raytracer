@@ -12,6 +12,7 @@
 #include "geometry/ioGeometryGroup.h"
 
 #include "geometry/ioSphere.h"
+#include "geometry/ioMovingSphere.h"
 #include "geometry/ioAARect.h"
 #include "geometry/ioAABox.h"
 
@@ -38,21 +39,17 @@ public:
 
         switch(Nscene){
         case 0:
-            // Nx = Ny = 1080;
+            // should make it square crop?
             world = CornellBox(context, Nx, Ny);
             break;
         case 1:
             world = MovingSpheres(context, Nx, Ny);
             break;
         case 2:
-            world = InOneWeekend(context, Nx, Ny);
-            break;
-        case 3:
             world = InOneWeekendLight(context, Nx, Ny);
             break;
         default:
-            printf("Error: scene unknown.\n");
-            //system("PAUSE");
+            std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
             return 1;
         }
 
@@ -61,10 +58,125 @@ public:
 
         // Setting World Variable
         context["sysWorld"]->set(world);
+        return 0;
     }
 
-    optix::GeometryGroup InOneWeekend(optix::Context& context, int Nx, int Ny)  {}
-    optix::GeometryGroup MovingSpheres(optix::Context& context, int Nx, int Ny) {}
+    optix::GeometryGroup MovingSpheres(optix::Context& context, int Nx, int Ny) {
+        sceneDescription = "InOneWeekend with moving spheres";
+
+        ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
+        ioTexture *fiftyPercentReddishGrey = new ioConstantTexture(make_float3(0.7f, 0.6f, 0.5f));
+        ioTexture *reddish = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.1f));
+
+        // Big Sphere
+        geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
+        materialList.push_back(new ioLambertianMaterial(fiftyPercentGrey));
+
+        // Medium Spheres
+        geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
+        geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
+        geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
+
+        materialList.push_back(new ioDielectricMaterial(1.5f));
+        materialList.push_back(new ioLambertianMaterial(reddish));
+        materialList.push_back(new ioMetalMaterial(fiftyPercentReddishGrey, 0.1f));
+
+        // Small Spheres
+        uint32_t seed = 0x314759;
+        for (int a = -11; a < 11; a++)
+        {
+            for (int b = -11; b < 11; b++)
+            {
+                float chooseMat = randf(seed);
+                float x = a + 0.8f*randf(seed);
+                float y = 0.2f;
+                float z = b + 0.9f*randf(seed);
+                float z_squared = (z)*(z);
+                float dist = sqrtf(
+                  (x-4.0f)*(x-4.0f) +
+                  //(y-0.2f)*(y-0.2f) +
+                  z_squared
+                );
+
+                 // keep out area near medium spheres
+                if ((dist > 0.9f) ||
+                    ((z_squared > 0.7f) && ((x*x - 16.0f) > -2.f)))
+                {
+                    if (chooseMat < 0.70f)
+                    {
+                        geometryList.push_back(new ioMovingSphere(x,y,z,
+                                                                  x, y + 0.18f ,z,
+                                                                  0.2f,
+                                                                  0.f, 1.f));
+                        materialList.push_back(new ioLambertianMaterial(
+                                                   new ioConstantTexture(make_float3(randf(seed), randf(seed), randf(seed))
+                                                       )));
+                    }
+                    else if (chooseMat < 0.85f)
+                    {
+                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+                        materialList.push_back(new ioMetalMaterial(
+                                                   new ioConstantTexture(make_float3(0.5f*(1.0f-randf(seed)),
+                                                                                     0.5f*(1.0f-randf(seed)),
+                                                                                     0.5f*(1.0f-randf(seed)))),
+                                                   0.5f*randf(seed))
+                        );
+                    }
+                    else if (chooseMat < 0.93f)
+                    {
+                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+                        materialList.push_back(new ioDielectricMaterial(1.5f));
+                    }
+                    else
+                    {
+                        geometryList.push_back(new ioSphere(x,y,z, 0.2f));
+                        materialList.push_back(new ioDielectricMaterial(1.5f));
+                        geometryList.push_back(new ioSphere(x,y,z, -(0.2f-0.007f)));
+                        materialList.push_back(new ioDielectricMaterial(1.5f));
+                    }
+                }
+            }
+        }
+
+        // init all geometry
+        for(int i = 0; i < geometryList.size(); i++)
+            geometryList[i]->init(context);
+
+        // GeometryInstance
+        geoInstList.resize(geometryList.size());
+
+        // Taking advantage of geometryList.size == materialList.size
+        for (int i = 0; i < geoInstList.size(); i++)
+        {
+            geoInstList[i] = ioGeometryInstance();
+            geoInstList[i].init(context);
+            geoInstList[i].setGeometry(*geometryList[i]);
+            materialList[i]->assignTo(geoInstList[i].get(), context);
+        }
+
+        // World & Acceleration
+        geometryGroup.init(context);
+        for (int i = 0; i < geoInstList.size(); i++)
+            geometryGroup.addChild(geoInstList[i]);
+
+        // Create and Init our scene camera
+        camera = new ioPerspectiveCamera(
+            13.0f, 2.0f, 3.0f,
+            0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f,
+            20.0f, float(Nx) / float(Ny),
+            /*aperture*/0.0f,
+            /*focus_distance*/10.f,
+            /* t0 and t1 */0.f, 1.f
+            );
+
+        // Do not have a light in scene
+        context["skyLight"]->setInt(true);
+
+        return geometryGroup.get();
+    }
+
+
 
     optix::GeometryGroup InOneWeekendLight(optix::Context& context, int Nx, int Ny)  {
 
@@ -79,8 +191,7 @@ public:
         ioTexture *black = new ioConstantTexture(make_float3( 0/255.f,  0/255.f,  0/255.f));
 
         ioTexture *checkered = new ioCheckerTexture(reallyDarkGrey, saddleBrown);
-
-        //ioTexture *noise4 = new ioNoiseTexture(4.f);
+        ioTexture *noise4 = new ioNoiseTexture(4.f);
 
         ioTexture *earthGlobeImage = new ioImageTexture("assets/earthmap.jpg");
 
@@ -90,8 +201,8 @@ public:
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
-        //materialList.push_back(new ioLambertianMaterial(noise4));
-        materialList.push_back(new ioLambertianMaterial(checkered));
+        materialList.push_back(new ioLambertianMaterial(noise4));
+        //materialList.push_back(new ioLambertianMaterial(checkered));
 
         // Medium Spheres
         geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
@@ -101,7 +212,6 @@ public:
         materialList.push_back(new ioMetalMaterial(constantGrey, 0.4f));
         materialList.push_back(new ioLambertianMaterial(earthGlobeImage));
         materialList.push_back(new ioDielectricMaterial(1.5f));
-        //materialList.push_back(new ioLambertianMaterial(noise2));
 
         geometryList.push_back(new ioAARect(3.f, 5.f, 0.8f+0.2f, 2.8f+0.7f, -2.f, false, Z_AXIS));
         materialList.push_back(new ioDiffuseLightMaterial(light8));
@@ -305,7 +415,7 @@ public:
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
     ioCamera* camera;
-    //optix::GeometryGroup world;
+    //optix::Group world;
     std::string sceneDescription;
 };
 
