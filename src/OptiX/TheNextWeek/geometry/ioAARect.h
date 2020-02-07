@@ -52,7 +52,7 @@ public:
         m_geo["b0"]->setFloat(m_b0);
         m_geo["b1"]->setFloat(m_b1);
         m_geo["k"]->setFloat(m_k);
-        m_geo["flip"]->setInt(m_flip);
+        //m_geo["flip"]->setInt(m_flip);
     }
 
 private:

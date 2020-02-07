@@ -26,24 +26,23 @@ static __device__ float3 boxNormal(float t, float3 t0, float3 t1) {
 RT_PROGRAM void hitBox(int pid) {
     float3 t0 = (boxMin - theRay.origin) / theRay.direction;
     float3 t1 = (boxMax - theRay.origin) / theRay.direction;
-    float tmin = max_component(min_vec(t0, t1));
-    float tmax = min_component(max_vec(t0, t1));
+    float tMin = max_component(min_vec(t0, t1));
+    float tMax = min_component(max_vec(t0, t1));
 
     // rtPrintf("boxMin(%f,%f,%f)\n", boxMin.x, boxMin.y, boxMin.z);
     // rtPrintf("boxMax(%f,%f,%f)\n", boxMax.x, boxMax.y, boxMax.z);
+    rtPrintf("tMin, tMax: (%f,%f)\n", tMin, tMax);
 
-    if(tmin <= tmax) {
+    if(tMin <= tMax) {
       bool check_second = true;
 
-      if(rtPotentialIntersection(tmin)) {
-        float3 hit_point = theRay.origin + tmin * theRay.direction;
-        hit_point = rtTransformPoint(RT_OBJECT_TO_WORLD, hit_point);
-        hitRecord.point = hit_point;
+      if(rtPotentialIntersection(tMin)) {
+        hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + tMin*theRay.direction);
 
         hitRecord.u = 0.f;
         hitRecord.v = 0.f;
 
-        float3 normal = boxNormal(tmin, t0, t1);
+        float3 normal = boxNormal(tMin, t0, t1);
         normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
         hitRecord.normal = normal;
 
@@ -52,17 +51,14 @@ RT_PROGRAM void hitBox(int pid) {
       }
 
       if(check_second) {
-        if(rtPotentialIntersection(tmax)) {
-            float3 hit_point = theRay.origin + tmax * theRay.direction;
-            hit_point = rtTransformPoint(RT_OBJECT_TO_WORLD, hit_point);
-            hitRecord.point = hit_point;
+        if(rtPotentialIntersection(tMax)) {
+            hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD, theRay.origin + tMax * theRay.direction);
 
             hitRecord.u = 0.f;
             hitRecord.v = 0.f;
 
-            float3 normal = boxNormal(tmax, t0, t1);
-            normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
-            hitRecord.normal = normal;
+            float3 normal = boxNormal(tMax, t0, t1);
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
 
             rtReportIntersection(0);
         }

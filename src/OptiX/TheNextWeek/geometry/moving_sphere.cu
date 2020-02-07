@@ -73,8 +73,8 @@ RT_PROGRAM void intersection(int pid)
     if (t < theRay.tmax && t > theRay.tmin)
         if (rtPotentialIntersection(t))
         {
-            hitRecord.point = theRay.origin + t * theRay.direction;
-            hitRecord.normal = (hitRecord.point - center(thePrd.gatherTime)) / radius;
+            hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + t*theRay.direction);
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, hitRecord.point - center(thePrd.gatherTime)));
             get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
@@ -83,8 +83,8 @@ RT_PROGRAM void intersection(int pid)
     if (t < theRay.tmax && t > theRay.tmin)
         if (rtPotentialIntersection(t))
         {
-            hitRecord.point = theRay.origin + t * theRay.direction;
-            hitRecord.normal = (hitRecord.point - center(thePrd.gatherTime)) / radius;
+            hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + t*theRay.direction);
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, hitRecord.point - center(thePrd.gatherTime)));
             get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
