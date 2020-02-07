@@ -1,11 +1,16 @@
 
 * TODOs for this project
 
+** code cleanup tasks
+
+- [ ] consolidate dot() and cross() if applicable
+- [ ] add Exception program
 
 ** feature impl. tasks
 
-- [ ] multiple, selectable scenes
+- [X] multiple, selectable scenes
 - [ ] Instances (ch7 TNW) and Group and Transform optixpp objects
+   - [ ] add progress output, useful for longer running jobs
 - [ ] Volumes (ch8 TNW) aka participating media
 
 ** Rest Of Life feature breakdown
@@ -16,20 +21,6 @@
 - [ ] Chapter 8 - Mixture Densities
 - [ ] Chapter 10 - Cleaning Up PDF Management
 
-** code cleanup tasks
-
-- [ ] consolidate dot() and cross() if applicable
-- [ ] add Exception program
-
-*** add command line options
-
- - [X] debug (turn on rtPrintf, e.g.)
- - [X] verbose?
- - [X] scene selection
- - [-] image parameters
-   - [ ] image width
-   - [ ] image height
-   - [X] number of samples
 
 
 * DONE
@@ -45,3 +36,13 @@
   - [x] move files and update path/relative paths
   - [x] check that all targets still build
   - [x] Update and trim readme
+
+** add command line options
+
+ - [X] debug (turn on rtPrintf, e.g.)
+ - [X] verbose?
+ - [X] scene selection
+ - [X] image parameters
+   - [X] image width
+   - [X] image height
+   - [X] number of samples

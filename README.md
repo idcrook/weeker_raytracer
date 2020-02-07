@@ -42,6 +42,21 @@ The `time` shell wrapper is obviated when program itself outputs its duration.
 
 A `.ppm` image file is a non-binary (text) format.
 
+#### Advanced example(s) with additional command line parameters
+
+```bash
+build/theNextWeekOptix -v -s 2 -dx 1120 -dy 1120 -ns 1024 >! output/test1.ppm
+```
+
+In this example
+
+-	`-v` sets **verbose** output
+-	`-s 2` selects **scene** number two
+-	`-dx 1120 -dy 1120` sets image to be of width and height **1120x1120**
+-	`-ns 1024` collect **1024** sampled rays per pixel
+
+Not all executables have the same options, or possible have none at all.
+
 Build C++ (Cpp)
 ---------------
 
