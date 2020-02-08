@@ -23,6 +23,7 @@
 #include "material/ioMetalMaterial.h"
 #include "material/ioDielectricMaterial.h"
 #include "material/ioDiffuseLightMaterial.h"
+#include "material/ioIsotropicMaterial.h"
 
 #include "scene/ioCamera.h"
 

@@ -41,6 +41,10 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
+  isotropic_material_ptx_c material/isotropicMaterial.cu
+  )
+
+cuda_compile_and_embed(
   null_texture_ptx_c        texture/nullTexture.cu
   )
 
