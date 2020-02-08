@@ -46,7 +46,6 @@ public:
 
         switch(Nscene){
         case 0:
-            // should make it square crop?
             world = CornellBox(context, Nx, Ny);
             break;
         case 1:
@@ -56,8 +55,10 @@ public:
             world = InOneWeekendLight(context, Nx, Ny);
             break;
         case 3:
-            // should make it square crop?
             world = VolumesCornellBox(context, Nx, Ny);
+            break;
+        case 4:
+            world = TheNextWeek(context, Nx, Ny);
             break;
         default:
             std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
@@ -73,7 +74,7 @@ public:
     }
 
     optix::Group MovingSpheres(optix::Context& context, int Nx, int Ny) {
-        sceneDescription = "InOneWeekend with moving spheres";
+        sceneDescription = "InOneWeekend final scene with moving spheres";
 
         ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
         ioTexture *fiftyPercentReddishGrey = new ioConstantTexture(make_float3(0.7f, 0.6f, 0.5f));
@@ -578,6 +579,99 @@ public:
     }
 
 
+    optix::Group TheNextWeek(optix::Context& context, int Nx, int Ny) {
+        sceneDescription = "The Next Week final scene";
+
+        ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
+        ioTexture *fiftyPercentReddishGrey = new ioConstantTexture(make_float3(0.7f, 0.6f, 0.5f));
+        ioTexture *reddish = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.1f));
+        ioTexture *saddleBrown = new ioConstantTexture(make_float3(139/255.f,  69/255.f,  19/255.f));
+        ioTexture *brown = new ioConstantTexture(make_float3(0.7f, 0.3f, 0.1f));
+
+        ioTexture *light7 =  new ioConstantTexture(make_float3(7.f, 7.f, 7.f));
+
+
+        // light
+        geometryList.push_back(new ioAARect(113.f, 443.f, 127.f, 432.f, 554.f, false, Y_AXIS)); // light
+        materialList.push_back(new ioDiffuseLightMaterial(light7));
+
+        // brown moving sphere
+        float3 center = make_float3(400.f, 400.f, 200.f);
+        float3 center1tr = center + make_float3(30.f, 0.f, 0.f);
+
+        geometryList.push_back(new ioMovingSphere(center.x, center.y, center.z,
+                                                  center1tr.x, center1tr.y, center1tr.z,
+                                                  50.f,
+                                                  0.f, 1.f));
+        materialList.push_back(new ioLambertianMaterial(brown));
+
+
+        // // Big Sphere
+        // geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
+        // materialList.push_back(new ioLambertianMaterial(fiftyPercentGrey));
+
+        // // Medium Spheres
+        // geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
+        // geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
+        // geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
+
+        // materialList.push_back(new ioDielectricMaterial(1.5f));
+        // materialList.push_back(new ioLambertianMaterial(reddish));
+        // materialList.push_back(new ioMetalMaterial(fiftyPercentReddishGrey, 0.1f));
+
+        // // Small Spheres
+        // uint32_t seed = 0x314759;
+        // //for (int a = -11; a < 11; a++)
+
+        // init all geometry
+        for(int i = 0; i < geometryList.size(); i++) {
+            geometryList[i]->init(context);
+        }
+        // GeometryInstance
+        geoInstList.resize(geometryList.size());
+
+        // Taking advantage of geometryList.size == materialList.size
+        for (int i = 0; i < geoInstList.size(); i++)
+        {
+            //std::cerr << i << std::endl;
+            geoInstList[i] = ioGeometryInstance();
+            geoInstList[i].init(context);
+            geoInstList[i].setGeometry(*geometryList[i]);
+            materialList[i]->assignTo(geoInstList[i].get(), context);
+        }
+
+        // World & Acceleration
+        geometryGroup.init(context);  // init() sets acceleration
+        for (int i = 0; i < geoInstList.size(); i++)
+            geometryGroup.addChild(geoInstList[i]);
+
+        topGroup.addChild(geometryGroup.get(), context);
+
+        // Create and Init our scene camera
+        const float3 lookfrom = make_float3(478.f, 278.f, -600.f);
+        const float3 lookat = make_float3(278.f, 278.f, 0.f);
+        const float3 up = make_float3(0.f, 1.f, 0.f);
+        const float fovy = 40.0f;
+        const float aspect = (float(Nx) / float(Ny));
+        const float aperture = (0.f);
+        const float focus_distance = (10.f);
+
+        camera = new ioPerspectiveCamera(
+            lookfrom.x, lookfrom.y, lookfrom.z,
+            lookat.x, lookat.y, lookat.z,
+            up.x, up.y, up.z,
+            fovy, aspect,
+            aperture,
+            focus_distance,
+            /* t0 and t1 */0.f, 1.f
+            );
+
+        // Have a light in scene
+        context["skyLight"]->setInt(false);
+
+        return topGroup.get();
+
+    }
 
 
     void destroy()

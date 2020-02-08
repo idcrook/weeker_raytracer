@@ -100,6 +100,8 @@ RT_PROGRAM void rayGenProgram()
     {
         float s = float(theLaunchIndex.x+randf(seed)) / float(theLaunchDim.x);
         float t = float(theLaunchIndex.y+randf(seed)) / float(theLaunchDim.y);
+
+        // generateRay is found in scene/camera.cuh
         optix::Ray theRay = generateRay(s, t, seed);
         float3 sampleRadiance = color(theRay, seed);
 
