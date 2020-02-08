@@ -61,8 +61,6 @@ public:
     }
 
 
-
-
   void destroy()
     {
       m_gg->destroy();

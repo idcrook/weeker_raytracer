@@ -23,7 +23,7 @@
 // set maximum resolution to standard 4K dimensions
 #define Nx_MAX  (3840)
 #define Ny_MAX  (2160)
-#define Nscene_MAX  (2)   // Range [0 .. Nscene_MAX]
+#define Nscene_MAX  (3)   // Range [0 .. Nscene_MAX]
 #define Ns_MAX  (1024*10)
 
 int main(int argc, char* argv[])

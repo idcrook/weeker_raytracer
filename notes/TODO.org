@@ -11,8 +11,10 @@
 
 - [X] multiple, selectable scenes
 - [X] Instances (ch7 TNW) and Group and Transform optixpp objects
-- [ ] Volumes (ch8 TNW) aka participating media
+- [X] Volumes (ch8 TNW) aka participating media
+  - [X] scene: cornell box volumes
 - [ ] scene: TNW final
+- [ ] flatten transformation matrices instead of cascading transforms
 
 ** Rest Of Life feature breakdown
 - [ ] Chapter 4 - Importance Sampling Materials

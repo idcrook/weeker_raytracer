@@ -55,6 +55,10 @@ public:
         case 2:
             world = InOneWeekendLight(context, Nx, Ny);
             break;
+        case 3:
+            // should make it square crop?
+            world = VolumesCornellBox(context, Nx, Ny);
+            break;
         default:
             std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
             return 1;
@@ -381,6 +385,155 @@ public:
                                                                       box2, context),
                                                  context),
                           context);
+
+        uint32_t seed = 0x6314759;
+
+        // init all geometry
+        for(int i = 0; i < geometryList.size(); i++) {
+            geometryList[i]->init(context);
+        }
+        // GeometryInstance
+        geoInstList.resize(geometryList.size());
+
+        // Taking advantage of geometryList.size == materialList.size
+        for (int i = 0; i < geoInstList.size(); i++)
+        {
+            //std::cerr << i << std::endl;
+            geoInstList[i] = ioGeometryInstance();
+            geoInstList[i].init(context);
+            geoInstList[i].setGeometry(*geometryList[i]);
+            materialList[i]->assignTo(geoInstList[i].get(), context);
+        }
+
+        // World & Acceleration
+        geometryGroup.init(context);  // init() sets acceleration
+        for (int i = 0; i < geoInstList.size(); i++)
+            geometryGroup.addChild(geoInstList[i]);
+
+        topGroup.addChild(geometryGroup.get(), context);
+
+        // Create and Init our scene camera
+        camera = new ioPerspectiveCamera(
+            278.f, 278.f, -800.f,
+            278.f, 278.f, 0.f,
+            0.0f, 1.0f, 0.0f,
+            40.0f, float(Nx) / float(Ny),
+            /*aperture*/0.f,
+            /*focus_distance*/10.f
+            );
+
+        //context["skyLight"]->setInt(true);
+        context["skyLight"]->setInt(false);
+
+        return topGroup.get();
+    }
+
+
+    optix::Group VolumesCornellBox(optix::Context& context, int Nx, int Ny) {
+
+        sceneDescription = "Cornell box with volumes (participating media)";
+
+        ioMaterial *wallRed = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.65f, 0.05f, 0.05f)));
+        ioMaterial *wallGreen = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.12f, 0.45f, 0.15f)));
+        ioMaterial *wallWhite = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.73f, 0.73f, 0.73f)));
+        ioTexture* light15 =  new ioConstantTexture(make_float3(15.f, 15.f, 15.f));
+
+        ioMaterial *blackFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.f)));
+        ioMaterial *whiteFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(1.f)));
+
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, X_AXIS)); // left wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f, false, X_AXIS));  // right wall
+        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, false, Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, Y_AXIS)); // roof
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f, false, Y_AXIS));  //floor
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f, true, Z_AXIS)); // back wall
+
+        materialList.push_back(wallGreen);
+        materialList.push_back(wallRed);
+        materialList.push_back(new ioDiffuseLightMaterial(light15));
+        materialList.push_back(wallWhite);
+        materialList.push_back(wallWhite);
+        materialList.push_back(wallWhite);
+
+        // place some objects in the box
+
+        // // bigger Sphere
+        // geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
+        // materialList.push_back(wallWhite);
+
+        // // small sphere
+        // geometryList.push_back(new ioSphere(185.f, 75.f, 155.f, 75.f));
+        // materialList.push_back(wallWhite);
+
+        // // medium glass sphere
+        // geometryList.push_back(new ioSphere(185.f, 105.f, 155.f, 105.f));
+        // materialList.push_back(new ioDielectricMaterial(1.5f));
+
+        // boxes
+        const float z1Theta = -12.5f * (CUDART_PI_F/180.f);
+        float3 b1size = make_float3(165.f,  330.f,   165.f);
+        float3 b1tr = make_float3(265.f, fabs(sinf(z1Theta))*b1size.x + 0.f, 255.f);
+        // //  Rear Box, white wall - transform
+        // optix::GeometryGroup box1 = ioGeometryGroup::createBox(make_float3(0.f), b1size, wallWhite, context);
+        // topGroup.addChild(ioTransform::translate(b1tr,
+        //                                          ioTransform::rotateZ(z1Theta*(180.f/CUDART_PI_F),
+        //                                                               ioTransform::rotateY(15.f,
+        //                                                                                    box1, context),
+        //                                                               context),
+        //                                          context),
+        //                   context);
+
+        // //  Rear Box, Volume, black fog - transform
+        optix::GeometryInstance box1 = ioGeometryInstance::createVolumeBox(make_float3(0.f), b1size, 0.006f, blackFog, context);
+        topGroup.addChild(ioTransform::translate(b1tr,
+                                                 ioTransform::rotateZ(z1Theta*(180.f/CUDART_PI_F),
+                                                                      ioTransform::rotateY(15.f,
+                                                                                           box1, context),
+                                                                      context),
+                                                 context),
+                          context);
+
+
+        float3 b2origin = make_float3(0.f);
+        float3 b2size = make_float3(165.f, 165.f,   165.f);
+        float3 b2tr = make_float3(130.f, 0.f, 65.f);
+        // //  Box, white wall - transform
+        // optix::GeometryGroup box2 = ioGeometryGroup::createBox(make_float3(0.f), b2size, wallWhite, context);
+        // topGroup.addChild(ioTransform::translate(b2tr,
+        //                                          ioTransform::rotateY(-18.f,
+        //                                                               box2, context),
+        //                                          context),
+        //                   context);
+
+        // //  Box, Volume Box - transform
+        // optix::GeometryInstance box2 = ioGeometryInstance::createVolumeBox(make_float3(0.f), b2size,
+        //                                                                 0.005f, whiteFog, context);
+        // topGroup.addChild(ioTransform::translate(b2tr,
+        //                                          ioTransform::rotateY(-18.f,
+        //                                                               box2, context),
+        //                                          context),
+        //                   context);
+
+        // // white fog volume box
+        // b2origin += b2tr;
+        // b2size += b2tr;
+        // geometryList.push_back(new ioVolumeBox(b2origin, b2size, 0.01f));
+        // materialList.push_back(whiteFog);
+
+        // white fog volume sphere - transform
+        b2origin += make_float3(165.f/2.f, 75.f, 165.f/2.f);
+        optix::GeometryInstance sphere2 = ioGeometryInstance::createVolumeSphere(b2origin, 75.f, 0.005f, whiteFog, context);
+        topGroup.addChild(ioTransform::translate(b2tr,
+                                                 sphere2, context),
+                          context);
+
+        // // white fog volume sphere
+        // b2origin += b2tr;
+        // b2origin += make_float3(165.f/2.f, 75.f, 165.f/2.f);
+        // geometryList.push_back(new ioVolumeSphere (b2origin.x , b2origin.y, b2origin.z,
+        //                                           75.f, 0.01f));
+        // materialList.push_back(whiteFog);
+
 
         uint32_t seed = 0x6314759;
 

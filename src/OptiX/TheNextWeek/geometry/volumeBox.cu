@@ -79,7 +79,6 @@ RT_PROGRAM void hitVolume(int pid) {
                 hitRecord.u = 0.f;
                 hitRecord.v = 0.f;
 
-                // FIXME: is the normal we always want?
                 float3 normal = make_float3(1.f, 0.f, 0.f);
                 hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
 
