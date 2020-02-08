@@ -36,7 +36,10 @@ public:
 
     int init(optix::Context& context, int Nx, int Ny, int Nscene) {
 
-        optix::GeometryGroup world;
+        topGroup.init(context);
+        topGroup.get()->setAcceleration(context->createAcceleration("Trbvh"));
+
+        optix::Group world;
 
         switch(Nscene){
         case 0:
@@ -62,7 +65,7 @@ public:
         return 0;
     }
 
-    optix::GeometryGroup MovingSpheres(optix::Context& context, int Nx, int Ny) {
+    optix::Group MovingSpheres(optix::Context& context, int Nx, int Ny) {
         sceneDescription = "InOneWeekend with moving spheres";
 
         ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
@@ -174,12 +177,12 @@ public:
         // Do not have a light in scene
         context["skyLight"]->setInt(true);
 
-        return geometryGroup.get();
+        return topGroup.get();
     }
 
 
 
-    optix::GeometryGroup InOneWeekendLight(optix::Context& context, int Nx, int Ny)  {
+    optix::Group InOneWeekendLight(optix::Context& context, int Nx, int Ny)  {
 
         sceneDescription = "IOW Scene with a light box";
 
@@ -306,11 +309,11 @@ public:
         // Have a light in scene
         context["skyLight"]->setInt(false);
 
-        return geometryGroup.get();
+        return topGroup.get();
 
     }
 
-    optix::GeometryGroup CornellBox(optix::Context& context, int Nx, int Ny) {
+    optix::Group CornellBox(optix::Context& context, int Nx, int Ny) {
 
         sceneDescription = "Cornell box";
 
@@ -344,9 +347,10 @@ public:
         // geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
         // materialList.push_back(wallWhite);
 
-        // box ioAABox not working
-        // float3 p0 = make_float3(265.f, 0.f, 295.f);
-        // float3 p1 = make_float3(165.f, 330.f, 165.f);
+        // box
+        float3 p0 = make_float3(265.f, 0.f, 295.f);
+        float3 p1 = make_float3(165.f, 330.f, 165.f);
+
         // geometryList.push_back(new ioAABox(p0, p1));
         // materialList.push_back(wallWhite);
 
@@ -374,6 +378,8 @@ public:
         for (int i = 0; i < geoInstList.size(); i++)
             geometryGroup.addChild(geoInstList[i]);
 
+        topGroup.addChild(geometryGroup.get(), context);
+
         // Create and Init our scene camera
         camera = new ioPerspectiveCamera(
             278.f, 278.f, -800.f,
@@ -387,7 +393,7 @@ public:
         //context["skyLight"]->setInt(true);
         context["skyLight"]->setInt(false);
 
-        return geometryGroup.get();
+        return topGroup.get();
     }
 
 
@@ -415,7 +421,7 @@ public:
     std::vector<ioGeometry*> geometryList;
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
-    ioGroup group;
+    ioGroup topGroup;
     ioCamera* camera;
     //optix::Group world;
     std::string sceneDescription;
