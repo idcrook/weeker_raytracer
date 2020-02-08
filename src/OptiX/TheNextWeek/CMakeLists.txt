@@ -13,7 +13,11 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  moving_sphere_ptx_c   geometry/moving_sphere.cu
+  moving_sphere_ptx_c   geometry/movingSphere.cu
+  )
+
+cuda_compile_and_embed(
+  volume_sphere_ptx_c   geometry/volumeSphere.cu
   )
 
 cuda_compile_and_embed(

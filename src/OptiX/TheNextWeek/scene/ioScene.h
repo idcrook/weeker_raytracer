@@ -16,6 +16,8 @@
 #include "geometry/ioSphere.h"
 #include "geometry/ioMovingSphere.h"
 #include "geometry/ioAARect.h"
+#include "geometry/ioVolumeBox.h"
+#include "geometry/ioVolumeSphere.h"
 
 #include "texture/ioTexture.h"
 #include "material/ioNormalMaterial.h"

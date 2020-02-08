@@ -25,7 +25,7 @@ rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 // Programs that performs the ray-box intersection
 //
 
-inline __device__ bool hitBoundary(const float tMin, const float tMax, float &rec) {
+inline __device__ bool hit_boundary(const float tMin, const float tMax, float &rec) {
     float3 t0 = (boxMin - theRay.origin) / theRay.direction;
     float3 t1 = (boxMax - theRay.origin) / theRay.direction;
     float temp1 = max_component(min_vec(t0, t1));
@@ -51,40 +51,41 @@ inline __device__ bool hitBoundary(const float tMin, const float tMax, float &re
 
 
 RT_PROGRAM void hitVolume(int pid) {
-  float hitt1, hitt2;
+    float hitt1, hitt2;
 
-  if(hitBoundary(-FLT_MAX, FLT_MAX, hitt1))
-    if(hitBoundary(hitt1 + EPSILON, FLT_MAX, hitt2)){
-      if(hitt1 < theRay.tmin)
-        hitt1 = theRay.tmin;
+    if(hit_boundary(-FLT_MAX, FLT_MAX, hitt1)) {
+        if(hit_boundary(hitt1 + EPSILON, FLT_MAX, hitt2)){
+            if(hitt1 < theRay.tmin)
+                hitt1 = theRay.tmin;
 
-      if(hitt2 > theRay.tmax)
-        hitt2 = theRay.tmax;
+            if(hitt2 > theRay.tmax)
+                hitt2 = theRay.tmax;
 
-      if(hitt1 >= hitt2)
-        return;
+            if(hitt1 >= hitt2)
+                return;
 
-      if(hitt1 < 0.f)
-        hitt1 = 0.f;
+            if(hitt1 < 0.f)
+                hitt1 = 0.f;
 
-      float distanceInsideBoundary = hitt2 - hitt1;
-      distanceInsideBoundary *= optix::length(theRay.direction);
+            float distanceInsideBoundary = hitt2 - hitt1;
+            distanceInsideBoundary *= optix::length(theRay.direction);
 
-      float hitDistance = -(1.f / density) * logf(randf(thePrd.seed));
-      float hitt = hitt1 + (hitDistance / optix::length(theRay.direction));
+            float hitDistance = -(1.f / density) * logf(randf(thePrd.seed));
+            float hitt = hitt1 + (hitDistance / optix::length(theRay.direction));
 
-      if (rtPotentialIntersection(hitt)) {
-        hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + hitt*theRay.direction);
+            if (rtPotentialIntersection(hitt)) {
+                hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + hitt*theRay.direction);
 
-        hitRecord.u = 0.f;
-        hitRecord.v = 0.f;
+                hitRecord.u = 0.f;
+                hitRecord.v = 0.f;
 
-        // FIXME: is the normal we always want?
-        float3 normal = make_float3(1.f, 0.f, 0.f);
-        hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
+                // FIXME: is the normal we always want?
+                float3 normal = make_float3(1.f, 0.f, 0.f);
+                hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
 
-        rtReportIntersection(0);
-      }
+                rtReportIntersection(0);
+            }
+        }
     }
 }
 
@@ -93,10 +94,10 @@ RT_PROGRAM void hitVolume(int pid) {
   in this geometry. Since we handle multiple boxes by having a different
   geometry per box, the'pid' parameter is ignored */
 RT_PROGRAM void getBounds(int pid, float result[6]) {
-  optix::Aabb* aabb = (optix::Aabb*)result;
-  // rtPrintf("boxMin(%f,%f,%f)\n", boxMin.x, boxMin.y, boxMin.z);
-  // rtPrintf("boxMax(%f,%f,%f)\n", boxMax.x, boxMax.y, boxMax.z);
-  // NOTE: assume all components of boxMin are less than  boxMax
-  aabb->m_min = boxMin - make_float3(EPSILON);
-  aabb->m_max = boxMax + make_float3(EPSILON);
+    optix::Aabb* aabb = (optix::Aabb*)result;
+    // rtPrintf("boxMin(%f,%f,%f)\n", boxMin.x, boxMin.y, boxMin.z);
+    // rtPrintf("boxMax(%f,%f,%f)\n", boxMax.x, boxMax.y, boxMax.z);
+    // NOTE: assume all components of boxMin are less than  boxMax
+    aabb->m_min = boxMin - make_float3(EPSILON);
+    aabb->m_max = boxMax + make_float3(EPSILON);
 }
