@@ -174,6 +174,44 @@ public:
         return rotateTransform;
     }
 
+
+    static optix::Transform scale( float3& scale, optix::GeometryInstance gi, optix::Context &context){
+        optix::Matrix4x4 matrix = optix::Matrix4x4::scale(scale);
+
+        optix::GeometryGroup d_world = context->createGeometryGroup();
+        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setChildCount(1);
+        d_world->setChild(0, gi);
+
+        optix::Transform transf = context->createTransform();
+        transf->setChild(d_world);
+        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return transf;
+    }
+
+    static optix::Transform scale(float3& scale, optix::GeometryGroup gg, optix::Context &context){
+        optix::Matrix4x4 matrix = optix::Matrix4x4::scale(scale);
+
+        optix::Transform transf = context->createTransform();
+        transf->setChild(gg);
+        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return transf;
+    }
+
+    static optix::Transform scale(float3& scale, optix::Transform t, optix::Context &context){
+        optix::Matrix4x4 matrix = optix::Matrix4x4::scale(scale);
+
+        optix::Transform transf = context->createTransform();
+        transf->setChild(t);
+        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return transf;
+    }
+
+
 private:
 
     static optix::Matrix4x4 translateMatrix(float3 offset){
@@ -231,10 +269,10 @@ private:
     // rotateZ functions
     static optix::Matrix4x4 rotateMatrixZ(float angle){
         float floatM[16] = {
-             cosf(angle), -sinf(angle), 0.0f, 0.0f,
-             sinf(angle),  cosf(angle), 0.0f, 0.0f,
-                    0.0f,         0.0f, 1.0f, 0.0f,
-                    0.0f,         0.0f, 0.0f, 1.0f
+            cosf(angle), -sinf(angle), 0.0f, 0.0f,
+            sinf(angle),  cosf(angle), 0.0f, 0.0f,
+            0.0f,         0.0f, 1.0f, 0.0f,
+            0.0f,         0.0f, 0.0f, 1.0f
         };
         optix::Matrix4x4 mm(floatM);
 

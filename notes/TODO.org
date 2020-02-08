@@ -5,13 +5,14 @@
 
 - [ ] consolidate dot() and cross() if applicable
 - [ ] add Exception program
+- [ ] add progress output, useful for longer running jobs
 
 ** feature impl. tasks
 
 - [X] multiple, selectable scenes
-- [ ] Instances (ch7 TNW) and Group and Transform optixpp objects
-   - [ ] add progress output, useful for longer running jobs
+- [X] Instances (ch7 TNW) and Group and Transform optixpp objects
 - [ ] Volumes (ch8 TNW) aka participating media
+- [ ] scene: TNW final
 
 ** Rest Of Life feature breakdown
 - [ ] Chapter 4 - Importance Sampling Materials
