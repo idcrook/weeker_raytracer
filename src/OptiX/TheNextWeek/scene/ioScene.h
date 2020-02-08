@@ -7,9 +7,11 @@
 #include <optix.h>
 #include <optixu/optixpp.h>
 
-#include "geometry/ioGeometry.h"
-#include "geometry/ioGeometryInstance.h"
+#include "geometry/ioGroup.h"
+#include "geometry/ioTransform.h"
 #include "geometry/ioGeometryGroup.h"
+#include "geometry/ioGeometryInstance.h"
+#include "geometry/ioGeometry.h"
 
 #include "geometry/ioSphere.h"
 #include "geometry/ioMovingSphere.h"
