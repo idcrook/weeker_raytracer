@@ -50,7 +50,7 @@ public:
 
 
     static optix::Transform rotateAboutPoint(float angleDegrees, float3& point, optix::GeometryInstance gi, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateAboutPointMatrix(-angleDegrees * CUDART_PI_F / 180.f, point);
+        optix::Matrix4x4 matrix = rotateAboutPointMatrix(angleDegrees * CUDART_PI_F / 180.f, point);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
         //d_world->setAcceleration(context->createAcceleration("Trbvh"));
@@ -66,7 +66,7 @@ public:
     }
 
     static optix::Transform rotateX(float angleDegrees, optix::GeometryInstance gi, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixX(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
         //d_world->setAcceleration(context->createAcceleration("Trbvh"));
@@ -82,7 +82,7 @@ public:
     }
 
     static optix::Transform rotateX(float angleDegrees, optix::GeometryGroup gg, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixX(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::Transform translateTransform = context->createTransform();
         translateTransform->setChild(gg);
@@ -92,7 +92,7 @@ public:
     }
 
     static optix::Transform rotateX(float angleDegrees, optix::Transform t, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixX(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::Transform translateTransform = context->createTransform();
         translateTransform->setChild(t);
@@ -102,7 +102,7 @@ public:
     }
 
     static optix::Transform rotateY(float angleDegrees, optix::GeometryInstance gi, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixY(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
         //d_world->setAcceleration(context->createAcceleration("Trbvh"));
@@ -118,7 +118,7 @@ public:
     }
 
     static optix::Transform rotateY(float angleDegrees, optix::GeometryGroup gi,  optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixY(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::Transform transf = context->createTransform();
         transf->setChild(gi);
@@ -128,7 +128,7 @@ public:
     }
 
     static optix::Transform rotateY(float angleDegrees, optix::Transform t, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixY(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::Transform transf = context->createTransform();
         transf->setChild(t);
@@ -139,7 +139,7 @@ public:
 
 
     static optix::Transform rotateZ(float angleDegrees, optix::GeometryInstance gi, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixZ(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
         //d_world->setAcceleration(context->createAcceleration("Trbvh"));
@@ -155,7 +155,7 @@ public:
     }
 
     static optix::Transform rotateZ(float angleDegrees, optix::GeometryGroup gg,  optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixZ(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::Transform rotateTransform = context->createTransform();
         rotateTransform->setChild(gg);
@@ -165,7 +165,7 @@ public:
     }
 
     static optix::Transform rotateZ(float angleDegrees, optix::Transform t, optix::Context &context){
-        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
+        optix::Matrix4x4 matrix = rotateMatrixZ(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::Transform rotateTransform = context->createTransform();
         rotateTransform->setChild(t);
@@ -204,10 +204,10 @@ private:
     // rotateX functions
     static optix::Matrix4x4 rotateMatrixX(float angle){
         float floatM[16] = {
-            1.0f,         0.0f,        0.0f, 0.0f,
-            0.0f,  cosf(angle), sinf(angle), 0.0f,
-            0.0f, -sinf(angle), cosf(angle), 0.0f,
-            0.0f,         0.0f,        0.0f, 1.0f
+            1.0f,         0.0f,         0.0f, 0.0f,
+            0.0f,  cosf(angle), -sinf(angle), 0.0f,
+            0.0f,  sinf(angle),  cosf(angle), 0.0f,
+            0.0f,         0.0f,         0.0f, 1.0f
         };
         optix::Matrix4x4 mm(floatM);
 
@@ -217,10 +217,10 @@ private:
     // rotate  Y functions
     static optix::Matrix4x4 rotateMatrixY(float angle){
         float floatM[16] = {
-            cosf(angle), 0.0f, -sinf(angle), 0.0f,
-            0.0f,  1.0f,         0.0f, 0.0f,
-            sinf(angle), 0.0f,  cosf(angle), 0.0f,
-            0.0f,  0.0f,         0.0f, 1.0f
+            cosf(angle),  0.0f,  sinf(angle), 0.0f,
+            0.0f,         1.0f,         0.0f, 0.0f,
+            -sinf(angle), 0.0f,  cosf(angle), 0.0f,
+            0.0f,         0.0f,         0.0f, 1.0f
         };
         optix::Matrix4x4 mm(floatM);
 
@@ -228,13 +228,13 @@ private:
     }
 
 
-        // rotateZ functions
+    // rotateZ functions
     static optix::Matrix4x4 rotateMatrixZ(float angle){
         float floatM[16] = {
-             cosf(angle), sinf(angle), 0.0f, 0.0f,
-            -sinf(angle), cosf(angle), 0.0f, 0.0f,
-                    0.0f,        0.0f, 1.0f, 0.0f,
-                    0.0f,        0.0f, 0.0f, 1.0f
+             cosf(angle), -sinf(angle), 0.0f, 0.0f,
+             sinf(angle),  cosf(angle), 0.0f, 0.0f,
+                    0.0f,         0.0f, 1.0f, 0.0f,
+                    0.0f,         0.0f, 0.0f, 1.0f
         };
         optix::Matrix4x4 mm(floatM);
 
