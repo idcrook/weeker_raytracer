@@ -201,9 +201,10 @@ public:
 
         ioTexture *earthGlobeImage = new ioImageTexture("assets/earthmap.jpg");
 
-        //ioTexture* light4 =  new ioConstantTexture(make_float3(4.f, 4.f, 4.f));
+        ioTexture* light4 =  new ioConstantTexture(make_float3(4.f, 4.f, 4.f));
         ioTexture* light8 =  new ioConstantTexture(make_float3(8.f, 8.f, 8.f));
-        //ioTexture* light12 =  new ioConstantTexture(make_float3(12.f, 12.f, 12.f));
+        ioTexture* light25 =  new ioConstantTexture(make_float3(25.f, 25.f, 25.f));
+        ioTexture* light16 =  new ioConstantTexture(make_float3(16.f, 16.f, 16.f));
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
@@ -219,9 +220,11 @@ public:
         materialList.push_back(new ioLambertianMaterial(earthGlobeImage));
         materialList.push_back(new ioDielectricMaterial(1.5f));
 
-        geometryList.push_back(new ioAARect(3.f, 5.f, 0.8f+0.2f, 2.8f+0.7f, -2.f, false, Z_AXIS));
-        materialList.push_back(new ioDiffuseLightMaterial(light8));
+        geometryList.push_back(new ioAARect(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f, false, Z_AXIS));
+        materialList.push_back(new ioDiffuseLightMaterial(light16));
 
+        // geometryList.push_back(new ioAARect(-6.f, -1.f, -2.f, 2.f, 10.f, true, Y_AXIS));
+        // materialList.push_back(new ioDiffuseLightMaterial(light4));
 
         // Small Spheres
         uint32_t seed = 0x6314759;
@@ -306,7 +309,7 @@ public:
             0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
             20.0f, float(Nx) / float(Ny),
-            /*aperture*/0.12f,
+            /*aperture*/0.08f,
             /*focus_distance*/10.f
             );
 
