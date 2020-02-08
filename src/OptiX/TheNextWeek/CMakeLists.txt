@@ -21,10 +21,6 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  aabox_ptx_c          geometry/aabox.cu
-  )
-
-cuda_compile_and_embed(
   normal_material_ptx_c     material/normalMaterial.cu
   )
 
