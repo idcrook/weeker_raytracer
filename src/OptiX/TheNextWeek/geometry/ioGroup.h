@@ -25,7 +25,7 @@ public:
         gg->setChild(0, gi);
 
         int i = m_group->getChildCount();
-        std::cerr << "DEBUG: Group child count: " << i  << std::endl;
+        // std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
         m_group->setChild(i, gg);
         m_group->getAcceleration()->markDirty();
@@ -33,7 +33,7 @@ public:
 
     void addChild(optix::GeometryGroup gg, optix::Context &context){
         int i = m_group->getChildCount();
-        std::cerr << "DEBUG: Group child count: " << i  << std::endl;
+        // std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
         m_group->setChild(i, gg);
         m_group->getAcceleration()->markDirty();
@@ -41,7 +41,7 @@ public:
 
     void addChild(optix::Transform t, optix::Context &context){
         int i = m_group->getChildCount();
-        std::cerr << "DEBUG: Group child count: " << i  << std::endl;
+        // std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
         m_group->setChild(i, t);
         m_group->getAcceleration()->markDirty();

@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
     bool Qdebug = false;
 
     InputParser cl_input(argc, argv);
-    if(cl_input.cmdOptionExists("-h")){
+    if(cl_input.cmdOptionExists("-h") or cl_input.cmdOptionExists("--help")) {
         std::cerr << std::endl <<  " HELP - " << argv[0] << std::endl;
         std::cerr << R"(
     -s N           Scene Selection number N (N: 0, 1, 2, etc.)
