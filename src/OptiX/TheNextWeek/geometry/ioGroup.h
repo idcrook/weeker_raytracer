@@ -17,9 +17,10 @@ public:
 
 
     // groups and primitives to the hierarchy
-    void addChild(optix::GeometryInstance gi,  optix::Context &g_context){
-        optix::GeometryGroup gg = g_context->createGeometryGroup();
-        gg->setAcceleration(g_context->createAcceleration("Trbvh"));
+    void addChild(optix::GeometryInstance gi,  optix::Context &context){
+        optix::GeometryGroup gg = context->createGeometryGroup();
+        //gg->setAcceleration(context->createAcceleration("Trbvh"));
+        gg->setAcceleration(context->createAcceleration("NoAccel"));
         gg->setChildCount(1);
         gg->setChild(0, gi);
 
@@ -30,7 +31,7 @@ public:
         m_group->getAcceleration()->markDirty();
     }
 
-    void addChild(optix::GeometryGroup gg, optix::Context &g_context){
+    void addChild(optix::GeometryGroup gg, optix::Context &context){
         int i = m_group->getChildCount();
         std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
@@ -38,11 +39,11 @@ public:
         m_group->getAcceleration()->markDirty();
     }
 
-    void addChild(optix::Transform gi,  optix::Context &g_context){
+    void addChild(optix::Transform t, optix::Context &context){
         int i = m_group->getChildCount();
         std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
-        m_group->setChild(i, gi);
+        m_group->setChild(i, t);
         m_group->getAcceleration()->markDirty();
     }
 

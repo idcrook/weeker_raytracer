@@ -354,23 +354,23 @@ public:
         // materialList.push_back(wallWhite);
 
         // boxes
-        float3 b1p0 = make_float3(0.f);
-        float3 b1p1 = make_float3(165.f, 330.f,   165.f);
+        float3 b1size = make_float3(165.f, 330.f,   165.f);
         float3 b1tr = {265.f, 0.f, 255.f};
-        b1p0 += b1tr;
-        b1p1 += b1tr;
+        optix::GeometryGroup box1 = ioGeometryGroup::createBox(make_float3(0.f), b1size, wallWhite, context);
+        topGroup.addChild(ioTransform::translate(b1tr,
+                                                 ioTransform::rotateY(15.f,
+                                                                      box1, context),
+                                                 context),
+                          context);
 
-        float3 b2p0 = make_float3(0.f);
-        float3 b2p1 = make_float3(165.f, 165.f,   165.f);
+        float3 b2size = make_float3(165.f, 165.f,   165.f);
         float3 b2tr = {130.f, 0.f, 65.f};
-        b2p0 += b2tr;
-        b2p1 += b2tr;
-
-        optix::GeometryGroup box1 = ioGeometryGroup::createBox(b1p0, b1p1, wallWhite, context);
-        topGroup.addChild(box1, context);
-
-        optix::GeometryGroup box2 = ioGeometryGroup::createBox(b2p0, b2p1, wallWhite, context);
-        topGroup.addChild(box2, context);
+        optix::GeometryGroup box2 = ioGeometryGroup::createBox(make_float3(0.f), b2size, wallWhite, context);
+        topGroup.addChild(ioTransform::translate(b2tr,
+                                                 ioTransform::rotateY(-18.f,
+                                                                      box2, context),
+                                                 context),
+                          context);
 
         uint32_t seed = 0x6314759;
 

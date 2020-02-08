@@ -12,6 +12,170 @@ class ioTransform
 {
 public:
 
+    static optix::Transform translate(float3& offset, optix::GeometryInstance gi, optix::Context &context){
+        optix::Matrix4x4 matrix = translateMatrix(offset);
+
+        optix::GeometryGroup d_world = context->createGeometryGroup();
+        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setChildCount(1);
+        d_world->setChild(0, gi);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(d_world);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform translate(float3& offset, optix::GeometryGroup gg, optix::Context &context){
+        optix::Matrix4x4 matrix = translateMatrix(offset);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(gg);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform translate(float3& offset, optix::Transform t, optix::Context &context){
+        optix::Matrix4x4 matrix = translateMatrix(offset);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(t);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+
+    static optix::Transform rotateAboutPoint(float angleDegrees, float3& point, optix::GeometryInstance gi, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateAboutPointMatrix(-angleDegrees * CUDART_PI_F / 180.f, point);
+
+        optix::GeometryGroup d_world = context->createGeometryGroup();
+        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setChildCount(1);
+        d_world->setChild(0, gi);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(d_world);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform rotateX(float angleDegrees, optix::GeometryInstance gi, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::GeometryGroup d_world = context->createGeometryGroup();
+        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setChildCount(1);
+        d_world->setChild(0, gi);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(d_world);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform rotateX(float angleDegrees, optix::GeometryGroup gg, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(gg);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform rotateX(float angleDegrees, optix::Transform t, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(t);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform rotateY(float angleDegrees, optix::GeometryInstance gi, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::GeometryGroup d_world = context->createGeometryGroup();
+        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setChildCount(1);
+        d_world->setChild(0, gi);
+
+        optix::Transform translateTransform = context->createTransform();
+        translateTransform->setChild(d_world);
+        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return translateTransform;
+    }
+
+    static optix::Transform rotateY(float angleDegrees, optix::GeometryGroup gi,  optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::Transform transf = context->createTransform();
+        transf->setChild(gi);
+        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return transf;
+    }
+
+    static optix::Transform rotateY(float angleDegrees, optix::Transform t, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::Transform transf = context->createTransform();
+        transf->setChild(t);
+        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return transf;
+    }
+
+
+    static optix::Transform rotateZ(float angleDegrees, optix::GeometryInstance gi, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::GeometryGroup d_world = context->createGeometryGroup();
+        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setChildCount(1);
+        d_world->setChild(0, gi);
+
+        optix::Transform transf = context->createTransform();
+        transf->setChild(d_world);
+        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return transf;
+    }
+
+    static optix::Transform rotateZ(float angleDegrees, optix::GeometryGroup gg,  optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::Transform rotateTransform = context->createTransform();
+        rotateTransform->setChild(gg);
+        rotateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return rotateTransform;
+    }
+
+    static optix::Transform rotateZ(float angleDegrees, optix::Transform t, optix::Context &context){
+        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
+
+        optix::Transform rotateTransform = context->createTransform();
+        rotateTransform->setChild(t);
+        rotateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
+
+        return rotateTransform;
+    }
+
+private:
+
     static optix::Matrix4x4 translateMatrix(float3 offset){
         float floatM[16] = {
             1.0f, 0.0f, 0.0f, offset.x,
@@ -24,42 +188,6 @@ public:
         return mm;
     }
 
-    static optix::Transform translate(optix::GeometryInstance gi, float3& translate, optix::Context &g_context){
-        optix::Matrix4x4 matrix = translateMatrix(translate);
-
-        optix::GeometryGroup d_world = g_context->createGeometryGroup();
-        d_world->setAcceleration(g_context->createAcceleration("Trbvh"));
-        d_world->setChildCount(1);
-        d_world->setChild(0, gi);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(d_world);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
-    static optix::Transform translate(optix::GeometryGroup gi, float3& translate, optix::Context &g_context){
-        optix::Matrix4x4 matrix = translateMatrix(translate);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(gi);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
-    static optix::Transform translate(optix::Transform gi, float3 & translate, optix::Context &g_context){
-        optix::Matrix4x4 matrix = translateMatrix(translate);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(gi);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
-
     // rotateAboutPoint
     static optix::Matrix4x4 rotateAboutPointMatrix(float angle, float3 offset){
         float floatM[16] = {
@@ -71,22 +199,6 @@ public:
         optix::Matrix4x4 mm(floatM);
 
         return mm;
-    }
-
-    // it's *really* slow.
-    static optix::Transform rotateAboutPoint(optix::GeometryInstance gi, float angle, float3& translate, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateAboutPointMatrix(-angle * CUDART_PI_F / 180.f, translate);
-
-        optix::GeometryGroup d_world = g_context->createGeometryGroup();
-        d_world->setAcceleration(g_context->createAcceleration("Trbvh"));
-        d_world->setChildCount(1);
-        d_world->setChild(0, gi);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(d_world);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
     }
 
     // rotateX functions
@@ -102,41 +214,6 @@ public:
         return mm;
     }
 
-    static optix::Transform rotateX(optix::GeometryInstance gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::GeometryGroup d_world = g_context->createGeometryGroup();
-        d_world->setAcceleration(g_context->createAcceleration("Trbvh"));
-        d_world->setChildCount(1);
-        d_world->setChild(0, gi);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(d_world);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
-    static optix::Transform rotateX(optix::GeometryGroup gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(gi);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
-    static optix::Transform rotateX(optix::Transform gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixX(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(gi);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
     // rotate  Y functions
     static optix::Matrix4x4 rotateMatrixY(float angle){
         float floatM[16] = {
@@ -150,89 +227,20 @@ public:
         return mm;
     }
 
-    static optix::Transform rotateY(optix::GeometryInstance gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
 
-        optix::GeometryGroup d_world = g_context->createGeometryGroup();
-        d_world->setAcceleration(g_context->createAcceleration("Trbvh"));
-        d_world->setChildCount(1);
-        d_world->setChild(0, gi);
-
-        optix::Transform translateTransform = g_context->createTransform();
-        translateTransform->setChild(d_world);
-        translateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return translateTransform;
-    }
-
-    static optix::Transform rotateY(optix::GeometryGroup gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::Transform transf = g_context->createTransform();
-        transf->setChild(gi);
-        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return transf;
-    }
-
-    static optix::Transform rotateY(optix::Transform gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixY(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::Transform transf = g_context->createTransform();
-        transf->setChild(gi);
-        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return transf;
-    }
-
-
-    // rotateZ functions
+        // rotateZ functions
     static optix::Matrix4x4 rotateMatrixZ(float angle){
         float floatM[16] = {
-            cosf(angle), sinf(angle), 0.0f, 0.0f,
+             cosf(angle), sinf(angle), 0.0f, 0.0f,
             -sinf(angle), cosf(angle), 0.0f, 0.0f,
-            0.0f,       0.0f, 1.0f, 0.0f,
-            0.0f,       0.0f, 0.0f, 1.0f
+                    0.0f,        0.0f, 1.0f, 0.0f,
+                    0.0f,        0.0f, 0.0f, 1.0f
         };
         optix::Matrix4x4 mm(floatM);
 
         return mm;
     }
 
-    static optix::Transform rotateZ(optix::GeometryInstance gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::GeometryGroup d_world = g_context->createGeometryGroup();
-        d_world->setAcceleration(g_context->createAcceleration("Trbvh"));
-        d_world->setChildCount(1);
-        d_world->setChild(0, gi);
-
-        optix::Transform transf = g_context->createTransform();
-        transf->setChild(d_world);
-        transf->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return transf;
-    }
-
-    static optix::Transform rotateZ(optix::GeometryGroup gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::Transform rotateTransform = g_context->createTransform();
-        rotateTransform->setChild(gi);
-        rotateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return rotateTransform;
-    }
-
-    static optix::Transform rotateZ(optix::Transform gi, float angleDegrees, optix::Context &g_context){
-        optix::Matrix4x4 matrix = rotateMatrixZ(-angleDegrees * CUDART_PI_F / 180.f);
-
-        optix::Transform rotateTransform = g_context->createTransform();
-        rotateTransform->setChild(gi);
-        rotateTransform->setMatrix(false, matrix.getData(), matrix.inverse().getData());
-
-        return rotateTransform;
-    }
 
 };
 
