@@ -341,8 +341,8 @@ public:
         materialList.push_back(wallWhite);
 
         // bigger Sphere
-        geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
-        materialList.push_back(wallWhite);
+        // geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
+        // materialList.push_back(wallWhite);
 
         // box ioAABox not working
         // float3 p0 = make_float3(265.f, 0.f, 295.f);
@@ -415,6 +415,7 @@ public:
     std::vector<ioGeometry*> geometryList;
     std::vector<ioGeometryInstance> geoInstList;
     ioGeometryGroup geometryGroup;
+    ioGroup group;
     ioCamera* camera;
     //optix::Group world;
     std::string sceneDescription;

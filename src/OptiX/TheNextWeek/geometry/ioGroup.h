@@ -7,7 +7,12 @@
 class ioGroup
 {
 public:
-    virtual void init(optix::Context& context) = 0;
+    void init(optix::Context& context) {
+        optix::Group group = context->createGroup();
+        group->setAcceleration(context->createAcceleration("Trbvh"));
+        m_group = group;
+    }
+
 
     // groups and primitives to the hierarchy
     void addChild(optix::GeometryInstance gi, optix::Group &d_world, optix::Context &g_context){
