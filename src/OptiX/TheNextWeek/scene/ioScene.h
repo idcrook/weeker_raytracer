@@ -163,6 +163,8 @@ public:
         for (int i = 0; i < geoInstList.size(); i++)
             geometryGroup.addChild(geoInstList[i]);
 
+        topGroup.addChild(geometryGroup.get(), context);
+
         // Create and Init our scene camera
         camera = new ioPerspectiveCamera(
             13.0f, 2.0f, 3.0f,
@@ -296,6 +298,8 @@ public:
         for (int i = 0; i < geoInstList.size(); i++)
             geometryGroup.addChild(geoInstList[i]);
 
+        topGroup.addChild(geometryGroup.get(), context);
+
         // Create and Init our scene camera
         camera = new ioPerspectiveCamera(
             13.0f, 2.0f, 3.0f,
@@ -338,21 +342,32 @@ public:
 
         // place some objects in the box
 
-        //  Sphere
-        //geometryList.push_back(new ioSphere(265.f, 165.f, 295.f, 165.f));
-        geometryList.push_back(new ioSphere(185.f, 75.f, 155.f, 75.f));
-        materialList.push_back(wallWhite);
+        // small sphere
+        // geometryList.push_back(new ioSphere(185.f, 75.f, 155.f, 75.f));
+        // materialList.push_back(wallWhite);
 
         // bigger Sphere
         // geometryList.push_back(new ioSphere(365.f, 165.f, 295.f, 165.f));
         // materialList.push_back(wallWhite);
 
-        // box
-        float3 p0 = make_float3(265.f, 0.f, 295.f);
-        float3 p1 = make_float3(165.f, 330.f, 165.f);
+        // boxes
+        float3 b1p0 = make_float3(0.f);
+        float3 b1p1 = make_float3(165.f, 330.f,   165.f);
+        float3 b1tr = {265.f, 0.f, 255.f};
+        b1p0 += b1tr;
+        b1p1 += b1tr;
 
-        // geometryList.push_back(new ioAABox(p0, p1));
-        // materialList.push_back(wallWhite);
+        float3 b2p0 = make_float3(0.f);
+        float3 b2p1 = make_float3(165.f, 165.f,   165.f);
+        float3 b2tr = {130.f, 0.f, 65.f};
+        b2p0 += b2tr;
+        b2p1 += b2tr;
+
+        optix::GeometryGroup box1 = ioGeometryGroup::createBox(b1p0, b1p1, wallWhite, context);
+        topGroup.addChild(box1, context);
+
+        optix::GeometryGroup box2 = ioGeometryGroup::createBox(b2p0, b2p1, wallWhite, context);
+        topGroup.addChild(box2, context);
 
         uint32_t seed = 0x6314759;
 

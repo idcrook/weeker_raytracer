@@ -23,18 +23,18 @@ public:
 
 
     // Utility function - box made of rectangle primitives
-    optix::GeometryGroup createBox(const float3& p0, const float3& p1, ioMaterial &material, optix::Context &context){
+   static optix::GeometryGroup createBox(const float3& p0, const float3& p1, ioMaterial* material, optix::Context &context){
         std::vector<ioGeometry*> geometryList;
         std::vector<ioGeometryInstance> geoInstList;
 
-        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p0.z, true,  X_AXIS)); // left wall
-        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p1.z, false, X_AXIS)); // right wall
+        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p0.z, true,  Z_AXIS)); // left wall
+        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p1.z, false, Z_AXIS)); // right wall
 
         geometryList.push_back(new ioAARect(p0.x, p1.x, p0.z, p1.z, p0.y, true,  Y_AXIS)); // roof
         geometryList.push_back(new ioAARect(p0.x, p1.x, p0.z, p1.z, p1.y, false, Y_AXIS)); // floor
 
-        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p0.x, true,  Z_AXIS)); // back wall
-        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p1.x, false, Z_AXIS)); // front wall
+        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p0.x, true,  X_AXIS)); // back wall
+        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p1.x, false, X_AXIS)); // front wall
 
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {
@@ -48,7 +48,7 @@ public:
             geoInstList[i] = ioGeometryInstance();
             geoInstList[i].init(context);
             geoInstList[i].setGeometry(*geometryList[i]);
-            material.assignTo(geoInstList[i].get(), context);
+            material->assignTo(geoInstList[i].get(), context);
         }
 
         optix::GeometryGroup d_world = context->createGeometryGroup();

@@ -1,6 +1,8 @@
 #ifndef IO_GROUP_H
 #define IO_GROUP_H
 
+#include <iostream>
+
 #include <optix.h>
 #include <optixu/optixpp.h>
 
@@ -22,6 +24,7 @@ public:
         gg->setChild(0, gi);
 
         int i = m_group->getChildCount();
+        std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
         m_group->setChild(i, gg);
         m_group->getAcceleration()->markDirty();
@@ -29,6 +32,7 @@ public:
 
     void addChild(optix::GeometryGroup gg, optix::Context &g_context){
         int i = m_group->getChildCount();
+        std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
         m_group->setChild(i, gg);
         m_group->getAcceleration()->markDirty();
@@ -36,6 +40,7 @@ public:
 
     void addChild(optix::Transform gi,  optix::Context &g_context){
         int i = m_group->getChildCount();
+        std::cerr << "DEBUG: Group child count: " << i  << std::endl;
         m_group->setChildCount(i + 1);
         m_group->setChild(i, gi);
         m_group->getAcceleration()->markDirty();
