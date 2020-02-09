@@ -599,7 +599,7 @@ public:
 
         //
         ioMaterial *glassyBlueFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.2f, 0.4f, 0.9f)));
-        ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(1.f)));
+        ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.95f)));
 
         ioMaterial *ground = new ioLambertianMaterial(groundGreenish);
         // ground
@@ -647,8 +647,10 @@ public:
         //                   context);
         topGroup.addChild(ioGeometryInstance::createVolumeSphere(centerGlassy, 70.f, 0.2f, glassyBlueFog,
                                                                  context), context);
-        // room ambient
-        topGroup.addChild(ioGeometryInstance::createVolumeSphere(make_float3(0.f), 5000.f, 5e-5f, ambientFog,
+        // room ambient / boundary
+        geometryList.push_back(new ioSphere(0.f, 0.f, 0.f, 5000.f) );
+        materialList.push_back(new ioDielectricMaterial(1.5f));
+        topGroup.addChild(ioGeometryInstance::createVolumeSphere(make_float3(0.f), 5000.f, 8e-5f, ambientFog,
                                                                  context), context);
         // earth globe
         geometryList.push_back(new ioSphere(400.f, 200.f, 400.f, 100.0f));
