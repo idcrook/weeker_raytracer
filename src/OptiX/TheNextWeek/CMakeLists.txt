@@ -13,7 +13,11 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  moving_sphere_ptx_c   geometry/moving_sphere.cu
+  moving_sphere_ptx_c   geometry/movingSphere.cu
+  )
+
+cuda_compile_and_embed(
+  volume_sphere_ptx_c   geometry/volumeSphere.cu
   )
 
 cuda_compile_and_embed(
@@ -21,7 +25,7 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  aabox_ptx_c          geometry/aabox.cu
+  volume_box_ptx_c      geometry/volumeBox.cu
   )
 
 cuda_compile_and_embed(
@@ -42,6 +46,10 @@ cuda_compile_and_embed(
 
 cuda_compile_and_embed(
   diffuse_light_material_ptx_c material/diffuseLight.cu
+  )
+
+cuda_compile_and_embed(
+  isotropic_material_ptx_c material/isotropicMaterial.cu
   )
 
 cuda_compile_and_embed(
@@ -72,15 +80,20 @@ add_executable(theNextWeekOptix
   # Compiled cuda ptx programs
   ${raygen_ptx_c}
   ${miss_ptx_c}
+
   ${sphere_ptx_c}
   ${moving_sphere_ptx_c}
   ${aarect_ptx_c}
-  ${aabox_ptx_c}
+  ${volume_box_ptx_c}
+  ${volume_sphere_ptx_c}
+
   ${normal_material_ptx_c}
   ${lambertian_material_ptx_c}
   ${metal_material_ptx_c}
   ${dielectric_material_ptx_c}
   ${diffuse_light_material_ptx_c}
+  ${isotropic_material_ptx_c}
+
   ${null_texture_ptx_c}
   ${constant_texture_ptx_c}
   ${checkered_texture_ptx_c}

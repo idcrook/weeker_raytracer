@@ -16,30 +16,20 @@ rtDeclareVariable(rtObject, sysWorld, , );
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 
 // Material variables
-rtDeclareVariable(float, fuzz, , );
-
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTexture, , );
 
-inline __device__ float3 emitted(){
+inline __device__ float3 emitted() {
     return make_float3(0.f, 0.f, 0.f);
 }
 
 RT_PROGRAM void closestHit()
 {
-    thePrd.emitted = emitted();
-
-    // optix::reflect expects normalized (unit vector) inputs
-    float3 reflected = optix::reflect(optix::normalize(theRay.direction), hitRecord.normal);
-    float3 scatterDirection = reflected + fuzz*randomInUnitSphere(thePrd.seed);
-
-    thePrd.scattered_origin = hitRecord.point;
-    thePrd.scattered_direction = scatterDirection;
-    thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
-
-    if (optix::dot(scatterDirection, hitRecord.normal) <= 0.0f ) {
-        thePrd.scatterEvent = Ray_Cancel;
-        return;
-    }
+    float3 scatterDirection = randomInUnitSphere(thePrd.seed);
 
     thePrd.scatterEvent = Ray_Hit;
+    thePrd.scattered_origin = hitRecord.point;
+    thePrd.scattered_direction = scatterDirection;
+    thePrd.emitted = emitted();
+    thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+
 }

@@ -2,7 +2,6 @@
 #define IO_SPHERE_H
 
 #include "ioGeometry.h"
-#include "material/ioMaterial.h"
 
 #include <optix.h>
 #include <optixu/optixpp.h>
@@ -12,13 +11,6 @@ extern "C" const char sphere_ptx_c[];
 class ioSphere : public ioGeometry
 {
 public:
-  ioSphere()
-    {
-      // m_cx = 0.0f;
-      // m_cy = 0.0f;
-      // m_cz = 0.0f;
-      // m_r = 0.0f;
-    }
 
   ioSphere(const float x, const float y, const float z, const float r)
     {

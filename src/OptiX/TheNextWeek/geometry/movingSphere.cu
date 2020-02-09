@@ -20,16 +20,11 @@ rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
 rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 
 inline __device__ void get_sphere_uv(const float3 p) {
-	float phi = atan2(p.z, p.x);
-	float theta = asin(p.y);
+	float phi = atan2f(p.z, p.x);
+	float theta = asinf(p.y);
 
-	hitRecord.u = 1 - (phi + CUDART_PI_F) / (2.f * CUDART_PI_F);
+	hitRecord.u = 1.f - (phi + CUDART_PI_F) / (2.f * CUDART_PI_F);
 	hitRecord.v = (theta + CUDART_PIO2_F) / CUDART_PI_F;
-}
-
-inline __device__ float dot(float3 a, float3 b)
-{
-    return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
 __device__ float3 center(float time) {
@@ -62,9 +57,9 @@ RT_PROGRAM void getBounds(int pid, float result[6])
 RT_PROGRAM void intersection(int pid)
 {
     float3 oc = theRay.origin - center(thePrd.gatherTime);
-    float a = dot(theRay.direction, theRay.direction);
-    float b = dot(oc, theRay.direction);
-    float c = dot(oc, oc) - radius*radius;
+    float a = optix::dot(theRay.direction, theRay.direction);
+    float b = optix::dot(oc, theRay.direction);
+    float c = optix::dot(oc, oc) - radius*radius;
     float discriminant = b*b - a*c;
 
     if (discriminant < 0.0f) return;
@@ -73,8 +68,9 @@ RT_PROGRAM void intersection(int pid)
     if (t < theRay.tmax && t > theRay.tmin)
         if (rtPotentialIntersection(t))
         {
-            hitRecord.point = theRay.origin + t * theRay.direction;
-            hitRecord.normal = (hitRecord.point - center(thePrd.gatherTime)) / radius;
+            hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + t*theRay.direction);
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD,
+                                                                  (hitRecord.point - center(thePrd.gatherTime))/radius));
             get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
@@ -83,8 +79,9 @@ RT_PROGRAM void intersection(int pid)
     if (t < theRay.tmax && t > theRay.tmin)
         if (rtPotentialIntersection(t))
         {
-            hitRecord.point = theRay.origin + t * theRay.direction;
-            hitRecord.normal = (hitRecord.point - center(thePrd.gatherTime)) / radius;
+            hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + t*theRay.direction);
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD,
+                                                                  (hitRecord.point - center(thePrd.gatherTime))/radius));
             get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
