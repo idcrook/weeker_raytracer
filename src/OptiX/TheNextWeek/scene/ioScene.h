@@ -656,7 +656,7 @@ public:
 
         // marble (perlin noise) sphere
         geometryList.push_back(new ioSphere(220.f, 280.f, 300.f, 80.f));
-        materialList.push_back(new ioLambertianMaterial(noise4));
+        materialList.push_back(new ioLambertianMaterial(noisep1));
 
         ioMaterial *white = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.93f)));
 

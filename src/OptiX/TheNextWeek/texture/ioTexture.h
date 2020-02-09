@@ -90,7 +90,7 @@ struct ioNoiseTexture : public ioTexture {
     ioNoiseTexture(const float s) : scale(s) {}
 
     virtual float3 unit_float3(float x, float y, float z) const {
-        float l = sqrt(x*x + y*y + z*z);
+        float l = sqrtf(x*x + y*y + z*z);
         return make_float3(x/l, y/l, z/l);
     }
 
@@ -132,6 +132,7 @@ struct ioNoiseTexture : public ioTexture {
         textProg["perm_x"]->set(perm_x);
         textProg["perm_y"]->set(perm_y);
         textProg["perm_z"]->set(perm_z);
+        textProg["scale"]->setFloat(scale);
 
         gi["sampleTexture"]->setProgramId(textProg);
 
