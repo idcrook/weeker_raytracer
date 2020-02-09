@@ -175,3 +175,22 @@ Image Renders (C++ Single Thread CPU)
 ### Rest Of Life
 
 Top Image above of the Cornell box: 1000x1000 pixels with 500 rays per pixel. Took 1 hour, 8 minutes
+
+Image Renders (Optix GPU)
+-------------------------
+
+### In One Weekend
+
+![IOW final image](assets/img/IOW-OptiX-final.png) 1200 x 800 pixels, 1024 samples per pixel. Image took about **3 seconds**
+
+### The Next Week
+
+![TNW lighting IOW image](assets/img/TNW-Optix-lighting-IOW-final.png) 2400 x 800 pixels with 9000 samples per pixel. took **67.9 seconds**
+
+![TNW final image](assets/img/TNW-Optix-final.png) 3840 x 1080 pixels with 10240 samples per pixel. took **400 seconds**
+
+`convert tnw-final_scene.png -resize 50% half_tnw-final_scene.png`
+
+### Rest Of Life
+
+TBD:
