@@ -19,8 +19,8 @@ public:
     // groups and primitives to the hierarchy
     void addChild(optix::GeometryInstance gi,  optix::Context &context){
         optix::GeometryGroup gg = context->createGeometryGroup();
-        //gg->setAcceleration(context->createAcceleration("Trbvh"));
-        gg->setAcceleration(context->createAcceleration("NoAccel"));
+        gg->setAcceleration(context->createAcceleration("Trbvh"));
+        //gg->setAcceleration(context->createAcceleration("NoAccel"));
         gg->setChildCount(1);
         gg->setChild(0, gi);
 

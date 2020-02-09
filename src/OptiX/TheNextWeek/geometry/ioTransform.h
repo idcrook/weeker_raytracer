@@ -16,8 +16,8 @@ public:
         optix::Matrix4x4 matrix = translateMatrix(offset);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
-        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
-        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        //d_world->setAcceleration(context->createAcceleration("NoAccel"));
         d_world->setChildCount(1);
         d_world->setChild(0, gi);
 
@@ -53,8 +53,8 @@ public:
         optix::Matrix4x4 matrix = rotateAboutPointMatrix(angleDegrees * CUDART_PI_F / 180.f, point);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
-        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
-        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        //d_world->setAcceleration(context->createAcceleration("NoAccel"));
         d_world->setChildCount(1);
         d_world->setChild(0, gi);
 
@@ -69,8 +69,8 @@ public:
         optix::Matrix4x4 matrix = rotateMatrixX(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
-        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
-        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        //d_world->setAcceleration(context->createAcceleration("NoAccel"));
         d_world->setChildCount(1);
         d_world->setChild(0, gi);
 
@@ -105,8 +105,8 @@ public:
         optix::Matrix4x4 matrix = rotateMatrixY(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
-        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
-        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        //d_world->setAcceleration(context->createAcceleration("NoAccel"));
         d_world->setChildCount(1);
         d_world->setChild(0, gi);
 
@@ -142,8 +142,8 @@ public:
         optix::Matrix4x4 matrix = rotateMatrixZ(angleDegrees * CUDART_PI_F / 180.f);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
-        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
-        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        //d_world->setAcceleration(context->createAcceleration("NoAccel"));
         d_world->setChildCount(1);
         d_world->setChild(0, gi);
 
@@ -179,8 +179,8 @@ public:
         optix::Matrix4x4 matrix = optix::Matrix4x4::scale(scale);
 
         optix::GeometryGroup d_world = context->createGeometryGroup();
-        //d_world->setAcceleration(context->createAcceleration("Trbvh"));
-        d_world->setAcceleration(context->createAcceleration("NoAccel"));
+        d_world->setAcceleration(context->createAcceleration("Trbvh"));
+        //d_world->setAcceleration(context->createAcceleration("NoAccel"));
         d_world->setChildCount(1);
         d_world->setChild(0, gi);
 
