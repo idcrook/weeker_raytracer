@@ -5,6 +5,7 @@
 #include <optixu/optixpp.h>
 
 #include "geometry/ioGeometry.h"
+#include "geometry/ioSphere.h"
 #include "geometry/ioVolumeBox.h"
 #include "geometry/ioVolumeSphere.h"
 #include "material/ioMaterial.h"
@@ -19,6 +20,18 @@ public:
         {
             m_gi = context->createGeometryInstance();
         }
+
+    static optix::GeometryInstance createSphere(const float3& p0, const float radius,
+                                                ioMaterial* material, optix::Context &context) {
+        ioGeometry* theSphereShape = new ioSphere(p0.x, p0.y, p0.z, radius);
+        theSphereShape->init(context);
+        ioGeometryInstance gi = ioGeometryInstance();
+        gi.init(context);
+        gi.setGeometry(*theSphereShape);
+        material->assignTo(gi.get(), context);
+        return gi.get();
+    }
+
 
     static optix::GeometryInstance createVolumeBox(const float3& p0, const float3& p1,
                                                    const float density,

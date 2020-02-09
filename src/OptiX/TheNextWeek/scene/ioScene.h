@@ -58,7 +58,7 @@ public:
             world = VolumesCornellBox(context, Nx, Ny);
             break;
         case 4:
-            world = TheNextWeek(context, Nx, Ny);
+            world = TheNextWeekFinal(context, Nx, Ny);
             break;
         default:
             std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
@@ -105,12 +105,12 @@ public:
                 float z = b + 0.9f*randf(seed);
                 float z_squared = (z)*(z);
                 float dist = sqrtf(
-                  (x-4.0f)*(x-4.0f) +
-                  //(y-0.2f)*(y-0.2f) +
-                  z_squared
-                );
+                    (x-4.0f)*(x-4.0f) +
+                    //(y-0.2f)*(y-0.2f) +
+                    z_squared
+                    );
 
-                 // keep out area near medium spheres
+                // keep out area near medium spheres
                 if ((dist > 0.9f) ||
                     ((z_squared > 0.7f) && ((x*x - 16.0f) > -2.f)))
                 {
@@ -132,7 +132,7 @@ public:
                                                                                      0.5f*(1.0f-randf(seed)),
                                                                                      0.5f*(1.0f-randf(seed)))),
                                                    0.5f*randf(seed))
-                        );
+                            );
                     }
                     else if (chooseMat < 0.93f)
                     {
@@ -579,18 +579,44 @@ public:
     }
 
 
-    optix::Group TheNextWeek(optix::Context& context, int Nx, int Ny) {
+    optix::Group TheNextWeekFinal(optix::Context& context, int Nx, int Ny) {
         sceneDescription = "The Next Week final scene";
 
-        ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
-        ioTexture *fiftyPercentReddishGrey = new ioConstantTexture(make_float3(0.7f, 0.6f, 0.5f));
-        ioTexture *reddish = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.1f));
-        ioTexture *saddleBrown = new ioConstantTexture(make_float3(139/255.f,  69/255.f,  19/255.f));
+        // ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
+        // ioTexture *fiftyPercentReddishGrey = new ioConstantTexture(make_float3(0.7f, 0.6f, 0.5f));
+        // ioTexture *reddish = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.1f));
+        // ioTexture *saddleBrown = new ioConstantTexture(make_float3(139/255.f,  69/255.f,  19/255.f));
         ioTexture *brown = new ioConstantTexture(make_float3(0.7f, 0.3f, 0.1f));
+        ioTexture *groundGreenish = new ioConstantTexture(make_float3(0.48f, 0.83f, 0.53f));
+        ioTexture *metal1 = new ioConstantTexture(make_float3(0.8f, 0.8f, 0.9f));
+        ioTexture *noisep1 = new ioNoiseTexture(0.1f);
+        ioTexture *noise4 = new ioNoiseTexture(4.f);
 
+        ioTexture *earthGlobeImage = new ioImageTexture("assets/earthmap.jpg");
         ioTexture *light7 =  new ioConstantTexture(make_float3(7.f, 7.f, 7.f));
 
+        uint32_t seed = 0x6314759;
 
+        //
+        ioMaterial *glassyBlueFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.2f, 0.4f, 0.9f)));
+        ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(1.f)));
+
+        ioMaterial *ground = new ioLambertianMaterial(groundGreenish);
+        // ground
+        for(int i = 0; i < 20; i++){
+            for(int j = 0; j < 20; j++){
+                float w = 100.f;
+                float x0 = -1000 + i * w;
+                float z0 = -1000 + j * w;
+                float y0 = 0.f;
+                float x1 = x0 + w;
+                float y1 = 100 * (randf(seed) + 0.01f);
+                float z1 = z0 + w;
+                optix::GeometryGroup box = ioGeometryGroup::createBox(make_float3(x0, y0, z0), make_float3(x1, y1, z1),
+                                                                      ground, context);
+                topGroup.addChild(box, context);
+            }
+        }
         // light
         geometryList.push_back(new ioAARect(113.f, 443.f, 127.f, 432.f, 554.f, false, Y_AXIS)); // light
         materialList.push_back(new ioDiffuseLightMaterial(light7));
@@ -598,30 +624,61 @@ public:
         // brown moving sphere
         float3 center = make_float3(400.f, 400.f, 200.f);
         float3 center1tr = center + make_float3(30.f, 0.f, 0.f);
-
-        geometryList.push_back(new ioMovingSphere(center.x, center.y, center.z,
-                                                  center1tr.x, center1tr.y, center1tr.z,
-                                                  50.f,
-                                                  0.f, 1.f));
+        geometryList.push_back(new ioMovingSphere(center.x, center.y, center.z, center1tr.x, center1tr.y, center1tr.z,
+                                                  50.f, 0.f, 1.f));
         materialList.push_back(new ioLambertianMaterial(brown));
 
+        // glass sphere
+        geometryList.push_back(new ioSphere(260.f, 150.f, 45.f, 50.f) );
+        materialList.push_back(new ioDielectricMaterial(1.5f));
 
-        // // Big Sphere
-        // geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
-        // materialList.push_back(new ioLambertianMaterial(fiftyPercentGrey));
+        // metal sphere
+        geometryList.push_back(new ioSphere(0.f, 150.f, 145.f, 50.f) );
+        materialList.push_back(new ioMetalMaterial(metal1, 10.f));
 
-        // // Medium Spheres
-        // geometryList.push_back(new ioSphere(0.0f, 1.0f, 0.0, 1.0f));
-        // geometryList.push_back(new ioSphere(-4.0f, 1.0f, 0.0, 1.0f));
-        // geometryList.push_back(new ioSphere(4.0f, 1.0f, 0.0, 1.0f));
+        // blue glassy sphere with a volume
+        float3 centerGlassy = make_float3(360.f, 150.f, 45.f);
+        geometryList.push_back(new ioSphere(centerGlassy.x, centerGlassy.y, centerGlassy.z, 70.f));
+        materialList.push_back(new ioDielectricMaterial(1.5f));
+        // optix::GeometryInstance sphere2 =
+        //     ioGeometryInstance::createVolumeSphere(make_float3(), 75.f, 0.005f, whiteFog, context);
+        // topGroup.addChild(ioTransform::translate(b2tr,
+        //                                          sphere2, context),
+        //                   context);
+        topGroup.addChild(ioGeometryInstance::createVolumeSphere(centerGlassy, 70.f, 0.2f, glassyBlueFog,
+                                                                 context), context);
+        // room ambient
+        topGroup.addChild(ioGeometryInstance::createVolumeSphere(make_float3(0.f), 5000.f, 5e-5f, ambientFog,
+                                                                 context), context);
+        // earth globe
+        geometryList.push_back(new ioSphere(400.f, 200.f, 400.f, 100.0f));
+        materialList.push_back(new ioLambertianMaterial(earthGlobeImage));
 
-        // materialList.push_back(new ioDielectricMaterial(1.5f));
-        // materialList.push_back(new ioLambertianMaterial(reddish));
-        // materialList.push_back(new ioMetalMaterial(fiftyPercentReddishGrey, 0.1f));
+        // marble (perlin noise) sphere
+        geometryList.push_back(new ioSphere(220.f, 280.f, 300.f, 80.f));
+        materialList.push_back(new ioLambertianMaterial(noise4));
 
-        // // Small Spheres
-        // uint32_t seed = 0x314759;
-        // //for (int a = -11; a < 11; a++)
+        ioMaterial *white = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.93f)));
+
+        std::vector<optix::GeometryInstance> d_list;
+        for(int j = 0; j < 1000; j++) {
+            d_list.push_back(ioGeometryInstance::createSphere(make_float3(165 * randf(seed), 165 * randf(seed), 165 * randf(seed)),
+                                                              10.f, white, context));
+
+        }
+
+        optix::GeometryGroup ggSmallBallsBox = context->createGeometryGroup();
+        ggSmallBallsBox->setAcceleration(context->createAcceleration("Trbvh"));
+        ggSmallBallsBox->setChildCount((int)d_list.size());
+        for (int i = 0; i < d_list.size(); i++)
+            ggSmallBallsBox->setChild(i, d_list[i]);
+
+        float3 positionSmallBallsBox = make_float3(-100.f, 270.f, 395.f);
+        topGroup.addChild(ioTransform::translate(positionSmallBallsBox,
+                                                 ioTransform::rotateY(15.f,
+                                                                      ggSmallBallsBox, context),
+                                                 context),
+                          context);
 
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {
