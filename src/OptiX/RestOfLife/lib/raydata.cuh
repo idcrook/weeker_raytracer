@@ -16,13 +16,14 @@ typedef enum
 struct PerRayData
 {
     float3 attenuation;         // 12 bytes
-    uint seed;                  //  4 bytes
     float3 scattered_origin;    // 12 bytes
     float3 scattered_direction; // 12 bytes
-    ScatterEvent scatterEvent;  //  4 bytes (int)
-    float gatherTime;           //  4 bytes
     float3 emitted;             // 12 bytes
-
+    ScatterEvent scatterEvent;  //  4 bytes
+    float  pdf;                 //  4 bytes
+    float  scattered_pdf;       //  4 bytes
+    float  gatherTime;          //  4 bytes
+    uint   seed;                //  4 bytes
 };
 
 struct HitRecord

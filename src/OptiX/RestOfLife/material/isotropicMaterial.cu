@@ -22,6 +22,10 @@ inline __device__ float3 emitted() {
     return make_float3(0.f, 0.f, 0.f);
 }
 
+inline __device__ float scatteringPdf() {
+  return false;
+}
+
 RT_PROGRAM void closestHit()
 {
     float3 scatterDirection = randomInUnitSphere(thePrd.seed);
@@ -31,5 +35,5 @@ RT_PROGRAM void closestHit()
     thePrd.scattered_direction = scatterDirection;
     thePrd.emitted = emitted();
     thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
-
+    thePrd.scattered_pdf = scatteringPdf();
 }

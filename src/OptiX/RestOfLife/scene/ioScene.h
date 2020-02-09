@@ -95,10 +95,8 @@ public:
 
         // Small Spheres
         uint32_t seed = 0x314759;
-        for (int a = -11; a < 11; a++)
-        {
-            for (int b = -11; b < 11; b++)
-            {
+        for (int a = -11; a < 11; a++) {
+            for (int b = -11; b < 11; b++) {
                 float chooseMat = randf(seed);
                 float x = a + 0.8f*randf(seed);
                 float y = 0.2f;

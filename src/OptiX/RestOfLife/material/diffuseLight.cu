@@ -33,29 +33,16 @@ rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTexture, , );
 
 
-/*! the actual scatter function - in Pete's reference code, that's a
-  virtual function, but since we have a different function per program
-  we do not need this here */
-// inline __device__ bool scatter(const optix::Ray &ray_in,
-//                                DRand48 &rndState,
-//                                vec3f &scattered_origin,
-//                                vec3f &scattered_direction,
-//                                vec3f &attenuation) {
-//   return false;
-// }
+inline __device__ float3 emitted() {
+    return sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+}
 
-inline __device__ float3 emitted(){
-  return sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+inline __device__ float scatteringPdf() {
+    return false;
 }
 
 RT_PROGRAM void closestHit() {
-  thePrd.emitted = emitted();
-  thePrd.scatterEvent = Ray_Cancel;
-    // = scatter(ray,
-    //           *prd.in.randState,
-    //           prd.out.scattered_origin,
-    //           prd.out.scattered_direction,
-    //           prd.out.attenuation)
-    // ? rayGotBounced
-    // : rayGotCancelled;
+    thePrd.emitted = emitted();
+    thePrd.scatterEvent = Ray_Cancel;
+    thePrd.scattered_pdf = scatteringPdf();
 }

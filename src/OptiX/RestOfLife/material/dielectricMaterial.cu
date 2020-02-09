@@ -25,8 +25,12 @@ inline __device__ float fresnelSchlick(
     return r0 + (1.f-r0)*powf((1.f-cosThetaI), 5.f);
 }
 
-inline __device__ float3 emitted(){
+inline __device__ float3 emitted() {
     return make_float3(0.f, 0.f, 0.f);
+}
+
+inline __device__ float scatteringPdf(){
+  return false;
 }
 
 RT_PROGRAM void closestHit()
@@ -94,6 +98,7 @@ RT_PROGRAM void closestHit()
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
-    thePrd.attenuation = make_float3(1.0f, 1.0f, 1.0f);
     // thePrd.attenuation = make_float3(0.8f, 0.85f, 0.82f); // for greenish glass
+    thePrd.attenuation = make_float3(1.0f, 1.0f, 1.0f);
+    thePrd.scattered_pdf = scatteringPdf();
 }

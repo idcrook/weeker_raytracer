@@ -9,7 +9,7 @@
 - [ ] flatten transformation matrices instead of cascading transforms
 
 ** Rest Of Life feature breakdown
-- [ ] Chapter 4 - Importance Sampling Materials
+- [X] Chapter 4 - Importance Sampling Materials
 - [ ] Chapter 5 - Generating Random Directions
 - [ ] Chapter 6 - Ortho-normal Bases
 - [ ] Chapter 7 - Sampling Lights Directly

@@ -24,6 +24,10 @@ inline __device__ float3 emitted(){
     return make_float3(0.f, 0.f, 0.f);
 }
 
+inline __device__ float scatteringPdf() {
+  return false;
+}
+
 RT_PROGRAM void closestHit()
 {
     thePrd.emitted = emitted();
@@ -35,6 +39,7 @@ RT_PROGRAM void closestHit()
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
     thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+    thePrd.scattered_pdf = scatteringPdf();
 
     if (optix::dot(scatterDirection, hitRecord.normal) <= 0.0f ) {
         thePrd.scatterEvent = Ray_Cancel;

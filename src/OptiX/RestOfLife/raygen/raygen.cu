@@ -75,7 +75,9 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
         else
         {
             // ray is still alive, and got properly bounced
-            sampleRadiance = thePrd.emitted + sampleRadiance * thePrd.attenuation;
+            // sampleRadiance = thePrd.emitted + (sampleRadiance * thePrd.attenuation);
+            sampleRadiance = thePrd.emitted +
+                ((sampleRadiance * thePrd.attenuation * thePrd.scattered_pdf) / thePrd.pdf);
             theRay = optix::make_Ray(
                 thePrd.scattered_origin,
                 thePrd.scattered_direction,
@@ -105,7 +107,7 @@ RT_PROGRAM void rayGenProgram()
         optix::Ray theRay = generateRay(s, t, seed);
         float3 sampleRadiance = color(theRay, seed);
 
-        // Remove NaNs
+        // Remove NaNs - should also remove from sample count? as this is a "bad" sample
         //sampleRadiance = removeNaNs(sampleRadiance);
 
         radiance += sampleRadiance;
