@@ -1,7 +1,6 @@
 #include <optix.h>
 
-#include "../lib/raydata.cuh"
-#include "../lib/sampling.cuh"
+#include "material.cuh"
 
 // Ray state variables
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
