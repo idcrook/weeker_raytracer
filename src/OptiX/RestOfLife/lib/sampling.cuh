@@ -21,8 +21,7 @@ inline __device__ float3 random_in_unit_disk(uint32_t& seed) {
 }
 
 
-inline __device__ float3 randomInUnitSphere(uint32_t& seed)
-{
+inline __device__ float3 randomInUnitSphere(uint32_t& seed) {
     float3 p;
     do
     {
@@ -44,6 +43,21 @@ inline __device__ float3 randomInUnitSphere(uint32_t& seed)
 
 //   return res;
 // }
+
+inline __device__ float3 randomCosineDirection(uint32_t& seed) {
+	float r1 = randf(seed);
+	float r2 = randf(seed);
+
+	float phi = 2.f * CUDART_PI_F * r1;
+
+	float x = cosf(phi) * 2 * sqrtf(r2);
+	float y = sinf(phi) * 2 * sqrtf(r2);
+	float z = sqrtf(1 - r2);
+
+	return make_float3(x, y, z);
+}
+
+
 
 
 #endif //!SAMPLING_CUH

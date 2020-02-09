@@ -10,7 +10,7 @@
 
 ** Rest Of Life feature breakdown
 - [X] Chapter 4 - Importance Sampling Materials
-- [ ] Chapter 5 - Generating Random Directions
+- [X] Chapter 5 - Generating Random Directions
 - [ ] Chapter 6 - Ortho-normal Bases
 - [ ] Chapter 7 - Sampling Lights Directly
 - [ ] Chapter 8 - Mixture Densities
