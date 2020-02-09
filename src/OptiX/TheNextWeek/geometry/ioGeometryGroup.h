@@ -27,14 +27,14 @@ public:
         std::vector<ioGeometry*> geometryList;
         std::vector<ioGeometryInstance> geoInstList;
 
-        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p0.z, true,  Z_AXIS)); // left wall
-        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p1.z, false, Z_AXIS)); // right wall
+        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p0.z, Z_AXIS)); // left wall
+        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.y, p1.y, p1.z, Z_AXIS)); // right wall
 
-        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.z, p1.z, p0.y, true,  Y_AXIS)); // roof
-        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.z, p1.z, p1.y, false, Y_AXIS)); // floor
+        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.z, p1.z, p0.y, Y_AXIS)); // roof
+        geometryList.push_back(new ioAARect(p0.x, p1.x, p0.z, p1.z, p1.y, Y_AXIS)); // floor
 
-        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p0.x, true,  X_AXIS)); // back wall
-        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p1.x, false, X_AXIS)); // front wall
+        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p0.x, X_AXIS)); // back wall
+        geometryList.push_back(new ioAARect(p0.y, p1.y, p0.z, p1.z, p1.x, X_AXIS)); // front wall
 
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {

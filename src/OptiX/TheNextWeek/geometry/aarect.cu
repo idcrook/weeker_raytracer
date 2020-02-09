@@ -10,8 +10,6 @@ rtDeclareVariable(float,  b0, , );
 rtDeclareVariable(float,  b1, , );
 rtDeclareVariable(float,  k, , );
 
-// rtDeclareVariable(int,  flip, , );
-
 // The ray that will be intersected against
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
 rtDeclareVariable(PerRayData, thePrd, rtPayload,  );
