@@ -206,6 +206,7 @@ public:
 
         ioTexture *checkered = new ioCheckerTexture(reallyDarkGrey, saddleBrown);
         ioTexture *noise4 = new ioNoiseTexture(4.f);
+        ioTexture *noise1 = new ioNoiseTexture(1.f);
 
         ioTexture *earthGlobeImage = new ioImageTexture("assets/earthmap.jpg");
 
@@ -216,7 +217,8 @@ public:
 
         // Big Sphere
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
-        materialList.push_back(new ioLambertianMaterial(noise4));
+        //materialList.push_back(new ioLambertianMaterial(noise4));
+        materialList.push_back(new ioLambertianMaterial(noise1));
         //materialList.push_back(new ioLambertianMaterial(checkered));
 
         // Medium Spheres
