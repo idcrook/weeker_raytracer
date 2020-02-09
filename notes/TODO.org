@@ -3,17 +3,9 @@
 
 ** code cleanup tasks
 
-- [ ] consolidate dot() and cross() if applicable
+- [X] consolidate dot() and cross() if applicable
 - [ ] add Exception program
 - [ ] add progress output, useful for longer running jobs
-
-** feature impl. tasks
-
-- [X] multiple, selectable scenes
-- [X] Instances (ch7 TNW) and Group and Transform optixpp objects
-- [X] Volumes (ch8 TNW) aka participating media
-  - [X] scene: cornell box volumes
-- [ ] scene: TNW final
 - [ ] flatten transformation matrices instead of cascading transforms
 
 ** Rest Of Life feature breakdown
@@ -49,3 +41,11 @@
    - [X] image width
    - [X] image height
    - [X] number of samples
+
+** TNW feature impl. tasks
+
+- [X] multiple, selectable scenes
+- [X] Instances (ch7 TNW) and Group and Transform optixpp objects
+- [X] Volumes (ch8 TNW) aka participating media
+  - [X] scene: cornell box volumes
+- [X] scene: TNW final

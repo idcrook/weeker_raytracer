@@ -1,15 +1,14 @@
-# Ray Tracing In One Weekend Book Series
+# Implementations 
+
+Originally Based on Ray Tracing In One Weekend Book Series (C++ version)
 
 https://github.com/RayTracing/raytracing.github.io
 
-## Infrastructure
+## Optix
 
-- [x] Makefile build
-- [x] Convert to CMake build
-  - [x] Linux C++ builds
-  - [x] Linux CUDA C++ builds
-  - [x] macOS C++ builds
-  - [N/A] macOS CUDA C++ builds
+- [x] In One Weekend
+- [x] The Next Week
+- [WIP] Rest Of Life
 
 ## C++
 
@@ -20,18 +19,21 @@ https://github.com/RayTracing/raytracing.github.io
 ## CUDA C++
 
 - [x] In One Weekend
-- [ ] The Next Week
+- [ ] The Next Week - Stalled trying to create a BVH data structure
 - [ ] Rest Of Life
-
-## Optix
-
-- [x] In One Weekend
-- [WIP] The Next Week
-- [ ] Rest Of Life
-
 
 ## Rust lang
 
 - [ ] In One Weekend
 - [ ] The Next Week
 - [ ] Rest Of Life
+
+## Infrastructure
+
+- [x] Makefile build
+- [x] Convert to CMake build
+  - [x] Linux C++ builds
+  - [x] Linux CUDA C++ builds
+  - [x] macOS C++ builds
+  - [N/A] macOS CUDA C++ builds
+

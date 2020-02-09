@@ -74,6 +74,8 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build src
 	cmake --build build --target restOfLifeCpp
 	```
 
+[Cpp example images](#image-renders-c-single-thread-cpu)
+
 Build CUDA C++ (Cuda)
 ---------------------
 
@@ -95,7 +97,9 @@ cmake --build build --target inOneWeekendCuda
 cmake --build build --target theNextWeekCuda
 ```
 
-![cuda final image](assets/img/IOW-cu12b.png) Above: `inOneWeekendCuda` output, around four seconds to render.
+Implementation stopped at the point of creating a BVH structure in CUDA. The `qsort` from the book was problematic to adapt since there is no direct equivalent in the `thrust` library that I could find.
+
+[CUDA example images](#image-renders-cuda)
 
 Build OptiX 6.5 (Optix)
 -----------------------
@@ -103,6 +107,10 @@ Build OptiX 6.5 (Optix)
 Code based on
 
 -	https://github.com/trevordblack/OptixInOneWeekend
+
+and then heavily
+
+-	https://github.com/joaovbs96/OptiX-Path-Tracer
 
 Uses cmake
 
@@ -124,7 +132,7 @@ cmake --build build --target inOneWeekendOptix --clean-first
 cmake --build build --target theNextWeekOptix
 ```
 
-![cuda final image](assets/img/IOW-OptiX-final.png) 1200x600 pixels, 1K rays launched per pixel. Render time about 2.5 seconds using OptiX on an RTX card.
+[Optix example images](#image-renders-optix-gpu)
 
 Tested on
 ---------
@@ -157,6 +165,25 @@ Ray Tracing In One Weekend final scene
 -	CUDA GPU version: When generating same scene without BVH partitioning, less than **4 seconds**
 -	OptiX GPU version: When generating similar scene at 1K samples per pixel, less than **2.5 seconds**
 
+Image Renders (Optix GPU)
+-------------------------
+
+### In One Weekend
+
+![IOW Optix final image](assets/img/IOW-OptiX-final.png) 1200 x 600 pixels, 1K rays launched per pixel. Render time about **2.5 seconds** using OptiX on an RTX card.
+
+### The Next Week
+
+![TNW lighting IOW image](assets/img/TNW-Optix-lighting-IOW-final.png) 2400 x 800 pixels with 9000 samples per pixel. took **67.9 seconds**
+
+![TNW final image](assets/img/TNW-Optix-final.png) 3840 x 1080 pixels with 10240 samples per pixel. took **400 seconds**
+
+`convert tnw-final_scene.png -resize 50% half_tnw-final_scene.png`
+
+### Rest Of Life
+
+TBD:
+
 Image Renders (C++ Single Thread CPU)
 -------------------------------------
 
@@ -176,21 +203,7 @@ Image Renders (C++ Single Thread CPU)
 
 Top Image above of the Cornell box: 1000x1000 pixels with 500 rays per pixel. Took 1 hour, 8 minutes
 
-Image Renders (Optix GPU)
--------------------------
+Image Renders (CUDA)
+--------------------
 
-### In One Weekend
-
-![IOW final image](assets/img/IOW-OptiX-final.png) 1200 x 800 pixels, 1024 samples per pixel. Image took about **3 seconds**
-
-### The Next Week
-
-![TNW lighting IOW image](assets/img/TNW-Optix-lighting-IOW-final.png) 2400 x 800 pixels with 9000 samples per pixel. took **67.9 seconds**
-
-![TNW final image](assets/img/TNW-Optix-final.png) 3840 x 1080 pixels with 10240 samples per pixel. took **400 seconds**
-
-`convert tnw-final_scene.png -resize 50% half_tnw-final_scene.png`
-
-### Rest Of Life
-
-TBD:
+![cuda final image](assets/img/IOW-cu12b.png) Above: `inOneWeekendCuda` output, around four seconds to render.
