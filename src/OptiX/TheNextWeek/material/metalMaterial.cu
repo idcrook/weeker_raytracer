@@ -26,23 +26,20 @@ inline __device__ float3 emitted(){
 
 RT_PROGRAM void closestHit()
 {
-    float3 scatterDirection =
-        optix::reflect(theRay.direction, hitRecord.normal)
-        + fuzz*randomInUnitSphere(thePrd.seed);
-
-    if (optix::dot(scatterDirection, hitRecord.normal) <= 0.0f )
-    { // Ray is absorbed by the material
-        thePrd.scatterEvent = Ray_Finish;
-        thePrd.scattered_origin = hitRecord.point;
-        thePrd.scattered_direction = scatterDirection;
-        // no need to calculate if ray absorbed
-        thePrd.attenuation = make_float3(0.0f, 0.0f, 0.0f);
-        return;
-    }
-
     thePrd.emitted = emitted();
-    thePrd.scatterEvent = Ray_Hit;
+
+    // optix::reflect expects normalized (unit vector) inputs
+    float3 reflected = optix::reflect(optix::normalize(theRay.direction), hitRecord.normal);
+    float3 scatterDirection = reflected + fuzz*randomInUnitSphere(thePrd.seed);
+
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
     thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+
+    if (optix::dot(scatterDirection, hitRecord.normal) <= 0.0f ) {
+        thePrd.scatterEvent = Ray_Cancel;
+        return;
+    }
+
+    thePrd.scatterEvent = Ray_Hit;
 }

@@ -18,16 +18,11 @@ rtDeclareVariable(HitRecord, hitRecord, attribute hitRecord, );
 
 // assume p is normalized direction vector
 inline __device__ void get_sphere_uv(const float3 p) {
-	float phi = atan2(p.z, p.x);
-	float theta = asin(p.y);
+	float phi = atan2f(p.z, p.x);
+	float theta = asinf(p.y);
 
 	hitRecord.u = 1 - (phi + CUDART_PI_F) / (2.f * CUDART_PI_F);
 	hitRecord.v = (theta + CUDART_PIO2_F) / CUDART_PI_F;
-}
-
-inline __device__ float dot(float3 a, float3 b)
-{
-    return a.x*b.x + a.y*b.y + a.z*b.z;
 }
 
 // The sphere bounding box program
@@ -47,9 +42,9 @@ RT_PROGRAM void getBounds(int pid, float result[6])
 RT_PROGRAM void intersection(int pid)
 {
     float3 oc = theRay.origin - center;
-    float a = dot(theRay.direction, theRay.direction);
-    float b = dot(oc, theRay.direction);
-    float c = dot(oc, oc) - radius*radius;
+    float a = optix::dot(theRay.direction, theRay.direction);
+    float b = optix::dot(oc, theRay.direction);
+    float c = optix::dot(oc, oc) - radius*radius;
     float discriminant = b*b - a*c;
 
     if (discriminant < 0.0f) return;
@@ -59,7 +54,7 @@ RT_PROGRAM void intersection(int pid)
         if (rtPotentialIntersection(t))
         {
             hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + t*theRay.direction);
-            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, hitRecord.point - center));
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, (hitRecord.point - center)/radius));
             get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }
@@ -69,7 +64,7 @@ RT_PROGRAM void intersection(int pid)
         if (rtPotentialIntersection(t))
         {
             hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + t*theRay.direction);
-            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, hitRecord.point - center));
+            hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, (hitRecord.point - center)/radius));
             get_sphere_uv(hitRecord.normal);
             rtReportIntersection(0);
         }

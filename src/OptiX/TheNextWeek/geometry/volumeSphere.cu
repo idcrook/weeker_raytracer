@@ -91,7 +91,7 @@ RT_PROGRAM void hitVolume(int pid)
             float hitt = hitt1 + (hitDistance / optix::length(theRay.direction));
 
             if (rtPotentialIntersection(hitt)) {
-                hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD,  theRay.origin + hitt*theRay.direction);
+                hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD, theRay.origin + hitt*theRay.direction);
 
                 hitRecord.u = 0.f;
                 hitRecord.v = 0.f;

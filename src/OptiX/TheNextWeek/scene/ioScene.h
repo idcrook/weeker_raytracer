@@ -582,10 +582,6 @@ public:
     optix::Group TheNextWeekFinal(optix::Context& context, int Nx, int Ny) {
         sceneDescription = "The Next Week final scene";
 
-        // ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
-        // ioTexture *fiftyPercentReddishGrey = new ioConstantTexture(make_float3(0.7f, 0.6f, 0.5f));
-        // ioTexture *reddish = new ioConstantTexture(make_float3(0.4f, 0.2f, 0.1f));
-        // ioTexture *saddleBrown = new ioConstantTexture(make_float3(139/255.f,  69/255.f,  19/255.f));
         ioTexture *brown = new ioConstantTexture(make_float3(0.7f, 0.3f, 0.1f));
         ioTexture *groundGreenish = new ioConstantTexture(make_float3(0.48f, 0.83f, 0.53f));
         ioTexture *metal1 = new ioConstantTexture(make_float3(0.8f, 0.8f, 0.9f));
@@ -600,8 +596,8 @@ public:
         //
         ioMaterial *glassyBlueFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.2f, 0.4f, 0.9f)));
         ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.95f)));
-
         ioMaterial *ground = new ioLambertianMaterial(groundGreenish);
+
         // ground
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 20; j++){
@@ -618,7 +614,7 @@ public:
             }
         }
         // light
-        geometryList.push_back(new ioAARect(113.f, 443.f, 127.f, 432.f, 554.f, false, Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(123.f, 423.f, 147.f, 412.f, 554.f, false, Y_AXIS)); // light
         materialList.push_back(new ioDiffuseLightMaterial(light7));
 
         // brown moving sphere
@@ -634,17 +630,13 @@ public:
 
         // metal sphere
         geometryList.push_back(new ioSphere(0.f, 150.f, 145.f, 50.f) );
-        materialList.push_back(new ioMetalMaterial(metal1, 10.f));
+        //materialList.push_back(new ioMetalMaterial(metal1, 10.f));
+        materialList.push_back(new ioMetalMaterial(metal1, 0.2f));
 
         // blue glassy sphere with a volume
         float3 centerGlassy = make_float3(360.f, 150.f, 45.f);
         geometryList.push_back(new ioSphere(centerGlassy.x, centerGlassy.y, centerGlassy.z, 70.f));
         materialList.push_back(new ioDielectricMaterial(1.5f));
-        // optix::GeometryInstance sphere2 =
-        //     ioGeometryInstance::createVolumeSphere(make_float3(), 75.f, 0.005f, whiteFog, context);
-        // topGroup.addChild(ioTransform::translate(b2tr,
-        //                                          sphere2, context),
-        //                   context);
         topGroup.addChild(ioGeometryInstance::createVolumeSphere(centerGlassy, 70.f, 0.2f, glassyBlueFog,
                                                                  context), context);
         // room ambient / boundary
@@ -661,12 +653,10 @@ public:
         materialList.push_back(new ioLambertianMaterial(noisep1));
 
         ioMaterial *white = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.93f)));
-
         std::vector<optix::GeometryInstance> d_list;
         for(int j = 0; j < 1000; j++) {
             d_list.push_back(ioGeometryInstance::createSphere(make_float3(165 * randf(seed), 165 * randf(seed), 165 * randf(seed)),
                                                               10.f, white, context));
-
         }
 
         optix::GeometryGroup ggSmallBallsBox = context->createGeometryGroup();
@@ -677,11 +667,10 @@ public:
 
         float3 positionSmallBallsBox = make_float3(-100.f, 270.f, 395.f);
         topGroup.addChild(ioTransform::translate(positionSmallBallsBox,
-                                                 ioTransform::rotateY(15.f,
+                                                 ioTransform::rotateY(20.f,
                                                                       ggSmallBallsBox, context),
                                                  context),
                           context);
-
         // init all geometry
         for(int i = 0; i < geometryList.size(); i++) {
             geometryList[i]->init(context);
@@ -729,26 +718,23 @@ public:
         context["skyLight"]->setInt(false);
 
         return topGroup.get();
-
     }
 
+    void destroy() {
+        for(int i = 0; i < materialList.size(); i++)
+            materialList[i]->destroy();
 
-    void destroy()
-        {
-            for(int i = 0; i < materialList.size(); i++)
-                materialList[i]->destroy();
+        for(int i = 0; i < geometryList.size(); i++)
+            geometryList[i]->destroy();
 
-            for(int i = 0; i < geometryList.size(); i++)
-                geometryList[i]->destroy();
+        for(int i = 0; i < geoInstList.size(); i++)
+            geoInstList[i].destroy();
 
-            for(int i = 0; i < geoInstList.size(); i++)
-                geoInstList[i].destroy();
+        geometryGroup.destroy();
 
-            geometryGroup.destroy();
-
-            camera->destroy();
-            delete camera;
-        }
+        camera->destroy();
+        delete camera;
+    }
 
 public:
     std::vector<ioMaterial*> materialList;

@@ -32,4 +32,18 @@ inline __device__ float3 randomInUnitSphere(uint32_t& seed)
     return p;
 }
 
+// inline __device__ float3 r_andomInUnitSphere(uint32_t& seed) {
+//     float z = randf(seed)*2.0f - 1.0f;
+// 	float t = randf(seed) * (2.0f * CUDART_PI_F);
+// 	float r = sqrtf((0.0f > (1.0f - z*z) ? 0.0f : (1.0f - z*z)));
+// 	float x = r * cosf(t);
+// 	float y = r * sinf(t);
+
+// 	float3 res = make_float3(x, y, z);
+// 	res *= powf(randf(seed), 1.0f / 3.0f);
+
+//   return res;
+// }
+
+
 #endif //!SAMPLING_CUH
