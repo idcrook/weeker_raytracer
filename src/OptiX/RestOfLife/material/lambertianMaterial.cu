@@ -26,10 +26,11 @@ inline __device__ float scatteringPdf() {
     float cosine = optix::dot(hitRecord.normal, optix::normalize(thePrd.scattered_direction));
 
     if(cosine < 0.f) {
-        cosine = 0.f;
+        //cosine = 0.f;
+        return 0.f;
+    } else {
+        return cosine / CUDART_PI_F;
     }
-
-    return cosine / CUDART_PI_F;
 }
 
 

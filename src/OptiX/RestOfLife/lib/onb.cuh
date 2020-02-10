@@ -21,7 +21,8 @@ struct onb {
         w = optix::normalize(n);
 
         float3 a;
-        if(fabsf(w.x) > 0.9f)
+        // equivalent to if(fabsf(w.x) > 0.9f)
+        if((w.x > 0.9f) or (w.x < -0.9f))
             a = make_float3(0.f, 1.f, 0.f);
         else
             a = make_float3(1.f, 0.f, 0.f);
