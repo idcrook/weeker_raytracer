@@ -5,10 +5,6 @@
 
 #include "Director.h"
 
-extern "C" const char raygen_ptx_c[];
-extern "C" const char miss_ptx_c[];
-// extern "C" const char exception_ptx_c[];
-
 void Director::init(unsigned int width, unsigned int height,
                     unsigned int samples)
 {
@@ -18,10 +14,6 @@ void Director::init(unsigned int width, unsigned int height,
     m_maxRayDepth = 50;
 
     initContext();
-
-    m_context->setEntryPointCount(1);
-    initRayGenProgram();
-    initMissProgram();
 
     initOutputBuffer();
     m_context["sysOutputBuffer"]->set(m_outputBuffer);
@@ -77,39 +69,17 @@ void Director::initOutputBuffer()
     m_outputBuffer->setSize(m_Nx, m_Ny);
 }
 
-void Director::initRayGenProgram()
-{
-    m_rayGenProgram = m_context->createProgramFromPTXString(
-        raygen_ptx_c, "rayGenProgram");
-    m_context->setRayGenerationProgram(0, m_rayGenProgram);
-    m_context["numSamples"]->setInt(m_Ns);
-    m_context["maxRayDepth"]->setInt(m_maxRayDepth);
-}
-
-void Director::initMissProgram()
-{
-    m_missProgram = m_context->createProgramFromPTXString(
-        miss_ptx_c, "missProgram");
-    m_context->setMissProgram(0, m_missProgram);
-}
-
-// void Director::initExceptionProgram()
-// {
-//   m_missProgram = m_context->createProgramFromPTXString(
-//     exception_ptx_c, "exceptionProgram");
-//   m_context->setMissProgram(0, m_missProgram);
-// }
-
 void Director::createScene(unsigned int sceneNumber)
 {
-    int error = m_scene.init(m_context, m_Nx, m_Ny, sceneNumber);
+
+    int error = m_scene.init(m_context, m_Nx, m_Ny, m_Ns, m_maxRayDepth, sceneNumber);
     if (error) {
         int exit_code = EXIT_FAILURE;
         std::exit( exit_code );
     }
 
     if (_verbose) {
-        std::string desc = m_scene.sceneDescription;
+        std::string desc = m_scene.getDescription();
         std::cerr << "INFO: Scene description: " << desc << std::endl;
     }
 }

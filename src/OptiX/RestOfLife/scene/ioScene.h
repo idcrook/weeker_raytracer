@@ -34,12 +34,29 @@
 // needed for randf()
 #include "../lib/random.cuh"
 
+
+extern "C" const char raygen_ptx_c[];
+extern "C" const char miss_ptx_c[];
+// extern "C" const char exception_ptx_c[];
+
+
 class ioScene
 {
 public:
     ioScene() { }
 
-    int init(optix::Context& context, int Nx, int Ny, int Nscene) {
+    int init(optix::Context& context, int Nx, int Ny, int Nsamples,
+             int maxRayDepth, int Nscene) {
+
+        context->setEntryPointCount(1);
+
+        // PDFs now set per scene
+        ioPdf* thePdf = getScenePdf(Nscene);
+        if (!thePdf) {
+            initRayGenProgram(context, Nsamples, maxRayDepth);
+            initMissProgram(context);
+        }
+
 
         topGroup.init(context);
         topGroup.get()->setAcceleration(context->createAcceleration("Trbvh"));
@@ -74,6 +91,42 @@ public:
         context["sysWorld"]->set(world);
         return 0;
     }
+
+    ioPdf* getScenePdf(int Nscene) {
+        ioPdf* PDF = nullptr;
+
+        switch(Nscene){
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        default:
+            std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
+        }
+        return PDF;
+    }
+
+
+    void initRayGenProgram(optix::Context& context, int samples, int maxRayDepth) {
+        m_rayGenProgram = context->createProgramFromPTXString(
+            raygen_ptx_c, "rayGenProgram");
+        context->setRayGenerationProgram(0, m_rayGenProgram);
+        context["numSamples"]->setInt(samples);
+        context["maxRayDepth"]->setInt(maxRayDepth);
+    }
+
+    void initMissProgram(optix::Context& context) {
+        m_missProgram = context->createProgramFromPTXString(
+            miss_ptx_c, "missProgram");
+        context->setMissProgram(0, m_missProgram);
+    }
+
 
     optix::Group MovingSpheres(optix::Context& context, int Nx, int Ny) {
         sceneDescription = "InOneWeekend final scene with moving spheres";
@@ -741,7 +794,12 @@ public:
         delete camera;
     }
 
-public:
+    std::string getDescription() {
+        return sceneDescription;
+    }
+
+private:
+    std::string sceneDescription;
     std::vector<ioMaterial*> materialList;
     std::vector<ioGeometry*> geometryList;
     std::vector<ioGeometryInstance> geoInstList;
@@ -749,7 +807,13 @@ public:
     ioGroup topGroup;
     ioCamera* camera;
     //optix::Group world;
-    std::string sceneDescription;
+
+    optix::Program m_rayGenProgram;
+    optix::Program m_missProgram;
+    // optix::Program m_exceptionProgram;
+
+
+
 };
 
 #endif //!IO_SCENE_H

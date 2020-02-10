@@ -29,18 +29,11 @@ private:
     optix::Context m_context;
     optix::Buffer m_outputBuffer;
 
-    optix::Program m_rayGenProgram;
-    optix::Program m_missProgram;
-    // optix::Program m_exceptionProgram;
-
     // Scene Objects
     ioScene m_scene;
 
     void initContext();
     void initOutputBuffer();
-    void initRayGenProgram();
-    void initMissProgram();
-    // void initExceptionProgram();
 
     bool _verbose = false;
     bool _debug = false;
