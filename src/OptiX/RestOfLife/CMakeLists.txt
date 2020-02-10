@@ -72,6 +72,9 @@ cuda_compile_and_embed(
   image_texture_ptx_c       texture/imageTexture.cu
   )
 
+cuda_compile_and_embed( cosine_pdf_ptx_c  pdf/cosinePdf.cu )
+cuda_compile_and_embed( rect_pdf_ptx_c    pdf/rectPdf.cu )
+cuda_compile_and_embed( mixture_pdf_ptx_c pdf/mixturePdf.cu )
 
 add_executable(restOfLifeOptix
   Director.h
@@ -86,6 +89,10 @@ add_executable(restOfLifeOptix
   ${aarect_ptx_c}
   ${volume_box_ptx_c}
   ${volume_sphere_ptx_c}
+
+  ${cosine_pdf_ptx_c}
+  ${rect_pdf_ptx_c}
+  ${mixture_pdf_ptx_c}
 
   ${normal_material_ptx_c}
   ${lambertian_material_ptx_c}

@@ -19,6 +19,8 @@
 #include "geometry/ioVolumeBox.h"
 #include "geometry/ioVolumeSphere.h"
 
+#include "pdf/ioPdf.h"
+
 #include "texture/ioTexture.h"
 #include "material/ioNormalMaterial.h"
 #include "material/ioLambertianMaterial.h"
