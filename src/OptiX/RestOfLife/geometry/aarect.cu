@@ -9,6 +9,7 @@ rtDeclareVariable(float,  a1, , );
 rtDeclareVariable(float,  b0, , );
 rtDeclareVariable(float,  b1, , );
 rtDeclareVariable(float,  k, , );
+rtDeclareVariable(int,    flip, , );
 
 // The ray that will be intersected against
 rtDeclareVariable(optix::Ray, theRay, rtCurrentRay, );
@@ -36,8 +37,10 @@ RT_PROGRAM void hitRectX(int pid) {
         hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD, theRay.origin + t * theRay.direction);
 
         float3 normal = make_float3(1.f, 0.f, 0.f);
-        if (0.f < optix::dot(normal, theRay.direction))
+        // if (0.f < optix::dot(normal, theRay.direction))
+        if (flip)
             normal = -normal;
+
 
         hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
 
@@ -61,7 +64,8 @@ RT_PROGRAM void hitRectY(int pid) {
         hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD, theRay.origin + t * theRay.direction);
 
         float3 normal = make_float3(0.f, 1.f, 0.f);
-        if (0.f < optix::dot(normal, theRay.direction))
+        // if (0.f < optix::dot(normal, theRay.direction))
+        if (flip)
             normal = -normal;
 
         hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));
@@ -86,7 +90,8 @@ RT_PROGRAM void hitRectZ(int pid) {
         hitRecord.point = rtTransformPoint(RT_OBJECT_TO_WORLD, theRay.origin + t * theRay.direction);
 
         float3 normal = make_float3(0.f, 0.f, 1.f);
-        if (0.f < optix::dot(normal, theRay.direction))
+        //if (0.f < optix::dot(normal, theRay.direction))
+        if (flip)
             normal = -normal;
 
         hitRecord.normal = optix::normalize(rtTransformNormal(RT_OBJECT_TO_WORLD, normal));

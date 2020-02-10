@@ -228,10 +228,10 @@ public:
         materialList.push_back(new ioLambertianMaterial(earthGlobeImage));
         materialList.push_back(new ioDielectricMaterial(1.5f));
 
-        geometryList.push_back(new ioAARect(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f,  Z_AXIS));
+        geometryList.push_back(new ioAARect(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f, false, Z_AXIS));
         materialList.push_back(new ioDiffuseLightMaterial(light16));
 
-        // geometryList.push_back(new ioAARect(-6.f, -1.f, -2.f, 2.f, 10.f,  Y_AXIS));
+        // geometryList.push_back(new ioAARect(-6.f, -1.f, -2.f, 2.f, 10.f, true, Y_AXIS));
         // materialList.push_back(new ioDiffuseLightMaterial(light4));
 
         // Small Spheres
@@ -337,13 +337,13 @@ public:
         ioMaterial *wallWhite = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.73f, 0.73f, 0.73f)));
         ioTexture* light15 =  new ioConstantTexture(make_float3(15.f, 15.f, 15.f));
 
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,     X_AXIS)); // left wall
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,       X_AXIS)); // right wall
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,     Y_AXIS)); // roof
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,       Y_AXIS)); // floor
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,     Z_AXIS)); // back wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, X_AXIS)); // left wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,   false, X_AXIS)); // right wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, Y_AXIS)); // roof
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,   false, Y_AXIS)); // floor
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, Z_AXIS)); // back wall
 
-        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, true, Y_AXIS)); // light
 
         materialList.push_back(wallGreen);
         materialList.push_back(wallRed);
@@ -443,13 +443,13 @@ public:
         ioMaterial *blackFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.f)));
         ioMaterial *whiteFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(1.f)));
 
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,     X_AXIS)); // left wall
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,       X_AXIS));  // right wall
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,     Y_AXIS)); // roof
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,       Y_AXIS));  //floor
-        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,     Z_AXIS)); // back wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, X_AXIS)); // left wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,   false, X_AXIS)); // right wall
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, Y_AXIS)); // roof
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,   false, Y_AXIS)); // floor
+        geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, Z_AXIS)); // back wall
 
-        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, true, Y_AXIS)); // light
 
         materialList.push_back(wallGreen);
         materialList.push_back(wallRed);
@@ -617,7 +617,7 @@ public:
             }
         }
         // light
-        geometryList.push_back(new ioAARect(123.f, 423.f, 147.f, 412.f, 554.f,  Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(123.f, 423.f, 147.f, 412.f, 554.f, false, Y_AXIS)); // light
         materialList.push_back(new ioDiffuseLightMaterial(light7));
 
         // brown moving sphere

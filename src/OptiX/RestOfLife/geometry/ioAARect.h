@@ -15,13 +15,14 @@ class ioAARect : public ioGeometry
 public:
     ioAARect() {}
 
-    ioAARect(const float a0, const float a1, const float b0, const float b1, const float k, const Axis orientation)
+    ioAARect(const float a0, const float a1, const float b0, const float b1, const float k, const bool flip, const Axis orientation)
         {
             m_a0 = a0;
             m_a1 = a1;
             m_b0 = b0;
             m_b1 = b1;
             m_k  = k;
+            m_flip = flip;
             kind = orientation;
         }
 
@@ -51,7 +52,10 @@ public:
         m_geo["b0"]->setFloat(m_b0);
         m_geo["b1"]->setFloat(m_b1);
         m_geo["k"]->setFloat(m_k);
+        m_geo["flip"]->setInt(m_flip);
     }
+
+
 
 private:
     float m_a0;
@@ -59,6 +63,7 @@ private:
     float m_b0;
     float m_b1;
     float m_k;
+    bool  m_flip;
     Axis kind;
 };
 
