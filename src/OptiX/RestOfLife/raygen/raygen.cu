@@ -108,7 +108,7 @@ RT_PROGRAM void rayGenProgram()
         float3 sampleRadiance = color(theRay, seed);
 
         // Remove NaNs - should also remove from sample count? as this is a "bad" sample
-        //sampleRadiance = removeNaNs(sampleRadiance);
+        sampleRadiance = removeNaNs(sampleRadiance);
 
         radiance += sampleRadiance;
     }

@@ -35,13 +35,17 @@ inline __device__ float scatteringPdf() {
 
 RT_PROGRAM void closestHit()
 {
-    float3 scatterDirection = hitRecord.normal + randomInUnitSphere(thePrd.seed);
+    onb uvw;
+    uvw.buildFromW(hitRecord.normal);
+    float3 scatterDirection = optix::normalize(uvw.local(randomCosineDirection(thePrd.seed)));
 
     thePrd.emitted = emitted();
-    thePrd.pdf = optix::dot(hitRecord.normal, scatterDirection) / CUDART_PI_F;
+
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
     thePrd.scattered_pdf = scatteringPdf();
     thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+    thePrd.pdf = optix::dot(uvw.w, scatterDirection) / CUDART_PI_F;
+
 }
