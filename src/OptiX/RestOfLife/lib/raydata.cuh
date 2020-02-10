@@ -20,6 +20,7 @@ struct PerRayData
     float3 scattered_direction; // 12 bytes
     float3 emitted;             // 12 bytes
     ScatterEvent scatterEvent;  //  4 bytes
+    float3 hit_normal;          // 12 bytes - Need to save per ray?
     float  pdf;                 //  4 bytes
     float  scattered_pdf;       //  4 bytes
     float  gatherTime;          //  4 bytes

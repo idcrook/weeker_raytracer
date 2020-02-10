@@ -20,6 +20,7 @@ inline __device__ float3 emitted(){
 RT_PROGRAM void closestHit()
 {
     thePrd.emitted = emitted();
+    thePrd.hit_normal = hitRecord.normal;
     thePrd.scatterEvent = Ray_Finish;
     thePrd.attenuation = 0.5f * (hitRecord.normal + make_float3(1.0f, 1.0f, 1.0f));
 }

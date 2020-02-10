@@ -100,4 +100,5 @@ RT_PROGRAM void closestHit()
     // thePrd.attenuation = make_float3(0.8f, 0.85f, 0.82f); // for greenish glass
     thePrd.attenuation = make_float3(1.0f, 1.0f, 1.0f);
     thePrd.scattered_pdf = scatteringPdf();
+    thePrd.hit_normal = hitRecord.normal;
 }

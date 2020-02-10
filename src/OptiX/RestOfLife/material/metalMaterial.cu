@@ -30,6 +30,7 @@ inline __device__ float scatteringPdf() {
 RT_PROGRAM void closestHit()
 {
     thePrd.emitted = emitted();
+    thePrd.hit_normal = hitRecord.normal;
 
     // optix::reflect expects normalized (unit vector) inputs
     float3 reflected = optix::reflect(optix::normalize(theRay.direction), hitRecord.normal);

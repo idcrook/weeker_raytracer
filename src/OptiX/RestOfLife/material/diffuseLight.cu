@@ -18,7 +18,12 @@ rtDeclareVariable(rtCallableProgramId<float3(float, float, float3)>, sampleTextu
 
 
 inline __device__ float3 emitted() {
-    return sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+
+    if(optix::dot(hitRecord.normal, theRay.direction) < 0.f) {
+        return sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
+    } else {
+        return make_float3(0.f);
+    }
 }
 
 inline __device__ float scatteringPdf() {
@@ -27,6 +32,7 @@ inline __device__ float scatteringPdf() {
 
 RT_PROGRAM void closestHit() {
     thePrd.emitted = emitted();
+    thePrd.hit_normal = hitRecord.normal;
     thePrd.scatterEvent = Ray_Cancel;
     thePrd.scattered_pdf = scatteringPdf();
 }

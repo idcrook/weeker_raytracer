@@ -30,6 +30,7 @@ RT_PROGRAM void closestHit()
     float3 scatterDirection = randomInUnitSphere(thePrd.seed);
 
     thePrd.scatterEvent = Ray_Hit;
+    thePrd.hit_normal = hitRecord.normal;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
     thePrd.emitted = emitted();

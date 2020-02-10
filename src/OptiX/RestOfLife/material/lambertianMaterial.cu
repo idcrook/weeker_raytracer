@@ -43,6 +43,7 @@ RT_PROGRAM void closestHit()
     thePrd.emitted = emitted();
 
     thePrd.scatterEvent = Ray_Hit;
+    thePrd.hit_normal = hitRecord.normal;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
     thePrd.scattered_pdf = scatteringPdf();
