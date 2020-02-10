@@ -74,20 +74,48 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
         }
         else
         {
-            // ray is still alive, and got properly bounced
-            // sampleRadiance = thePrd.emitted + (sampleRadiance * thePrd.attenuation);
-            sampleRadiance = thePrd.emitted +
-                ((sampleRadiance * thePrd.attenuation * thePrd.scattered_pdf) / thePrd.pdf);
-            theRay = optix::make_Ray(
-                thePrd.scattered_origin,
-                thePrd.scattered_direction,
-                0,
-                1e-3f,
-                RT_DEFAULT_MAX
-            );
+            // needs to match light source in cornell box
+            float3 on_light = make_float3(213.f + randf(seed) * (343.f - 213.f),
+                                          554.f,
+                                          227.f + randf(seed) * (332.f - 227.f));
+            float3 to_light = (on_light - thePrd.scattered_origin);
+            float  distance_squared = optix::dot(to_light, to_light);
+
+            float3 to_light_direction = optix::normalize(to_light);
+
+            if(optix::dot(to_light_direction, thePrd.hit_normal) < 0.f)
+                return sampleRadiance * thePrd.emitted;
+            else{
+                float light_cosine = fabsf(to_light_direction.y);
+
+                if(light_cosine < 0.000001)
+                    return sampleRadiance * thePrd.emitted;
+                else{
+                    float light_area = (343.f - 213.f) * (332.f - 227.f);
+                    float pdf = distance_squared / (light_cosine * light_area);
+                    sampleRadiance = thePrd.emitted + (thePrd.attenuation * thePrd.scattered_pdf * sampleRadiance) / pdf;
+                    theRay = optix::make_Ray(
+                        thePrd.scattered_origin,
+                        to_light_direction,
+                        0,
+                        1e-3f,
+                        RT_DEFAULT_MAX
+                    );
+                    // // ray is still alive, and got properly bounced
+                    // // sampleRadiance = thePrd.emitted + (sampleRadiance * thePrd.attenuation);
+                    // sampleRadiance = thePrd.emitted +
+                    //     ((sampleRadiance * thePrd.attenuation * thePrd.scattered_pdf) / thePrd.pdf);
+                    // theRay = optix::make_Ray(
+                    //     thePrd.scattered_origin,
+                    //     thePrd.scattered_direction,
+                    //     0,
+                    //     1e-3f,
+                    //     RT_DEFAULT_MAX
+                    // );
+                }
+            }
         }
     }
-
     seed = thePrd.seed;
 
     return make_float3(0.0f);
@@ -119,7 +147,7 @@ RT_PROGRAM void rayGenProgram()
         sqrtf(radiance.x),
         sqrtf(radiance.y),
         sqrtf(radiance.z)
-    );
+        );
 
     sysOutputBuffer[theLaunchIndex] = radiance;
 }

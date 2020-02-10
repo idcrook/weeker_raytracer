@@ -12,7 +12,7 @@
 - [X] Chapter 6 - Importance Sampling Materials
 - [X] Chapter 7 - Generating Random Directions
 - [X] Chapter 8 - Ortho-normal Bases
-- [ ] Chapter 9 - Sampling Lights Directly
+- [X] Chapter 9 - Sampling Lights Directly
 - [ ] Chapter 10 - Mixture Densities
 - [ ] Chapter 11 - Cleaning Up PDF Management
 
