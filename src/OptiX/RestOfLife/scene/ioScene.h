@@ -48,14 +48,14 @@ public:
     int init(optix::Context& context, int Nx, int Ny, int Nsamples,
              int maxRayDepth, int Nscene) {
 
-        context->setEntryPointCount(1);
-
         // PDFs now set per scene
         ioPdf* thePdf = getScenePdf(Nscene);
-        if (!thePdf) {
+        if (thePdf) {
+            initRayGenProgram(context, Nsamples, maxRayDepth, thePdf);
+        } else {
             initRayGenProgram(context, Nsamples, maxRayDepth);
-            initMissProgram(context);
         }
+        initMissProgram(context);
 
 
         topGroup.init(context);
@@ -97,6 +97,7 @@ public:
 
         switch(Nscene){
         case 0:
+            PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectY_PDF(213.f, 343.f, 227.f, 332.f, 554.f));
             break;
         case 1:
             break;
@@ -117,9 +118,23 @@ public:
         m_rayGenProgram = context->createProgramFromPTXString(
             raygen_ptx_c, "rayGenProgram");
         context->setRayGenerationProgram(0, m_rayGenProgram);
+        context->setEntryPointCount(1);
         context["numSamples"]->setInt(samples);
         context["maxRayDepth"]->setInt(maxRayDepth);
     }
+
+    void initRayGenProgram(optix::Context& context, int samples, int maxRayDepth, ioPdf* pdf) {
+        m_rayGenProgram = context->createProgramFromPTXString(
+            raygen_ptx_c, "rayGenProgram");
+        context->setEntryPointCount(1);
+        m_rayGenProgram["generate"]->setProgramId(pdf->assignGenerate(context));
+        m_rayGenProgram["value"]->setProgramId(pdf->assignValue(context));
+
+        context->setRayGenerationProgram(0, m_rayGenProgram);
+        context["numSamples"]->setInt(samples);
+        context["maxRayDepth"]->setInt(maxRayDepth);
+    }
+
 
     void initMissProgram(optix::Context& context) {
         m_missProgram = context->createProgramFromPTXString(

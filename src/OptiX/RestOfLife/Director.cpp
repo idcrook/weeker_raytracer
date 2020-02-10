@@ -52,6 +52,8 @@ void Director::initContext()
     }
 
     m_context = optix::Context::create();
+
+    // Should be handled per scene?
     m_context->setRayTypeCount(1);
 
     // Set Output Debugging via rtPrintf

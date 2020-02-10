@@ -13,7 +13,7 @@
 - [X] Chapter 7 - Generating Random Directions
 - [X] Chapter 8 - Ortho-normal Bases
 - [X] Chapter 9 - Sampling Lights Directly
-- [ ] Chapter 10 - Mixture Densities
+- [X] Chapter 10 - Mixture Densities
 - [ ] Chapter 11 - Cleaning Up PDF Management
 
 
