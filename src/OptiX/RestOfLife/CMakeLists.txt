@@ -5,7 +5,7 @@ cuda_compile_and_embed(
   )
 
 cuda_compile_and_embed(
-  miss_ptx_c     miss/miss.cu
+  miss_ptx_c     raygen/miss.cu
   )
 
 cuda_compile_and_embed(
