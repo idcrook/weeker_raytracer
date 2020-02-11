@@ -24,9 +24,20 @@ cmake --build build   # build all targets
 # developer generation
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -B build src
+
+cmake --build build --parallel 7 \
+    --target theNextWeekOptix
 ```
 
 Use `cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON` so that, for example, emacs irony-mode can know the compiler flags and flycheck can work.
+
+for debugging CMake itself: `-Wdev -Wdeprecated --warn-unused-vars --warn-uninitialized` on the `-B build` generation step
+
+Typically the number of parallel jobs is the number of CPU cores in your system, plus one. On linux, to get the number of cores in your system:
+
+```
+grep "^cpu\\scores" /proc/cpuinfo | uniq |  awk '{print $4}'
+```
 
 Run
 ===
@@ -45,13 +56,13 @@ A `.ppm` image file is a non-binary (text) format.
 #### Advanced example(s) with additional command line parameters
 
 ```bash
-build/theNextWeekOptix -v -s 2 -dx 1120 -dy 1120 -ns 1024 >! output/test1.ppm
+build/restOfLifeOptix -v -s 0 -dx 1120 -dy 1120 -ns 1024 >! output/test1.ppm
 ```
 
 In this example
 
 -	`-v` sets **verbose** output
--	`-s 2` selects **scene** number two
+-	`-s 0` selects **scene** zero
 -	`-dx 1120 -dy 1120` sets image to be of width and height **1120x1120**
 -	`-ns 1024` collect **1024** sampled rays per pixel
 
@@ -130,6 +141,8 @@ build specific targets
 ```
 cmake --build build --target inOneWeekendOptix --clean-first
 cmake --build build --target theNextWeekOptix
+cmake --build build --target restOfLifeOptix --parallel 7
+
 ```
 
 [Optix example images](#image-renders-optix-gpu)
