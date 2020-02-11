@@ -32,6 +32,8 @@ inline __device__ float scatteringPdf() {
 
 RT_PROGRAM void closestHit() {
     thePrd.emitted = emitted();
+    thePrd.is_specular = false;
+    thePrd.materialType = DiffuseLight;
     thePrd.hit_normal = hitRecord.normal;
     thePrd.scatterEvent = Ray_Cancel;
     thePrd.scattered_pdf = scatteringPdf();

@@ -30,6 +30,9 @@ inline __device__ float scatteringPdf() {
 RT_PROGRAM void closestHit()
 {
     thePrd.emitted = emitted();
+    thePrd.is_specular = true;
+    thePrd.materialType = Metallic;
+
     thePrd.hit_normal = hitRecord.normal;
 
     // optix::reflect expects normalized (unit vector) inputs

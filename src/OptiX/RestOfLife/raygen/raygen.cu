@@ -80,17 +80,28 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
             return sampleRadiance * thePrd.emitted;
         }
         else { // ray is still alive, and got properly bounced
+            if (thePrd.is_specular) {
+                sampleRadiance = sampleRadiance * thePrd.attenuation;
+                theRay = optix::make_Ray(
+                    thePrd.scattered_origin,
+                    thePrd.scattered_direction,
+                    0,
+                    1e-3f,
+                    RT_DEFAULT_MAX
+                    );
 
-            pdf_in in(thePrd.scattered_origin, thePrd.scattered_direction, thePrd.hit_normal);
-            float3 pdf_direction = generate(in, seed);
-            float pdf_val = value(in);
+            } else {
+                pdf_in in(thePrd.scattered_origin, thePrd.scattered_direction, thePrd.hit_normal);
+                float3 pdf_direction = generate(in, seed);
+                float pdf_val = value(in);
 
-            sampleRadiance = thePrd.emitted + (thePrd.attenuation * thePrd.scattered_pdf * sampleRadiance) / pdf_val;
-            theRay = optix::make_Ray(/* origin   : */ in.origin,
-                                  /* direction: */ pdf_direction,
-                                  /* ray type : */ 0,
-                                  /* tmin     : */ 1e-3f,
-                                  /* tmax     : */ RT_DEFAULT_MAX);
+                sampleRadiance = thePrd.emitted + (thePrd.attenuation * thePrd.scattered_pdf * sampleRadiance) / pdf_val;
+                theRay = optix::make_Ray(/* origin   : */ in.origin,
+                                         /* direction: */ pdf_direction,
+                                         /* ray type : */ 0,
+                                         /* tmin     : */ 1e-3f,
+                                         /* tmax     : */ RT_DEFAULT_MAX);
+            }
         }
     }
     seed = thePrd.seed;

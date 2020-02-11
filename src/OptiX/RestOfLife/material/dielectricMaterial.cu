@@ -94,6 +94,8 @@ RT_PROGRAM void closestHit()
     //     printf("sinThetaI is NaN: %f", sinThetaI);
 
     thePrd.emitted = emitted();
+    thePrd.is_specular = true;
+    thePrd.materialType = Dielectric;
     thePrd.scatterEvent = Ray_Hit;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;

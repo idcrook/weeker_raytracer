@@ -41,6 +41,8 @@ RT_PROGRAM void closestHit()
     float3 scatterDirection = optix::normalize(uvw.local(randomCosineDirection(thePrd.seed)));
 
     thePrd.emitted = emitted();
+    thePrd.is_specular = false;
+    thePrd.materialType = Lambertian;
 
     thePrd.scatterEvent = Ray_Hit;
     thePrd.hit_normal = hitRecord.normal;

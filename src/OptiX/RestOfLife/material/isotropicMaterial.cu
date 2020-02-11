@@ -29,11 +29,14 @@ RT_PROGRAM void closestHit()
 {
     float3 scatterDirection = randomInUnitSphere(thePrd.seed);
 
+    thePrd.emitted = emitted();
+    thePrd.is_specular = true; // ???
+    thePrd.materialType = Isotropic;
+
     thePrd.scatterEvent = Ray_Hit;
     thePrd.hit_normal = hitRecord.normal;
     thePrd.scattered_origin = hitRecord.point;
     thePrd.scattered_direction = scatterDirection;
-    thePrd.emitted = emitted();
     thePrd.attenuation = sampleTexture(hitRecord.u, hitRecord.v, hitRecord.point);
     thePrd.scattered_pdf = scatteringPdf();
 }
