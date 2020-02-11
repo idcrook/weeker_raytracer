@@ -1,14 +1,24 @@
-![final image](assets/img/ROL-ch13dSH.png)
+![Optix ROL final image](assets/img/rol-optix-final-alum_10k.png)
 
-Started with v2 in C++ from Peter Shirley's [Ray Tracing In One Weekend](https://github.com/RayTracing/raytracing.github.io) Book Series.
+| Platform   | In One Weekend | The Next Week | Rest Of Life |
+|------------|----------------|---------------|--------------|
+| Cpp        | Done           | Done          | Done         |
+| Cpp, macOS | Done           | Done          | Done         |
+| Optix 6.5  | Done           | Done          | Done         |
+| Cuda       | Done           | Stalled       |              |
 
--	Implementations
-	-	C++ (CPU)
-	-	CUDA C++ (GPU)
-	-	OptiX (Nvidia GPU SDK)
--	Multi-platform CMake builds
-	-	C++ tested on Linux, macOS
-	-	CUDA C++ and Optix 6.5 tested on Ubuntu amd64 19.10 (with Nvidia graphics card)
+Implementations
+
+Started from C++ v2 code from Peter Shirley's [Ray Tracing In One Weekend](https://github.com/RayTracing/raytracing.github.io) Book Series.
+
+-	Cpp (Single-thread C++ CPU)
+-	Cuda (C++ GPU)
+-	OptiX (C++ Nvidia Raytracing SDK GPU)
+
+Multi-platform CMake builds
+
+-	Cpp tested to work on Linux, macOS
+-	CUDA, Optix 6.5 tested on Ubuntu amd64 19.10 (with Nvidia RTX graphics card). Other version information below
 
 Build
 =====
@@ -195,7 +205,13 @@ Image Renders (Optix GPU)
 
 ### Rest Of Life
 
-TBD:
+![TNW final image](assets/img/rol-optix-final-alum_10k.png)
+
+`convert output/rol-final-alum_1k.ppm -resize 50% rol-final-alum_1k.png`
+
+-	2240 x 2240 pixels with 10240 samples per pixel, took **541 seconds** or 9 minutes. most of noise is gone.
+-	2240 x 2240 pixels with 1024 samples per pixel, **55 seconds** PNG scaled to 50% after.
+-	A version 1000x1000 pixels with 500 rays launched per pixel (apples to apples comparison with C++ Rest Of Life final scene): **7.3 seconds** (versus 1hr 8min)
 
 Image Renders (C++ Single Thread CPU)
 -------------------------------------
@@ -214,7 +230,7 @@ Image Renders (C++ Single Thread CPU)
 
 ### Rest Of Life
 
-Top Image above of the Cornell box: 1000x1000 pixels with 500 rays per pixel. Took 1 hour, 8 minutes
+![final image](assets/img/ROL-ch13dSH.png) 1000x1000 pixels with 500 rays per pixel. Took **1 hour, 8 minutes**
 
 Image Renders (CUDA)
 --------------------
