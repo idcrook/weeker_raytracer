@@ -429,34 +429,36 @@ public:
         // materialList.push_back(wallWhite);
 
         // // small sphere
-        //geometryList.push_back(new ioSphere(185.f, 75.f, 155.f, 75.f));
-        //materialList.push_back(wallWhite);
-
-        // // medium glass sphere
-        // geometryList.push_back(new ioSphere(185.f, 105.f, 155.f, 105.f));
+        // geometryList.push_back(new ioSphere(185.f, 75.f, 155.f, 75.f));
+        // materialList.push_back(wallWhite);
         // materialList.push_back(new ioDielectricMaterial(1.5f));
+
+        // medium glass sphere
+        geometryList.push_back(new ioSphere(190.f, 90.f, 175.f, 90.f));
+        materialList.push_back(new ioDielectricMaterial(1.5f));
 
         // boxes
         const float z1Theta = -12.5f * (CUDART_PI_F/180.f);
         float3 b1size = make_float3(165.f, 330.f,   165.f);
-        float3 b1tr = make_float3(265.f, fabs(sinf(z1Theta))*b1size.x, 255.f);
+        //float3 b1tr = make_float3(265.f, fabs(sinf(z1Theta))*b1size.x, 255.f);
+        float3 b1tr = make_float3(265.f, 0.f, 255.f);
         optix::GeometryGroup box1 = ioGeometryGroup::createBox(make_float3(0.f), b1size, wallWhite, context);
         topGroup.addChild(ioTransform::translate(b1tr,
-                                                 ioTransform::rotateZ(z1Theta*(180.f/CUDART_PI_F),
+                                                 //ioTransform::rotateZ(z1Theta*(180.f/CUDART_PI_F),
                                                                       ioTransform::rotateY(15.f,
                                                                                            box1, context),
-                                                                      context),
+                                                 //                     context),
                                                  context),
                           context);
 
-        float3 b2size = make_float3(165.f, 165.f,   165.f);
-        float3 b2tr = make_float3(130.f, 0.f, 65.f);
-        optix::GeometryGroup box2 = ioGeometryGroup::createBox(make_float3(0.f), b2size, wallWhite, context);
-        topGroup.addChild(ioTransform::translate(b2tr,
-                                                 ioTransform::rotateY(-18.f,
-                                                                      box2, context),
-                                                 context),
-                          context);
+        // float3 b2size = make_float3(165.f, 165.f,   165.f);
+        // float3 b2tr = make_float3(130.f, 0.f, 65.f);
+        // optix::GeometryGroup box2 = ioGeometryGroup::createBox(make_float3(0.f), b2size, wallWhite, context);
+        // topGroup.addChild(ioTransform::translate(b2tr,
+        //                                          ioTransform::rotateY(-18.f,
+        //                                                               box2, context),
+        //                                          context),
+        //                   context);
 
         uint32_t seed = 0x6314759;
 

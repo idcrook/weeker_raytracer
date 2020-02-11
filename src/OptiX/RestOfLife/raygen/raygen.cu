@@ -95,7 +95,10 @@ inline __device__ float3 color(optix::Ray& theRay, uint32_t& seed)
                 float3 pdf_direction = generate(in, seed);
                 float pdf_val = value(in);
 
-                sampleRadiance = thePrd.emitted + (thePrd.attenuation * thePrd.scattered_pdf * sampleRadiance) / pdf_val;
+                sampleRadiance = optix::clamp(thePrd.emitted +
+                                              (thePrd.attenuation * thePrd.scattered_pdf * sampleRadiance) / pdf_val,
+                                              0.f, 1.f);
+
                 theRay = optix::make_Ray(/* origin   : */ in.origin,
                                          /* direction: */ pdf_direction,
                                          /* ray type : */ 0,
