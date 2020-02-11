@@ -7,6 +7,7 @@
 - [ ] add Exception program
 - [ ] add progress output, useful for longer running jobs
 - [ ] flatten transformation matrices instead of cascading transforms
+- [ ] refactor ioScene-s in Optix ROL and test all scenes
 
 ** Rest Of Life feature breakdown
 - [X] Chapter 6 - Importance Sampling Materials
@@ -15,8 +16,6 @@
 - [X] Chapter 9 - Sampling Lights Directly
 - [X] Chapter 10 - Mixture Densities
 - [ ] Chapter 11 - Cleaning Up PDF Management
-
-
 
 * DONE
 
