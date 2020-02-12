@@ -48,6 +48,12 @@ public:
     int init(optix::Context& context, int Nx, int Ny, int Nsamples,
              int maxRayDepth, int Nscene) {
 
+        m_Nx = Nx;
+        m_Ny = Ny;
+        m_numSamples = Nsamples;
+        m_maxRayDepth = maxRayDepth;
+
+
         // PDFs now set per scene
         ioPdf* thePdf = getScenePdf(Nscene);
         if (thePdf) {
@@ -65,19 +71,19 @@ public:
 
         switch(Nscene){
         case 0:
-            world = CornellBox(context, Nx, Ny);
+            world = CornellBox(context);
             break;
         case 1:
-            world = MovingSpheres(context, Nx, Ny);
+            world = MovingSpheres(context);
             break;
         case 2:
-            world = InOneWeekendLight(context, Nx, Ny);
+            world = InOneWeekendLight(context);
             break;
         case 3:
-            world = VolumesCornellBox(context, Nx, Ny);
+            world = VolumesCornellBox(context);
             break;
         case 4:
-            world = TheNextWeekFinal(context, Nx, Ny);
+            world = TheNextWeekFinal(context);
             break;
         default:
             std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
@@ -104,6 +110,7 @@ public:
         case 2:
             break;
         case 3:
+            PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectY_PDF(213.f, 343.f, 227.f, 332.f, 554.f));
             break;
         case 4:
             break;
@@ -143,7 +150,7 @@ public:
     }
 
 
-    optix::Group MovingSpheres(optix::Context& context, int Nx, int Ny) {
+    optix::Group MovingSpheres(optix::Context& context) {
         sceneDescription = "InOneWeekend final scene with moving spheres";
 
         ioTexture *fiftyPercentGrey = new ioConstantTexture(make_float3(0.5f, 0.5f, 0.5f));
@@ -246,7 +253,7 @@ public:
             13.0f, 2.0f, 3.0f,
             0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
-            20.0f, float(Nx) / float(Ny),
+            20.0f, float(m_Nx) / float(m_Ny),
             /*aperture*/0.0f,
             /*focus_distance*/10.f,
             /* t0 and t1 */0.f, 1.f
@@ -260,7 +267,7 @@ public:
 
 
 
-    optix::Group InOneWeekendLight(optix::Context& context, int Nx, int Ny)  {
+    optix::Group InOneWeekendLight(optix::Context& context)  {
 
         sceneDescription = "IOW Scene with a light box";
 
@@ -386,7 +393,7 @@ public:
             13.0f, 2.0f, 3.0f,
             0.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
-            20.0f, float(Nx) / float(Ny),
+            20.0f, float(m_Nx) / float(m_Ny),
             /*aperture*/0.08f,
             /*focus_distance*/10.f
             );
@@ -398,14 +405,14 @@ public:
 
     }
 
-    optix::Group CornellBox(optix::Context& context, int Nx, int Ny) {
+    optix::Group CornellBox(optix::Context& context) {
 
         sceneDescription = "Cornell box";
 
         ioMaterial *wallRed = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.65f, 0.05f, 0.05f)));
         ioMaterial *wallGreen = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.12f, 0.45f, 0.15f)));
         ioMaterial *wallWhite = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.73f, 0.73f, 0.73f)));
-        ioMaterial *aluminum = new ioMetalMaterial(new ioConstantTexture(make_float3(0.91, 0.92, 0.92)), 0.008);
+        ioMaterial *aluminum = new ioMetalMaterial(new ioConstantTexture(make_float3(0.91, 0.92, 0.92)), 0.08);
         ioTexture* light15 =  new ioConstantTexture(make_float3(15.f, 15.f, 15.f));
 
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, X_AXIS)); // left wall
@@ -492,7 +499,7 @@ public:
             278.f, 278.f, -800.f,
             278.f, 278.f, 0.f,
             0.0f, 1.0f, 0.0f,
-            40.0f, float(Nx) / float(Ny),
+            40.0f, float(m_Nx) / float(m_Ny),
             /*aperture*/0.f,
             /*focus_distance*/10.f
             );
@@ -504,7 +511,7 @@ public:
     }
 
 
-    optix::Group VolumesCornellBox(optix::Context& context, int Nx, int Ny) {
+    optix::Group VolumesCornellBox(optix::Context& context) {
 
         sceneDescription = "Cornell box with volumes (participating media)";
 
@@ -643,7 +650,7 @@ public:
             278.f, 278.f, -800.f,
             278.f, 278.f, 0.f,
             0.0f, 1.0f, 0.0f,
-            40.0f, float(Nx) / float(Ny),
+            40.0f, float(m_Nx) / float(m_Ny),
             /*aperture*/0.f,
             /*focus_distance*/10.f
             );
@@ -655,7 +662,7 @@ public:
     }
 
 
-    optix::Group TheNextWeekFinal(optix::Context& context, int Nx, int Ny) {
+    optix::Group TheNextWeekFinal(optix::Context& context) {
         sceneDescription = "The Next Week final scene";
 
         ioTexture *brown = new ioConstantTexture(make_float3(0.7f, 0.3f, 0.1f));
@@ -776,7 +783,7 @@ public:
         const float3 lookat = make_float3(278.f, 278.f, 0.f);
         const float3 up = make_float3(0.f, 1.f, 0.f);
         const float fovy = 40.0f;
-        const float aspect = (float(Nx) / float(Ny));
+        const float aspect = (float(m_Nx) / float(m_Ny));
         const float aperture = (0.f);
         const float focus_distance = (10.f);
 
@@ -818,6 +825,12 @@ public:
 
 private:
     std::string sceneDescription;
+
+    int m_Nx;
+    int m_Ny;
+    int m_maxRayDepth;
+    int m_numSamples;
+
     std::vector<ioMaterial*> materialList;
     std::vector<ioGeometry*> geometryList;
     std::vector<ioGeometryInstance> geoInstList;
