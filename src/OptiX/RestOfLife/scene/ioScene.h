@@ -415,7 +415,7 @@ public:
         ioMaterial *wallRed = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.65f, 0.05f, 0.05f)));
         ioMaterial *wallGreen = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.12f, 0.45f, 0.15f)));
         ioMaterial *wallWhite = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.73f, 0.73f, 0.73f)));
-        ioMaterial *aluminum = new ioMetalMaterial(new ioConstantTexture(make_float3(0.91, 0.92, 0.92)), 0.08);
+        ioMaterial *aluminum = new ioMetalMaterial(new ioConstantTexture(make_float3(0.91, 0.92, 0.92)), 0.03);
         ioTexture* light15 =  new ioConstantTexture(make_float3(15.f, 15.f, 15.f));
 
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, X_AXIS)); // left wall
@@ -424,7 +424,7 @@ public:
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 0.f,   false, Y_AXIS)); // floor
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, Z_AXIS)); // back wall
 
-        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.f, true, Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(213.f, 343.f, 227.f, 332.f, 554.9f, true, Y_AXIS)); // light
 
         materialList.push_back(wallGreen);
         materialList.push_back(wallRed);
@@ -451,7 +451,7 @@ public:
         // boxes
         const float z1Theta = -15.5f * (CUDART_PI_F/180.f);
         float3 b1size = make_float3(165.f, 330.f,   165.f);
-        float3 b1tr = make_float3(265.f - (0.5f)*fabs(cosf(z1Theta))*b1size.x, fabs(sinf(z1Theta))*b1size.x, 255.f + (0.5f)*fabs(cosf(z1Theta))*b1size.x);
+        float3 b1tr = make_float3(265.f - (0.40f)*fabs(cosf(z1Theta))*b1size.x, fabs(sinf(z1Theta))*b1size.x, 255.f + (0.5f)*fabs(cosf(z1Theta))*b1size.x);
         //float3 b1tr = make_float3(265.f, 0.f, 255.f);
         optix::GeometryGroup box1 = ioGeometryGroup::createBox(make_float3(0.f), b1size, aluminum, context);
         topGroup.addChild(ioTransform::translate(b1tr,
@@ -470,6 +470,12 @@ public:
         //                                                               box2, context),
         //                                          context),
         //                   context);
+
+        // add a "fog"
+        ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.73f)));
+        topGroup.addChild(ioGeometryInstance::createVolumeBox(make_float3(0.f), make_float3(555.f), 3e-5f, ambientFog,
+                                                              context), context);
+
 
         uint32_t seed = 0x6314759;
 
