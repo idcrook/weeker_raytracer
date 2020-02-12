@@ -8,6 +8,7 @@ rtDeclareVariable(float,  a1, , );
 rtDeclareVariable(float,  b0, , );
 rtDeclareVariable(float,  b1, , );
 rtDeclareVariable(float,  k, , );
+//rtDeclareVariable(int,  flip, , );
 
 inline __device__ bool hit_x(pdf_in &in, const float tmin, const float tmax, pdf_rec &rec) {
     float t = (k - in.origin.x) / in.light_direction.x;

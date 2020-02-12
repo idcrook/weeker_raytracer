@@ -57,9 +57,9 @@ public:
         // PDFs now set per scene
         ioPdf* thePdf = getScenePdf(Nscene);
         if (thePdf) {
-            initRayGenProgram(context, Nsamples, maxRayDepth, thePdf);
+            initRayGenProgram(context, thePdf);
         } else {
-            initRayGenProgram(context, Nsamples, maxRayDepth);
+            initRayGenProgram(context);
         }
         initMissProgram(context);
 
@@ -106,13 +106,16 @@ public:
             PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectY_PDF(213.f, 343.f, 227.f, 332.f, 554.f));
             break;
         case 1:
+            PDF = new ioCosinePDF();
             break;
         case 2:
+            PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectZ_PDF(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f));
             break;
         case 3:
             PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectY_PDF(213.f, 343.f, 227.f, 332.f, 554.f));
             break;
         case 4:
+            PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectY_PDF(123.f, 423.f, 147.f, 412.f, 554.f));
             break;
         default:
             std::cerr << "ERROR: Scene " << Nscene << " unknown." << std::endl;
@@ -121,16 +124,16 @@ public:
     }
 
 
-    void initRayGenProgram(optix::Context& context, int samples, int maxRayDepth) {
+    void initRayGenProgram(optix::Context& context) {
         m_rayGenProgram = context->createProgramFromPTXString(
             raygen_ptx_c, "rayGenProgram");
         context->setRayGenerationProgram(0, m_rayGenProgram);
         context->setEntryPointCount(1);
-        context["numSamples"]->setInt(samples);
-        context["maxRayDepth"]->setInt(maxRayDepth);
+        context["numSamples"]->setInt(m_numSamples);
+        context["maxRayDepth"]->setInt(m_maxRayDepth);
     }
 
-    void initRayGenProgram(optix::Context& context, int samples, int maxRayDepth, ioPdf* pdf) {
+    void initRayGenProgram(optix::Context& context, ioPdf* pdf) {
         m_rayGenProgram = context->createProgramFromPTXString(
             raygen_ptx_c, "rayGenProgram");
         context->setEntryPointCount(1);
@@ -138,8 +141,8 @@ public:
         m_rayGenProgram["value"]->setProgramId(pdf->assignValue(context));
 
         context->setRayGenerationProgram(0, m_rayGenProgram);
-        context["numSamples"]->setInt(samples);
-        context["maxRayDepth"]->setInt(maxRayDepth);
+        context["numSamples"]->setInt(m_numSamples);
+        context["maxRayDepth"]->setInt(m_maxRayDepth);
     }
 
 
@@ -697,7 +700,7 @@ public:
             }
         }
         // light
-        geometryList.push_back(new ioAARect(123.f, 423.f, 147.f, 412.f, 554.f, false, Y_AXIS)); // light
+        geometryList.push_back(new ioAARect(123.f, 423.f, 147.f, 412.f, 554.f, true, Y_AXIS)); // light
         materialList.push_back(new ioDiffuseLightMaterial(light7));
 
         // brown moving sphere

@@ -34,9 +34,42 @@ struct ioCosinePDF : public ioPdf{
     }
 };
 
+// FIXME: refactor to have a struct factory for RectAXIS-s
+struct ioRectX_PDF : public ioPdf {
+ioRectX_PDF(const float aa0, const float aa1, const float bb0, const float bb1, const float kk)
+    : a0(aa0), a1(aa1), b0(bb0), b1(bb1), k(kk) {}
+
+    virtual optix::Program assignGenerate(optix::Context &context) const override {
+        optix::Program generate = context->createProgramFromPTXString(rect_pdf_ptx_c, "rect_x_generate");
+
+        generate["a0"]->setFloat(a0);
+        generate["a1"]->setFloat(a1);
+        generate["b0"]->setFloat(b0);
+        generate["b1"]->setFloat(b1);
+        generate["k"]->setFloat(k);
+
+        return generate;
+    }
+
+    virtual optix::Program assignValue(optix::Context &context) const override {
+        optix::Program value = context->createProgramFromPTXString(rect_pdf_ptx_c, "rect_x_value");
+
+        value["a0"]->setFloat(a0);
+        value["a1"]->setFloat(a1);
+        value["b0"]->setFloat(b0);
+        value["b1"]->setFloat(b1);
+        value["k"]->setFloat(k);
+
+        return value;
+    }
+
+    float a0, a1, b0, b1, k;
+};
+
+
 struct ioRectY_PDF : public ioPdf {
-    ioRectY_PDF(const float aa0, const float aa1, const float bb0, const float bb1, const float kk)
-                : a0(aa0), a1(aa1), b0(bb0), b1(bb1), k(kk) {}
+ioRectY_PDF(const float aa0, const float aa1, const float bb0, const float bb1, const float kk)
+    : a0(aa0), a1(aa1), b0(bb0), b1(bb1), k(kk) {}
 
     virtual optix::Program assignGenerate(optix::Context &context) const override {
         optix::Program generate = context->createProgramFromPTXString(rect_pdf_ptx_c, "rect_y_generate");
@@ -52,6 +85,37 @@ struct ioRectY_PDF : public ioPdf {
 
     virtual optix::Program assignValue(optix::Context &context) const override {
         optix::Program value = context->createProgramFromPTXString(rect_pdf_ptx_c, "rect_y_value");
+
+        value["a0"]->setFloat(a0);
+        value["a1"]->setFloat(a1);
+        value["b0"]->setFloat(b0);
+        value["b1"]->setFloat(b1);
+        value["k"]->setFloat(k);
+
+        return value;
+    }
+
+    float a0, a1, b0, b1, k;
+};
+
+struct ioRectZ_PDF : public ioPdf {
+ioRectZ_PDF(const float aa0, const float aa1, const float bb0, const float bb1, const float kk)
+                : a0(aa0), a1(aa1), b0(bb0), b1(bb1), k(kk) {}
+
+    virtual optix::Program assignGenerate(optix::Context &context) const override {
+        optix::Program generate = context->createProgramFromPTXString(rect_pdf_ptx_c, "rect_z_generate");
+
+        generate["a0"]->setFloat(a0);
+        generate["a1"]->setFloat(a1);
+        generate["b0"]->setFloat(b0);
+        generate["b1"]->setFloat(b1);
+        generate["k"]->setFloat(k);
+
+        return generate;
+    }
+
+    virtual optix::Program assignValue(optix::Context &context) const override {
+        optix::Program value = context->createProgramFromPTXString(rect_pdf_ptx_c, "rect_z_value");
 
         value["a0"]->setFloat(a0);
         value["a1"]->setFloat(a1);
