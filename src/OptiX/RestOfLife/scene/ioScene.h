@@ -471,10 +471,10 @@ public:
         //                                          context),
         //                   context);
 
-        // add a "fog"
-        ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.73f)));
-        topGroup.addChild(ioGeometryInstance::createVolumeBox(make_float3(0.f), make_float3(555.f), 3e-5f, ambientFog,
-                                                              context), context);
+        // // add a "fog"
+        // ioMaterial *ambientFog = new ioIsotropicMaterial(new ioConstantTexture(make_float3(0.73f)));
+        // topGroup.addChild(ioGeometryInstance::createVolumeBox(make_float3(0.f), make_float3(555.f), 3e-5f, ambientFog,
+        //                                                       context), context);
 
 
         uint32_t seed = 0x6314759;
