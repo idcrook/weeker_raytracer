@@ -1,22 +1,23 @@
 ![Optix ROL final image](assets/img/rol-optix-final-alum_10k.png) "Twisted" Final scene from *The Rest of Your Life* book, rendered using Optix 6.5 version.
 
-Started from C++ v2 code from Peter Shirley's [Ray Tracing In One Weekend](https://github.com/RayTracing/raytracing.github.io) Book Series. There are multiple implementations in this repository.
+Started from C++ v2 code from Peter Shirley's [Ray Tracing In One Weekend](https://github.com/RayTracing/raytracing.github.io) Book Series.
 
--	Cpp (Single-thread C++ CPU)
+|                | Cpp                          | OptiX                          | CUDA                          |
+|----------------|------------------------------|--------------------------------|-------------------------------|
+| In One Weekend | [Code](src/Cpp/InOneWeekend) | [Code](src/OptiX/InOneWeekend) | [Code](src/Cuda/InOneWeekend) |
+| The Next Week  | [Code](src/Cpp/TheNextWeek)  | [Code](src/OptiX/TheNextWeek)  | [Dev](src/Cuda/TheNextWeek)   |
+| Rest Of Life   | [Code](src/Cpp/RestOfLife)   | [Code](src/OptiX/RestOfLife)   |                               |
+
+There are multiple implementations in this repository.
+
+-	Cpp (Single-threaded C++ CPU)
 -	Cuda (C++ GPU)
--	OptiX (C++ Nvidia Raytracing SDK GPU)
+-	OptiX (C++ Nvidia Raytracing SDK GPU, Optix 6.5)
 
 Multi-platform CMake builds
 
 -	Cpp tested to work on Linux, macOS
 -	CUDA, Optix 6.5 tested on Ubuntu amd64 19.10 (with Nvidia RTX graphics card). Other version information below
-
-| Platform  | In One Weekend                 | The Next Week                         | Rest Of Life                 |
-|-----------|--------------------------------|---------------------------------------|------------------------------|
-| Cpp       | [Done](src/Cpp/InOneWeekend)   | [Done](src/Cpp/TheNextWeek)           | [Done](src/Cpp/RestOfLife)   |
-| Cuda      | [Done](src/Cuda/InOneWeekend)  | [Dev](src/Cuda/TheNextWeek) (Stalled) |                              |
-| Optix 6.5 | [Done](src/OptiX/InOneWeekend) | [Done](src/OptiX/TheNextWeek)         | [Done](src/OptiX/RestOfLife) |
-| Optix 7   |                                |                                       |                              |
 
 Build
 =====
@@ -86,6 +87,15 @@ In this example
 -	`-ns 1024` collect **1024** sampled rays per pixel
 
 Not all executables have the same options, or possible have none at all.
+
+Possible Future Implementations
+-------------------------------
+
+-	C++ Multi-threaded CPU
+-	Rust language
+-	OptiX 7
+-	Vulcan
+-	DXR 12
 
 Build C++ (Cpp)
 ---------------
@@ -194,6 +204,9 @@ Ray Tracing In One Weekend final scene
 -	Single thread CPU: When generating same scene with BVH partitioning, took about **3 minutes**.
 -	CUDA GPU version: When generating same scene without BVH partitioning, less than **4 seconds**
 -	OptiX GPU version: When generating similar scene at 1K samples per pixel, less than **2.5 seconds**
+
+Image Render examples
+=====================
 
 Image Renders (Optix GPU)
 -------------------------
