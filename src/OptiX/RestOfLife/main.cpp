@@ -22,7 +22,7 @@
 #define Ny_MIN  (200)
 // set maximum resolution to standard 4K dimensions
 #define Nx_MAX  (3840)
-#define Ny_MAX  (2160)
+#define Ny_MAX  (2240)  // was 2160, but increased so that square resolutions could hit 2240
 #define Nscene_MAX  (4)   // Range [0 .. Nscene_MAX]
 #define Ns_MAX  (1024*10)
 
@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
                 if (x < Ny_MIN) {
                     Ny = Ny_MIN;
                 }
-                std::cerr << "Using a value of " << Nx <<std::endl;
+                std::cerr << "Using a value of " << Ny <<std::endl;
             }
         }
     } catch (std::invalid_argument const &ex) {
