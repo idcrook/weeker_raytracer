@@ -421,7 +421,7 @@ public:
         ioMaterial *wallRed = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.65f, 0.05f, 0.05f)));
         ioMaterial *wallGreen = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.12f, 0.45f, 0.15f)));
         ioMaterial *wallWhite = new ioLambertianMaterial(new ioConstantTexture(make_float3(0.73f, 0.73f, 0.73f)));
-        ioMaterial *aluminum = new ioMetalMaterial(new ioConstantTexture(make_float3(0.91, 0.92, 0.92)), 0.03);
+        ioMaterial *aluminum = new ioMetalMaterial(new ioConstantTexture(make_float3(0.91, 0.92, 0.92)), 0.018);
         ioTexture* light15 =  new ioConstantTexture(make_float3(15.f, 15.f, 15.f));
 
         geometryList.push_back(new ioAARect(0.f, 555.f, 0.f, 555.f, 555.f,  true, X_AXIS)); // left wall
