@@ -109,6 +109,8 @@ public:
             PDF = new ioCosinePDF();
             break;
         case 2:
+            //PDF = new ioMixtureBiasPDF (new ioCosinePDF(), new ioRectZ_PDF(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f), 0.15f);
+            //PDF = new ioMixtureBiasPDF (new ioCosinePDF(), new ioRectZ_PDF(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f), 0.95f);
             PDF = new ioMixturePDF (new ioCosinePDF(), new ioRectZ_PDF(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f));
             break;
         case 3:
@@ -297,6 +299,7 @@ public:
         geometryList.push_back(new ioSphere(0.0f, -1000.0f, 0.0, 1000.0f));
         //materialList.push_back(new ioLambertianMaterial(noise4));
         materialList.push_back(new ioLambertianMaterial(noise1));
+        //materialList.push_back(new ioMetalMaterial(noise1, 0.08f));
         //materialList.push_back(new ioLambertianMaterial(checkered));
 
         // Medium Spheres
@@ -309,10 +312,13 @@ public:
         materialList.push_back(new ioDielectricMaterial(1.5f));
 
         geometryList.push_back(new ioAARect(3.f, 5.f, 2.3f, 3.f+3.f, -2.0f, false, Z_AXIS));
-        materialList.push_back(new ioDiffuseLightMaterial(light16));
+        materialList.push_back(new ioDiffuseLightMaterial(light8));
+
+        geometryList.push_back(new ioAARect(3.f, 5.f, 2.3f, 3.f+3.f, -2.002f, true, Z_AXIS));
+        materialList.push_back(new ioDiffuseLightMaterial(light8));
 
         // geometryList.push_back(new ioAARect(-6.f, -1.f, -2.f, 2.f, 10.f, true, Y_AXIS));
-        // materialList.push_back(new ioDiffuseLightMaterial(light4));
+        // materialList.push_back(new ioDiffuseLightMaterial(light8));
 
         // Small Spheres
         uint32_t seed = 0x6314759;

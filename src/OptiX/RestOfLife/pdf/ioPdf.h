@@ -11,6 +11,7 @@ extern "C" const char cosine_pdf_ptx_c[];
 extern "C" const char rect_pdf_ptx_c[];
 //extern "C" const char sphere_pdf_ptx_c[];
 extern "C" const char mixture_pdf_ptx_c[];
+extern "C" const char mixture_bias_pdf_ptx_c[];
 
 
 struct ioPdf {
@@ -152,6 +153,34 @@ struct ioMixturePDF : public ioPdf {
 
     const ioPdf* p0;
     const ioPdf* p1;
+};
+
+
+struct ioMixtureBiasPDF : public ioPdf {
+ioMixtureBiasPDF(const ioPdf *p00, const ioPdf *p11, const float bias00) : p0(p00), p1(p11), bias(bias00) {}
+
+    virtual optix::Program assignGenerate(optix::Context &context) const override {
+        optix::Program generate = context->createProgramFromPTXString(mixture_bias_pdf_ptx_c, "mixture_generate");
+
+        generate["p0_generate"]->setProgramId(p0->assignGenerate(context));
+        generate["p1_generate"]->setProgramId(p1->assignGenerate(context));
+
+        return generate;
+    }
+
+    virtual optix::Program assignValue(optix::Context &context) const override {
+        optix::Program value = context->createProgramFromPTXString(mixture_bias_pdf_ptx_c, "mixture_value");
+
+        value["p0_value"]->setProgramId(p0->assignValue(context));
+        value["p1_value"]->setProgramId(p1->assignValue(context));
+        value["bias"]->setFloat(bias);
+
+        return value;
+    }
+
+    const ioPdf* p0;
+    const ioPdf* p1;
+    const float bias;
 };
 
 
