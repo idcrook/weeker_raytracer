@@ -14,11 +14,17 @@
 # limitations under the License.                                           #
 # ======================================================================== #
 
+
 set(CMAKE_MODULE_PATH
   "${PROJECT_SOURCE_DIR}/CMake"
-#  "${CMAKE_CURRENT_SOURCE_DIR}/../cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../../CMake"
   ${CMAKE_MODULE_PATH}
   )
+
+# message(STATUS "OptiX_INSTALL_DIR: ${OptiX_INSTALL_DIR}")
+# message(STATUS "PROJECT_SOURCE_DIR ${PROJECT_SOURCE_DIR}")
+# message(STATUS "CMAKE_CURRENT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}")
+# message(STATUS "CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}")
 
 find_package(CUDA REQUIRED)
 find_package(OptiX REQUIRED)
