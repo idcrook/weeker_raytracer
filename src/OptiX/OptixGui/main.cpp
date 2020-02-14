@@ -1,7 +1,16 @@
+#include "imgui.h"
+#include "bindings/imgui_impl_glfw.h"
+#include "bindings/imgui_impl_opengl3.h"
 
 #include <iostream>
 #include <stdexcept>
 #include <chrono>
+
+#include <GL/glew.h> // Initialize with glewInit()
+
+// Include glfw3.h after our OpenGL definitions
+#include <GLFW/glfw3.h>
+
 
 // Image I/O
 // define STB_IMAGE*_IMPLEMENTATION-s only once (e.g. in .cpp file)

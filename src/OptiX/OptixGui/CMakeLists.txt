@@ -1,8 +1,11 @@
 cmake_minimum_required ( VERSION 3.11 )
 
-project ( OptixGui
-  VERSION 0.1.0
-  )
+project ( OptixGui  VERSION 0.1.0  )
+
+set(CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+
+INCLUDE_DIRECTORIES(.)
 
 # set to match your path
 set(OptiX_INSTALL_DIR "/usr/local/nvidia/NVIDIA-OptiX-SDK-6.5.0-linux64/"
@@ -27,8 +30,11 @@ else()
   message(STATUS "No CUDA support")
 endif()
 
+# CONFIG option is important so that CMake doesnt search for modules into the default modules directory
+find_package(imgui CONFIG)
+find_package(glfw CONFIG)
+find_package(glew CONFIG)
 
-INCLUDE_DIRECTORIES(.)
 
 cuda_compile_and_embed( raygen_ptx_c   raygen/raygen.cu )
 cuda_compile_and_embed(   miss_ptx_c     raygen/miss.cu )
@@ -61,6 +67,12 @@ add_executable(optixGui
   Director.h
   Director.cpp
   main.cpp
+
+  bindings/imgui_impl_glfw.cpp
+  bindings/imgui_impl_opengl3.cpp
+  bindings/imgui_impl_glfw.h
+  bindings/imgui_impl_opengl3.h
+
   # Compiled cuda ptx programs
   ${raygen_ptx_c}
   ${miss_ptx_c}
@@ -91,4 +103,6 @@ add_executable(optixGui
   )
 
 
-target_link_libraries(optixGui  ${optix_LIBRARY})
+target_compile_definitions(optixGui PUBLIC IMGUI_IMPL_OPENGL_LOADER_GLEW)
+
+target_link_libraries(optixGui imgui::imgui glew::glew glfw::glfw ${optix_LIBRARY} )
