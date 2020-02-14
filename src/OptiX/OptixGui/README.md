@@ -33,14 +33,31 @@ cmake --build . --target optixGui --parallel 7
 remove problematic `libGL.so`
 
 ```
+❯ strace ./optixGui >& out.log || grep GL out.log
+
 rm /home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so*
 rm: remove symbolic link '/home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so'? y
 rm: remove symbolic link '/home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so.1'? y
 rm: remove regular file '/home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so.1.2.0'? y
+
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release \
+     -DCMAKE_CUDA_FLAGS="--use_fast_math --generate-line-info" \
+     -B . ..
+
+...
+-- Library GL not found in package, might be system one
+...
+
+(now will build and link)
+
+grep -R /lib/libGL.so .
+
+sed -i.bak '/\/lib\/libGL.so/d' ./CMakeFiles/optixGui.dir/build.make
+#sed -i.bak 's/[^ ]\+\/lib\/libGL.so//g' ./CMakeFiles/optixGui.dir/link.txt
 ```
 
 now should run
 
 ```
-
+./optixGui
 ```

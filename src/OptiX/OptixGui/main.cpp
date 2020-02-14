@@ -43,6 +43,9 @@
 #define Nscene_MAX  (4)   // Range [0 .. Nscene_MAX]
 #define Ns_MAX  (1024*10)
 
+// Assign default GUI window size
+#define GUI_WINDOW_STARTING_Nx  (1280)
+#define GUI_WINDOW_STARTING_Ny  ( 720)
 
 static void glfw_error_callback(int error, const char *description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
@@ -71,7 +74,6 @@ void render_conan_logo()
 int main(int argc, char* argv[])
 {
     int exit_code = EXIT_SUCCESS;
-
 
     // default values
     int Nx = 1200;
@@ -190,7 +192,7 @@ int main(int argc, char* argv[])
     }
 
 
-    // Setup window
+    // Setup window after handling command line options
 	glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit())
 		std::exit ( EXIT_FAILURE) ;
@@ -213,7 +215,8 @@ int main(int argc, char* argv[])
 #endif
 
 	// Create window with graphics context
-	GLFWwindow *window = glfwCreateWindow(1280, 720, "Optix Rayocaster", NULL, NULL);
+	GLFWwindow *window = glfwCreateWindow(GUI_WINDOW_STARTING_Nx, GUI_WINDOW_STARTING_Ny,
+                                          "Optix Rayocaster", NULL, NULL);
 	if (window == NULL)
         std:: exit ( EXIT_FAILURE);
 	glfwMakeContextCurrent(window);
@@ -257,10 +260,11 @@ int main(int argc, char* argv[])
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-
+        //simple example
         ImGui::Begin("Conan logo");
         render_conan_logo();
         ImGui::End();
+
 		// Render dear imgui into screen
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
