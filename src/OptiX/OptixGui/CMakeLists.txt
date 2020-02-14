@@ -34,6 +34,7 @@ endif()
 find_package(imgui CONFIG)
 find_package(glfw CONFIG)
 find_package(glew CONFIG)
+#find_package(OpenGL REQUIRED)
 
 
 cuda_compile_and_embed( raygen_ptx_c   raygen/raygen.cu )

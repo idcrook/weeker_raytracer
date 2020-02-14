@@ -12,6 +12,7 @@ Linux
 cd src/OptiX/OptixGui
 mkdir build
 cd build
+conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan | true
 
 conan install .. -s build_type=Release
 #cmake .. -DCMAKE_BUILD_TYPE=Release
@@ -19,20 +20,38 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release \
      -DCMAKE_CUDA_FLAGS="--use_fast_math --generate-line-info" \
      -B . ..
 
-# conan install .. -s build_type=Debug
-# # run generate
-# #cmake .. -DCMAKE_BUILD_TYPE=Debug
-# Debug target seems broken
-# cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug \
-#      -DCMAKE_CUDA_FLAGS="--use_fast_math --generate-line-info" \
-#      -B . ..
+cmake --build . --target optixGui --parallel 7
+
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ./optixGui
+```
+
+Debug build
+-----------
+
+```
+conan install .. -s build_type=Debug
+# run generate
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug \
+     -DCMAKE_CUDA_FLAGS="--use_fast_math --generate-line-info" \
+     -B . ..
 
 cmake --build . --target optixGui --parallel 7
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ./optixGui
+
 ```
+
+#### earlies debugging of trying to remove problematic libGL.so
 
 remove problematic `libGL.so`
 
 ```
+❯ ./optixGui
+MESA-LOADER: failed to open swrast (search paths /home/conan/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/dri)
+libGL error: failed to load driver: swrast
+Glfw Error 65543: GLX: Failed to create context: BadMatch
+❯ LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ./optixGui
+
+
 ❯ strace ./optixGui >& out.log || grep GL out.log
 
 rm /home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so*
@@ -59,5 +78,5 @@ sed -i.bak '/\/lib\/libGL.so/d' ./CMakeFiles/optixGui.dir/build.make
 now should run
 
 ```
-./optixGui
+LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu ./optixGui
 ```
