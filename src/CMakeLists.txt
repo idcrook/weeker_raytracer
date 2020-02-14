@@ -64,4 +64,5 @@ if(CMAKE_CUDA_COMPILER)   # Only if CUDA is available
   ADD_SUBDIRECTORY( OptiX/InOneWeekend )
   ADD_SUBDIRECTORY( OptiX/TheNextWeek )
   ADD_SUBDIRECTORY( OptiX/RestOfLife )
+  ADD_SUBDIRECTORY( OptiX/OptixGui )
 endif()
