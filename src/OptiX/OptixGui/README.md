@@ -29,3 +29,18 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Release \
 
 cmake --build . --target optixGui --parallel 7
 ```
+
+remove problematic `libGL.so`
+
+```
+rm /home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so*
+rm: remove symbolic link '/home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so'? y
+rm: remove symbolic link '/home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so.1'? y
+rm: remove regular file '/home/dpc/.conan/data/mesa/19.3.1/bincrafters/stable/package/a56cf85a12b68f87c51b8bc2331fe996caedb686/lib/libGL.so.1.2.0'? y
+```
+
+now should run
+
+```
+
+```
