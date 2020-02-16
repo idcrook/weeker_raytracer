@@ -1,1 +1,0 @@
-ioScene6CornellBox.h
